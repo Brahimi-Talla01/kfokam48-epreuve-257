@@ -25,12 +25,14 @@ public class ExerciceService {
     private final ExerciceRepository exercices;
     private final SessionRepository sessions;
     private final EtudiantRepository etudiants;
+    private final RelectureService relectures;
 
     public ExerciceService(ExerciceRepository exercices, SessionRepository sessions,
-                           EtudiantRepository etudiants) {
+                           EtudiantRepository etudiants, RelectureService relectures) {
         this.exercices = exercices;
         this.sessions = sessions;
         this.etudiants = etudiants;
+        this.relectures = relectures;
     }
 
     @Transactional
@@ -56,7 +58,7 @@ public class ExerciceService {
         }
 
         Exercice sauvegarde = exercices.save(new Exercice(session, etudiant, lienValide));
-        affecterRelecteur(sauvegarde);
+        relectures.affecter(sauvegarde);
         return sauvegarde;
     }
 
@@ -84,14 +86,6 @@ public class ExerciceService {
         return exercices.findById(id)
                 .orElseThrow(() -> ApiException.notFound("EXERCICE_INCONNU",
                         "L'exercice demandé n'existe pas."));
-    }
-
-    /**
-     * Point d'extension : l'affectation du relecteur (issue #5 / RG6) est déclenchée
-     * au dépôt, comme tranché au cahier des charges §7.2.
-     */
-    protected void affecterRelecteur(Exercice exercice) {
-        // Implémenté dans l'issue « affectation » — voir RelectureService.affecter().
     }
 
     private String validerLien(String lien) {
