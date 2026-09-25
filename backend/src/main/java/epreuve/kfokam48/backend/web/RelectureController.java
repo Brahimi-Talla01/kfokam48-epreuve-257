@@ -3,6 +3,7 @@ package epreuve.kfokam48.backend.web;
 import epreuve.kfokam48.backend.domain.Relecture;
 import epreuve.kfokam48.backend.domain.StatutRelecture;
 import epreuve.kfokam48.backend.service.RelectureService;
+import epreuve.kfokam48.backend.web.dto.NoteResponse;
 import epreuve.kfokam48.backend.web.dto.RelectureCreateRequest;
 import epreuve.kfokam48.backend.web.dto.RelectureDetailResponse;
 import epreuve.kfokam48.backend.web.dto.RelectureResponse;
@@ -59,6 +60,22 @@ public class RelectureController {
                 relecture.getStatut().name(),
                 relecture.getNote(),
                 relecture.getCommentaire()));
+    }
+
+    /**
+     * Ajoutée (issue #8) — notes reçues sur un exercice : 200 · 404 EXERCICE_INCONNU.
+     * RG7 / Q8 : aucun champ d'identité du relecteur dans la réponse.
+     */
+    @GetMapping("/exercices/{id}/relectures")
+    public List<NoteResponse> notes(@PathVariable Long id) {
+        return relectures.listerPourExercice(id).stream()
+                .map(relecture -> new NoteResponse(
+                        relecture.getId(),
+                        relecture.getStatut().name(),
+                        relecture.getNote(),
+                        relecture.getCommentaire(),
+                        relecture.getRendueLe()))
+                .toList();
     }
 
     private RelectureResponse versDto(Relecture relecture) {
