@@ -551,13 +551,13 @@ git grep -nE "target/|node_modules/|dist/" --name-only
 - [x] **Démarre chez un tiers depuis le seul `README`**, avec données de démonstration (clone vierge, une commande) — smoke-testé en conteneurs
 
 **Journal et livraison**
-- [ ] `docs/JOURNAL.md` : **une entrée par étape** (Fait / Bloqué / IA + vérification), écrite en temps réel *(étapes 1 à 4 faites, étape 5 à venir)*
+- [x] `docs/JOURNAL.md` : **une entrée par étape** (Fait / Bloqué / IA + vérification), écrite en temps réel *(5/5 étapes)*
 - [x] `CHANGELOG.md` cohérent avec l'historique
 - [x] README testé depuis un **clone vierge**
 - [x] Backlog restant trié
-- [ ] `SOUMISSION.md` rempli, hash **40 caractères**, liens testés **en navigation privée**
-- [ ] Téléversement sur la plateforme **avant 18h00** (viser 17h00)
-- [ ] Le dépôt reste **public** jusqu'à la publication des résultats
+- [x] `SOUMISSION.md` rempli, hash **40 caractères** (`d5af9c6...`), accessibilité publique vérifiée sans authentification
+- [ ] Téléversement sur la plateforme **avant 18h00** (viser 17h00) — **action du candidat**, hors de portée de cette session
+- [ ] Le dépôt reste **public** jusqu'à la publication des résultats — engagement à tenir après la soumission
 
 ---
 

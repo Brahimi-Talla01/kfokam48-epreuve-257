@@ -20,7 +20,7 @@
 |                                            |                                                           |
 | ------------------------------------------ | --------------------------------------------------------- |
 | Dépôt (public)                             | `https://github.com/Brahimi-Talla01/kfokam48-epreuve-257` |
-| Commit final — hash complet, 40 caractères | `<à compléter en tout dernier, juste avant le televersement>` |
+| Commit final — hash complet, 40 caractères | `d5af9c61f6559cc30f688688606c2942d53fd03a` |
 | Branche                                    | `main`                                                    |
 
 ## Technique
@@ -48,12 +48,12 @@ et `docs/JOURNAL.md`, entrée étape 3).
 
 ## Avant de téléverser, vérifie
 
-- [ ] Mon dépôt est **public** et s'ouvre en navigation privée
-- [ ] Le hash fait bien **40 caractères** et existe sur GitHub
-- [ ] Tout mon travail est **poussé** — `git status` est propre
-- [ ] Mon `README` a été testé depuis un clone vierge, dans un dossier vide
-- [ ] Mon `JOURNAL.md` et mon cahier des charges sont dans `docs/`
-- [ ] Les trois commits `[JALON]` sont poussés et dans le bon ordre
+- [x] Mon dépôt est **public** et s'ouvre en navigation privée
+- [x] Le hash fait bien **40 caractères** et existe sur GitHub
+- [x] Tout mon travail est **poussé** — `git status` est propre
+- [x] Mon `README` a été testé depuis un clone vierge, dans un dossier vide
+- [x] Mon `JOURNAL.md` et mon cahier des charges sont dans `docs/`
+- [x] Les trois commits `[JALON]` sont poussés et dans le bon ordre
 
 ---
 

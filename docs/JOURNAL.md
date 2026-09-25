@@ -152,10 +152,29 @@ réellement dans un dossier séparé, pas seulement relus.
 
 ## Étape 5 — Soumission
 
-**Fait :**
+**Fait :** `docs/SOUMISSION.md` complété (technique, ce qui a été livré, backlog restant).
+Tout le travail poussé sur `develop`, puis `main` synchronisée une dernière fois en
+fast-forward (`d5af9c6`) — c'est ce commit qui est déclaré. Dépôt vérifié **public**
+et accessible sans authentification (`curl` non authentifié → `200`, API GitHub →
+`private: false`), hash confirmé à 40 caractères (`git rev-parse main | wc -c`). Les
+trois jalons `[JALON] analyse` (`f730f76`), `[JALON] v0.1` (`974ff81`),
+`[JALON] v1.0` (`9382fa7`) vérifiés présents, poussés et dans l'ordre sur `main`.
+Issue #16 fermée.
 
-**Bloqué :**
+**Bloqué :** rien de bloquant. Seul point d'attention traité consciemment : le hash
+déclaré dans `SOUMISSION.md` ne peut, par construction, pas inclure le commit qui
+l'écrit lui-même — le fichier a donc été rempli avec le hash de `main` **juste avant**
+d'être commité, en acceptant que ce dernier commit de documentation vienne
+chronologiquement après le hash déclaré (« tout ce que tu pousses après est ignoré »,
+ce qui est exactement l'usage prévu).
 
-**IA :**
+**IA :** demandé : relecture de `docs/SOUMISSION.md` avant remplissage final. Vérifié :
+accessibilité publique du dépôt testée par une requête réelle non authentifiée (pas une
+supposition), longueur du hash comptée par script plutôt qu'à l'œil, ordre des trois
+jalons relu directement dans `git log`.
 
-**Ce que je referais autrement avec une journée de plus :**
+**Ce que je referais autrement avec une journée de plus :** industrialiser la
+détection de l'index orphelin H2 rencontrée à l'étape 3 (§3, journal étape 3) dans un
+test de migration dédié, pour la repérer avant l'exécution de la suite complète.
+Implémenter l'issue #15 (blocage après 5 codes erronés), sacrifiée faute de temps
+après le changement de besoin tardif de l'étape 3.
