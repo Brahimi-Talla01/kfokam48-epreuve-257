@@ -32,7 +32,39 @@
 | 2026-09-25 | `develop` | `b30509c` | docs: création du suivi Git (assets/SUIVI_GIT.md) | — | 0 |
 | 2026-09-25 | `develop` | `69576fa` | docs: convention auto-référente du suivi Git explicite (§4.6) | — | 0 |
 | 2026-09-25 | `develop` | `eda97be` | docs: suivi Git — hash du commit de création complété | — | 0 |
-| 2026-09-25 | `develop` | *(ce commit)* | docs: configuration du dépôt tracée — develop branche par défaut, étape 0 avancée | — | 0 |
+| 2026-09-25 | `develop` | `0113e7f` | docs: configuration du dépôt tracée — develop branche par défaut, étape 0 avancée | — | 0 |
+| 2026-09-25 | `develop` | `6f5cccb` | chore: arborescence docs/ et api/ — modèles et contrat d'épreuve initial copiés | — | 1 |
+| 2026-09-25 | `develop` | `f8c2f52` | docs: cahier des charges et 4 diagrammes Mermaid (D1-D4) de l'étape 1 | #1 → #16 | 1 |
+| 2026-09-25 | `develop` | `d7c4e34` | api: contrat complété et figé avant le premier commit de code (9 opérations ajoutées) | — | 1 |
+| 2026-09-25 | `develop` | `7558bd6` | docs: journal de bord — entrée de l'étape 1 (analyse) | #16 | 1 |
+| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — trace de l'étape 1 et du backlog en issues | — | 1 |
+| 2026-09-25 | `develop` → `main` | *(à suivre)* | `[JALON] analyse` (commit vide) puis fast-forward de `main` | — | 1 |
+
+---
+
+## Issues (backlog)
+
+16 issues ouvertes le 2026-09-25, étiquetées `must` / `should` / `could` — **9 · 6 · 1**.
+La colonne **Références** les relie au cahier des charges et au contrat.
+
+| # | Titre (extrait) | Label | Références |
+|---|---|---|---|
+| 1 | Ouvrir une session et obtenir un code de présence | `must` | EF1 · RG16 |
+| 2 | Marquer ma présence en saisissant le code | `must` | EF2 · RG14, RG1, RG2 |
+| 3 | Déposer le lien de mon exercice | `must` | EF3 · RG11 |
+| 4 | Voir le tableau de ma promotion | `must` | EF6 · RG15, RG17 |
+| 5 | Être affecté à la relecture d'un pair | `must` | EF4 · RG5, RG6 |
+| 6 | Rendre une note entière 0–20 et un commentaire | `must` | EF5 · RG8, RG9, RG4 |
+| 7 | Clôturer la session (**trou principal**, cahier §7.2) | `must` | EF7 · RG11, RG16 |
+| 8 | Consulter mes notes sans voir le nom du relecteur | `should` | EF8 · RG7 |
+| 9 | Ajouter une présence manuelle tracée `FORMATEUR` | `should` | EF9 · RG13 |
+| 10 | Remplacer le lien tant qu'il n'est pas relu | `should` | EF10 · RG12 |
+| 11 | Choisir mon nom dans la liste sans mot de passe | `should` | EF11 · Q1 |
+| 12 | Flyway, schéma `V1` conforme à D2, seed `V2` | `must` | B5 · ENF4 |
+| 13 | Dockeriser `postgres` + `backend` + `frontend` | `must` | démarrage · ENF4 |
+| 14 | Couche d'appels API Next.js avec états de charge | `must` | F3 · ENF3, ENF6 |
+| 15 | Blocage après 5 codes erronés | `could` | EF12 · RG3 |
+| 16 | Journal d'étape, changelog et soumission | `should` | journal 5 pts |
 
 ---
 
