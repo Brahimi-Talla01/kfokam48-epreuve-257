@@ -16,7 +16,7 @@
 
 | # | Titre | Branche source | Branche cible | Issue | État | Lien |
 |---|---|---|---|---|---|---|
-| — | *Aucune PR pour l'instant — la première sera ouverte à l'étape 2 (backlog Must)* | — | `develop` | — | — | — |
+| #17 | Schéma Flyway V1 + seed de démonstration V2 | `feature/flyway-schema-seed` | `develop` | **#12** | `merged` | [pull/17](https://github.com/Brahimi-Talla01/kfokam48-epreuve-257/pull/17) |
 
 ---
 
@@ -41,6 +41,10 @@
 | 2026-09-25 | `develop` → `main` | `f730f76` | `[JALON] analyse` (commit vide) — `main` avancée en fast-forward de `develop` | — | 1 |
 | 2026-09-25 | `develop` | `1f25a72` | docs: plan et suivi — étapes 0 et 1 cochées, décision Q4 `429` → `400` | — | 1 |
 | 2026-09-25 | `develop` | *(ce commit)* | chore: gitignore retenu tel quel (`/assets` + Java/JS), plan §4.1 aligné | — | 1 |
+| 2026-09-25 | `develop` | `4362748` | docs: correction du backlog (10 must / 5 should / 1 could) et versions réelles de l'environnement | — | 1 |
+| 2026-09-25 | `feature/flyway-schema-seed` | `d58821c` | Schéma versionné Flyway (V1) et jeu de démonstration (V2), wrapper Maven commité | **#12** | 2 |
+| 2026-09-25 | `develop` | `1b1bf18` | Merge pull request #17 (feature/flyway-schema-seed → develop) | **#12** · PR #17 | 2 |
+| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — PR #17 et issue #12 tracées | — | 2 |
 
 ---
 
