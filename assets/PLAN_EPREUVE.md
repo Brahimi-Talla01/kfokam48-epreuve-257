@@ -11,33 +11,36 @@
 | Document | Rôle | Points clés extraits |
 | --- | --- | --- |
 | `LISEZ-MOI_CANDIDAT_KFOKAM48.pdf` (2 p.) | Instructions candidat, à lire en premier | Contenu du dossier `EPREUVE/` · vérif préalable `git` 2.x / `java` 17+ / `node` 18+ · création du dépôt public `kfokam48-epreuve-<matricule>` · test de push · **« l'enveloppe de l'étape 3 n'est pas dans le dossier, elle est remise par le surveillant une fois `[JALON] v0.1` poussé »** · le commit de test de connexion **n'est pas un jalon** (`chore: verification du depot`) · 5 points de vigilance (dépôt = copie d'examen, analyse d'abord, IA libre, pousser au fil de l'eau, 18h00) |
-| `EPREUVE_FINALE_KFOKAM48_SUJET.pdf` (8 p.) | Sujet principal — **variante A** | **5 étapes** (étape 5 = soumettre) · barème **Git 30 / Produit 17** · un seul dépôt · pas d'épreuve Git annexe · besoin en 5 points · 6 sections de règles du jeu · contraintes B1–B6, F1–F3 · barème détaillé et malus · Annexes A (16 questions), B (contrat), C (modèles) |
-| `assets/EPREUVE_KFOKAM48/` (fichier sans extension = **dossier**) | Dossier d'épreuve complet — **variante B** | `SUJET.pdf` + `SUJET.md` (**6 étapes**, étape 5 = épreuve Git), `CLIENT.md` (16 questions), `api/contrat.yaml` (contrat OpenAPI complet), `LISEZ-MOI.md`, `ENVELLOPE.md`, `modeles/` (`CAHIER_DES_CHARGES.md`, `JOURNAL.md`, `SOUMISSION.md`) |
+| `EPREUVE_FINALE_KFOKAM48_SUJET.pdf` (8 p.) | **Sujet principal — version faisant foi** (précisions n° 1 à 4) | **5 étapes** (étape 5 = soumettre) · barème **Git 30 / Produit 17** · un seul dépôt · pas d'épreuve Git annexe · besoin en 5 points · 6 sections de règles du jeu · contraintes B1–B6, F1–F3 · barème détaillé et malus · Annexes A (16 questions), B (contrat), C (modèles) |
+| `assets/EPREUVE_KFOKAM48/` (fichier sans extension = **dossier**) | Dossier d'épreuve — **version obsolète sur la structure** (6 étapes), **mais commun** pour `CLIENT.md`, `api/contrat.yaml`, `modeles/` | `SUJET.pdf` + `SUJET.md` (**6 étapes**, étape 5 = épreuve Git → **supprimé**, précision n° 3), `CLIENT.md` (16 questions), `api/contrat.yaml` (contrat OpenAPI complet), `LISEZ-MOI.md`, `ENVELLOPE.md`, `modeles/` (`CAHIER_DES_CHARGES.md`, `JOURNAL.md`, `SOUMISSION.md`) |
 | `ENVELOPPE_etape3_KFOKAM48.pdf` (2 p.) | Contenu de l'étape 3, remis après `[JALON] v0.1` | **Bug** : deux présences quasi simultanées, une seule enregistrée → issue avant de coder, test qui échoue, branche dédiée, test vert · **Changement de besoin** : **2 relecteurs par exercice, note = moyenne des deux, note d'un seul relecteur = « provisoire »** · touche base + contrat + frontend · analyse à mettre à jour, **nouvelle** migration (jamais modifier la existante), re-priorisation écrite, correctif et évolution séparés (2 branches, 2 PR) · **10 points** |
 | `assets/PLAN_EPREUVE.md` (avant réécriture) | Plan existant, à adapter | Couvrait la variante B (6 étapes) · barèmes, malus, jalons, contradictions `Q10/Q15`, trous du `CLIENT.md`, RG1–RG15 · **incomplet** sur la comparaison des deux variantes du sujet, sur l'enveloppe (contenu réel non intégré), sur l'architecture cible et sur les estimations de durée |
 
-### ⚠️ Anomalie documentaire majeure — deux versions du sujet
+### ✅ Précisions du professeur (dernière mise à jour) — elles font foi
 
-Les documents fournissent **deux variantes du même épreuve**, non réconciliables :
+Le sujet employait des termes ambigus ou deux versions divergentes. Voici les **quatre corrections** reçues, et ce qu'elles changent dans ce plan :
 
-| Point | Variante A — PDF racine | Variante B — `EPREUVE_KFOKAM48/` |
+| # | Correction | Ce que ça change |
 | --- | --- | --- |
-| Nombre d'étapes | **5** (étape 5 = soumettre) `[SUJET-A §2]` | **6** (étape 5 = épreuve Git, étape 6 = soumettre) `[SUJET-B §2]` |
-| Épreuve Git annexe | **absente** | **présente** : `git-lab.bundle`, 2e dépôt public `kfokam48-gitlab-<matricule>`, 17 pts `[SUJET-B §Étape 5]` |
-| Barème Git | **30 pts** | **32 pts** (dont 17 pour l'épreuve Git) |
-| Barème Produit | **17 pts** | **15 pts** |
-| Dossier | `l'enveloppe` remise par le surveillant | `enveloppe` = script + `git-lab.bundle` |
-| Commit de test de push | `chore: verification du depot` `[LISEZ-MOI §2d]` | `[JALON] depart` `[LISEZ-MOI.md §2.4]` |
+| **1** | **« Ticket » devient « issue ».** Le sujet employait les deux mots sans dire que c'est la même chose. Désormais **un seul terme : issue**. Le sujet s'ouvre par « **Oui, tu dois créer des issues** », avec la définition, un **exemple d'issue complète** et la commande `Closes #4` pour fermer une issue depuis un commit. | Tout le plan parle uniquement d'**issue** ; la définition + l'exemple + `Closes #4` sont rappelés en §3 étape 1c et en §4.3. Aucune distinction ne subsiste entre « ticket » et « issue ». |
+| **2** | **Le commit de test du LISEZ-MOI ne s'appelle plus `[JALON] depart`** : il devient **`chore: verification du depot`**. Il entrait en conflit avec la règle des trois jalons du sujet, au risque qu'un étudiant croie avoir déjà posé son jalon d'analyse **et écope d'un −5 immérité**. | Seuls trois commits portent le préfixe `[JALON]` : `analyse`, `v0.1`, `v1.0`. Voir §4.3 — le moindre autre commit `[JALON]…` est un risque de malus. |
+| **3** | **L'étape 5 (épreuve Git) est supprimée** : l'épreuve sur dépôt fourni disparaît, **le bundle n'existait pas**. **« Soumettre » devient l'étape 5**, et le sujet parle de **cinq étapes partout**. | 5 étapes : Analyser → Construire → Enveloppe → Finaliser → Soumettre. Un seul dépôt public, barème **Git 30 / Produit 17**, plus aucun second dépôt ni `git-lab.bundle` dans ce plan. |
+| **4** | **L'étape 3 ne mentionne plus le script `./enveloppe`** : l'enveloppe **se demande au surveillant**, une fois le commit `[JALON] v0.1` poussé. | §3 étape 3 et §6.4 : plus aucune référence au script. |
 
-Les deux barèmes somment à 100. `LISEZ-MOI_CANDIDAT…pdf` affirme que « SUJET.pdf et SUJET.md — même contenu, deux formats » : **c'est faux**, les deux sujets diffèrent structurellement.
+### Note d'archive — deux versions du sujet détectées dans `assets/`
 
-**Décision de plan (validée) :** on planifie sur la **variante A, c'est-à-dire les trois PDF à la racine de `assets/`** — `LISEZ-MOI_CANDIDAT_KFOKAM48.pdf`, `EPREUVE_FINALE_KFOKAM48_SUJET.pdf`, `ENVELOPPE_etape3_KFOKAM48.pdf`.
+Les documents fournissaient deux variantes divergentes ; **les précisions ci-dessus tranchent en faveur de la variante A (les PDF à la racine)**, la variante B étant obsolète.
 
-*Raison :* ce sont les documents « remis au candidat » dans le dossier d'instructions ; `LISEZ-MOI_CANDIDAT…pdf` décrit exactement ce qu'il y a dans ce dossier et ne mentionne **ni `git-lab.bundle` ni second dépôt**.
+| Point | **Variante A — retenue** (PDF racine) | Variante B — obsolète (`EPREUVE_KFOKAM48/`) |
+| --- | --- | --- |
+| Nombre d'étapes | **5** (étape 5 = soumettre) `[SUJET-A §2]` | 6 (étape 5 = épreuve Git) `[SUJET-B §2]` |
+| Épreuve Git annexe | **absente** (précision 3 : le bundle n'existait pas) | présente : `git-lab.bundle`, 2e dépôt, 17 pts |
+| Barème Git / Produit | **30 / 17** | 32 / 15 |
+| Enveloppe étape 3 | **demandée au surveillant** (précision 4) | script `./enveloppe` |
+| Commit de test de push | **`chore: verification du depot`** (précision 2) | `[JALON] depart` |
+| Terme unique | **issue** (précision 1) | « ticket » et « issue » mélangés |
 
-*Conséquences de ce choix :* **5 étapes** (étape 5 = soumettre), **un seul dépôt public**, barème **Git 30 / Produit 17**, enveloppe remise par le surveillant sur demande, commit de test de connexion `chore: verification du depot`.
-
-*Repli :* si un `git-lab.bundle` vous est remis pendant l'épreuve, c'est que la variante B est en vigueur → suivre alors §3 « étape 5 » de la variante B (épreuve Git, 17 pts, 2e dépôt public) et le barème B. Le repli est décrit en §3 et §6.4 ; il ne coûte aucune refonte, seulement 20 minutes de plus.
+> ⚠️ Les fichiers de `assets/EPREUVE_KFOKAM48/` restent utiles pour `CLIENT.md`, `api/contrat.yaml` et `modeles/`, dont le contenu est commun aux deux versions. **Seule la structure de l'épreuve (étapes, barème, enveloppe) suit la variante A.**
 
 ---
 
@@ -45,10 +48,10 @@ Les deux barèmes somment à 100. `LISEZ-MOI_CANDIDAT…pdf` affirme que « SUJE
 
 ### 1.1 Objectif global
 
-Livrer une application de **présence et de relecture par les pairs** pour la formation KFOKAM48, **et surtout** démontrer une démarche complète : analyser un besoin flou et contradictoire, le spécifier, le découper en tickets, livrer par jalons, encaisser un changement de besoin en cours de route — le tout **lisible dans l'historique Git** `[SUJET §AVANT DE COMMENCER, §6 CONSEIL]`.
+Livrer une application de **présence et de relecture par les pairs** pour la formation KFOKAM48, **et surtout** démontrer une démarche complète : analyser un besoin flou et contradictoire, le spécifier, le découper en **issues**, livrer par jalons, encaisser un changement de besoin en cours de route — le tout **lisible dans l'historique Git** `[SUJET §AVANT DE COMMENCER, §6 CONSEIL]`.
 
 > « Ton dépôt est ta copie d'examen : le correcteur lira ton historique comme on lit une rédaction. » `[SUJET]`
-> « L'application entière ne pèse que 15 points » (variante B) / « 17 points » (variante A) `[SUJET §6]`.
+> « L'application entière ne pèse que 17 points. » `[SUJET §6]` — *l'ancien libellé « 15 points » provenait de la version obsolète (variante B, 6 étapes), voir §0.*
 
 ### 1.2 Périmètre fonctionnel (les 5 besoins) `[SUJET §1 LE BESOIN]`
 
@@ -95,18 +98,17 @@ La demande est **incomplète et se contredit par endroits** : deux réponses du 
 | L9 | Étape 4 : `CHANGELOG.md` cohérent, `README` testé depuis un clone vierge, backlog trié | racine | `[SUJET §2 étape 4]` |
 | L10 | `docs/JOURNAL.md` : **une entrée par étape**, écrite au moment où l'étape se termine | `docs/` | `[SUJET §4 Journal]` |
 | L11 | `SOUMISSION.md` téléversé sur la plateforme **avant 18h00** — sans lui, rien n'est rendu | plateforme | `[SUJET §2 étape 5]`, `[LISEZ-MOI §4]` |
-| L12 | *Variante B uniquement* : 2e dépôt public `kfokam48-gitlab-<matricule>` avec toutes les branches poussées | GitHub | `[SUJET-B §Étape 5]` — **non retenu** (§0) |
 
 ### 1.5 Critères d'évaluation (barème sur 100)
 
-| Bloc | **Variante A (retenue)** | Variante B (repli) | Détail |
-| --- | ---: | ---: | --- |
-| Analyse & conception | **38** | 38 | Cahier des charges 10 · 3 diagrammes 12 · Backlog 8 · Contrat figé avant le code 5 · Analyse mise à jour après étape 3 : 3 · *bonus D4 : +3* |
-| Conduite du changement (étape 3) | **10** | 10 | Issue avant de coder, bug reproduit, migration versionnée, contrat mis à jour, re-priorisation écrite, correctif/évolution séparés `[ENVELOPPE]` |
-| Git | **30** | *32* | **A** : commits atomiques/messages explicites 8 · branche par issue + PR liée 7 · 3 jalons 5 · `.gitignore` avant le code 5 · main sain + aucun secret 5. *B : épreuve `git-lab` 17 + hygiène 15* |
-| Produit & conformité | **17** | *15* | **A** : contrat + codes HTTP 7 · B3–B6 / F1–F3 7 · démarre chez un tiers avec données de démo 3. *B : 6 / 6 / 3* |
-| Journal | **5** | 5 | Une entrée **par étape**, écrite en temps réel |
-| **Total** | **100** | **100** | |
+| Bloc | Pts | Détail |
+| --- | ---: | --- |
+| Analyse & conception | **38** | Cahier des charges 10 · 3 diagrammes 12 · Backlog (issues) 8 · Contrat figé avant le code 5 · Analyse mise à jour après étape 3 : 3 · *bonus D4 : +3* |
+| Conduite du changement (étape 3) | **10** | Issue ouverte avant de coder, bug reproduit par un test, migration versionnée, contrat mis à jour, re-priorisation écrite, correctif/évolution séparés `[ENVELOPPE]` |
+| Git | **30** | Commits atomiques + messages explicites 8 · une branche par issue, une PR par branche, PR rattachée à son issue 7 · les 3 commits `[JALON]` présents, poussés et dans l'ordre 5 · `.gitignore` Java + JS posé avant le premier commit de code, aucun fichier généré 5 · `main` toujours sain, aucun secret 5 |
+| Produit & conformité | **17** | Contrat + codes HTTP justes, erreurs comprises 7 · Conformité B3–B6 et F1–F3 7 · Démarre chez un tiers depuis le seul README, avec données de démo 3 |
+| Journal | **5** | Une entrée **par étape**, écrite en temps réel |
+| **Total** | **100** | |
 
 **Malus** `[SUJET §4 Malus]` : secret ou `target/`·`node_modules/`·`dist/` commités **−5** · aucune issue de la journée **−10** · un seul commit ou historique concentré sur la dernière heure **−10** · `[JALON] analyse` manquant ou après le premier commit de code **−5** · `push --force` destructeur sur `main` du projet **−5** · dépôt privé / lien mort / hash invalide = **partie non corrigée**.
 
@@ -197,7 +199,35 @@ flowchart LR
   1. **`docs/CAHIER_DES_CHARGES.md`** — 10 sections dans l'ordre imposé `[SUJET §2a]` :
      1. Contexte et objectif · 2. Acteurs et rôles · 3. Périmètre (**inclus et explicitement exclus**) · 4. Exigences fonctionnelles `EF1…` avec critère « quand… alors… » + priorité · 5. Exigences non fonctionnelles (volumétrie, mobile, temps de réponse) · 6. Règles de gestion `RG1…` **avec source `Qx`** · 7. Zones d'ombre, hypothèses et **contradictions tranchées** · 8. Contraintes techniques (B1–B6, F1–F3) · 9. Livrables · 10. Démarche prévue + **Definition of Done**.
   2. **3 diagrammes Mermaid** dans `docs/diagrammes/` (D1 cas d'utilisation, D2 classes/cardinalités **cohérent avec les migrations**, D3 séquence présence nominal + **410 CODE_EXPIRE** + **409 DEJA_PRESENT** **cohérent avec le contrat**) + **D4 bonus** états-transitions de l'exercice `[SUJET §2b]`.
-  3. **Backlog en issues** : ≈10 issues, titre = résultat utilisateur, critères « quand… alors… », priorité Must/Should/Could, renvoi `EFx`/`RGx`, estimation `[SUJET §2c]`.
+  3. **Backlog en issues** — *précision n° 1 du professeur : il n'y a qu'un seul mot, « issue » ; « ticket » est abandonné.*
+
+     > **Oui, tu dois créer des issues.** Une issue est une **fiche de travail que tu ouvres toi-même** dans l'onglet Issues de ton dépôt GitHub. **Une issue = une chose à faire.** Elles constituent ton plan de travail, et c'est à elles que tu rattacheras tes branches et tes commits `[SUJET §2c]`.
+     >
+     > *L'ancienne rédaction du sujet utilisait aussi le mot « ticket » : c'était la même chose. **Un seul terme est désormais employé : issue** (précision n° 1).*
+
+     Compte **une dizaine d'issues** pour ce projet. Chacune porte :
+     - un titre qui décrit **un résultat**, pas une tâche technique — « L'étudiant marque sa présence avec un code », pas « créer l'entité Presence » ;
+     - des **critères d'acceptation vérifiables**, formulés « quand … alors … » ;
+     - une **priorité** : Must, Should ou Could ;
+     - le **renvoi** à l'exigence `EFx` ou à la règle `RGx` du cahier des charges.
+
+     **Exemple d'issue complète** (modèle imposé par le sujet) :
+
+     > **Titre : L'étudiant marque sa présence avec un code**
+     > *Réf. EF1 · Règles RG1 (expiration 15 min), RG5 (une seule présence par session) · Priorité Must · Estimation 2 h*
+     > **Critères d'acceptation**
+     > - Quand je saisis un code valide et non expiré, ma présence apparaît dans le tableau du formateur
+     > - Quand le code a plus de 15 minutes, je reçois une erreur `410 CODE_EXPIRE`
+     > - Quand j'ai déjà marqué ma présence, je reçois une erreur `409 DEJA_PRESENT`
+
+     **Fermeture depuis un commit** — pendant la construction, une branche par issue, et un commit qui la ferme en la citant :
+
+     ```bash
+     git checkout -b feature/presence-code
+     git commit -m "Enregistrement d'une présence par code (RG1) — Closes #4"
+     ```
+
+     Écrire **`Closes #4`** dans le message ferme automatiquement l'issue n° 4 quand la branche est fusionnée. **C'est ce lien entre ton plan et ton code que le correcteur regarde.**
   4. **`api/contrat.yaml` complété** : les 5 opérations imposées **plus** celles nécessaires — à minima : ouverture/clôture de session (trou du `CLIENT.md`, §6.2), liste des sessions, création d'une relecture « en attente » (**nécessaire** : `POST /api/relectures/{id}` opère sur une relecture déjà existante), présence ajoutée par le formateur (Q14), gestion des tentatives échouées (Q4, `429`), tableau de l'étudiant (Q8/Q16) `[CONTRAT]`, `[SUJET §2d]`.
   5. **Trancher les contradictions et trous** (§6) dans la section 7 du cahier des charges, en citant `Qx`.
   6. Entrée « Étape 1 » du `JOURNAL.md` (Fait / Bloqué / IA) `[SUJET §4 Journal]`.
@@ -227,7 +257,7 @@ flowchart LR
 
 - **Objectif** : encaisser le bug + le changement de besoin **à la méthode**, ce qui est ce qui est noté.
 - **Tâches détaillées** (dans cet ordre, l'ordre se lit dans l'historique) :
-  1. **Demander l'enveloppe au surveillant** en lui donnant l'adresse du dépôt — elle n'est remise qu'une fois `[JALON] v0.1` poussé `[SUJET §2 étape 3]`, `[LISEZ-MOI §1]`. *(Repli variante B : `./enveloppe`, script qui refuse de s'ouvrir tant que le jalon n'est pas poussé.)*
+  1. **Demander l'enveloppe au surveillant**, en lui donnant l'adresse de ton dépôt — elle ne te sera remise qu'une fois ton commit `[JALON] v0.1` poussé, et tu ne peux pas l'obtenir avant `[SUJET §2 étape 3]`, `[LISEZ-MOI §1]`. *(Précision n° 4 : aucun script, pas de `./enveloppe`.)*
   2. **Bug — présences simultanées perdues** `[ENVELOPPE §1]` :
      - ouvrir une **issue** décrivant le problème **et la façon de le reproduire** *avant* de toucher au code ;
      - écrire un **test qui échoue** (deux `POST /api/presences` concurrents, une seule présence) ;
@@ -256,11 +286,11 @@ flowchart LR
 - **Validation** : dans un dossier vide : `git clone … && <commande 1> && <commande 2> && <commande 3>` → application opérationnelle **avec données de démonstration**.
 - **Estimation** : 45 min.
 
-### Étape 5 — Soumettre — **sans elle, rien n'est rendu**
+### Étape 5 — Soumettre — **sans elle, rien n'est rendu** *(5 étapes au total — précision n° 3)*
 
 - **Objectif** : rendre effectivement le travail.
 - **Tâches détaillées** :
-  1. Remplir `SOUMISSION.md` (modèle `modeles/SOUMISSION.md`, **section « Projet » seule en variante A**) : nom, matricule, centre, URL du dépôt, **hash complet 40 caractères**, frontend choisi, commande de démarrage `[SUJET §2 étape 5]`.
+  1. Remplir `SOUMISSION.md` (modèle `modeles/SOUMISSION.md`) : nom, matricule, centre, URL du dépôt, **hash complet 40 caractères**, frontend choisi, commande de démarrage `[SUJET §2 étape 5]`. *Le modèle fourni comporte une section « Épreuve Git — étape 5 » : **elle disparaît** (précision n° 3), de même que la case « Mes deux dépôts » de la check-list finale.*
   2. Pousser **tout** avant de relever le hash : « la correction porte exactement sur le commit que tu déclares. Tout ce que tu pousses après est ignoré. »
   3. Vérifier l'adresse du dépôt **en fenêtre de navigation privée** ; dépôt **public**, à conserver jusqu'à la publication des résultats.
   4. Téléverser sur la plateforme **bien avant 18h00** (« Ne soumets pas à 17h58 »).
@@ -279,8 +309,6 @@ flowchart LR
 | 4 — Final | 45 min | |
 | 5 — Soumission | 20 min | fin opérationnelle visée **17h00** |
 | **Total** | **≈ 11 h 55** | ~1 h de marge |
-
-*Repli variante B (seulement si un `git-lab.bundle` vous est remis) : ajouter l'épreuve Git — 2e dépôt public, 5 situations du README, `git push origin --all` — soit +20 min et +17 pts, entre les étapes 4 et 5.*
 
 ⚠️ **Information non trouvée dans les documents fournis** : horaire exact d'ouverture de l'épreuve. Seule l'échéance de 18h00 est donnée `[SUJET]`.
 
@@ -301,15 +329,15 @@ flowchart LR
 ### 4.2 Stratégie de branches
 
 - `main` : toujours sain, toujours poussé, **jamais** de `push --force` destructeur (−5).
-- `feature/<slug-issue>` : **une branche par ticket** (`feature/presence-code`, `feature/tableau-formateur`, `fix/presences-simultanees`, `evolution/deux-relecteurs`…).
-- `release` non nécessaire ; la PR est l'unité de revue.
-- Repli B : si un dépôt `git-lab` est fourni, son historique est réécrit avec `push --force` (attendu) — **jamais** celui du projet.
+- `feature/<slug-issue>` : **une branche par issue** (`feature/presence-code`, `feature/tableau-formateur`, `fix/presences-simultanees`, `evolution/deux-relecteurs`…).
+- `release` non nécessaire ; la PR est l'unité de revue, **rattachée à son issue** (7 pts).
+- **Jamais de `push --force` sur `main`** (−5) : aucun endroit de l'épreuve ne l'autorise.
 
 ### 4.3 Convention de commits
 
 - Messages **en français**, impératif, une idée par commit : `Enregistrement d'une présence par code (RG1) — Closes #4` `[SUJET §2c]`.
 - Toujours citer la règle/l'exigence (`RG1`, `EF4`) **et/ou** l'issue (`#12`).
-- Interdits : `update`, `fix`, `test2` (valent zéro) `[SUJET-A §4 Git]`.
+- Interdits : `update`, `fix`, `test2` (valent zéro) `[SUJET §4 Git]`.
 - Trois commits **vides de code**, messages **exacts** :
 
   ```bash
@@ -321,10 +349,12 @@ flowchart LR
 
   « Un jalon non poussé n'existe pas. » `[SUJET §2]`. Ne **jamais** réutiliser le préfixe `[JALON]` pour autre chose `[LISEZ-MOI §2d]`.
 
+  > ⚠️ **Précision n° 2** : le commit de test de connexion du LISEZ-MOI s'appelle **`chore: verification du depot`**, pas `[JALON] depart`. Ce dernier entrait en conflit avec la règle des trois jalons : un étudiant pourrait croire avoir déjà posé son jalon d'analyse **et écopter d'un −5 immérité**. Un seul commit hors des trois ci-dessus doit porter le préfixe `[JALON]`, et aucun.
+
 ### 4.4 Commandes essentielles
 
 ```bash
-# cycle normal d'un ticket
+# cycle normal d'une issue
 git checkout -b feature/presence-code
 # ... travailler, committer par idées atomiques ...
 git commit -m "Enregistrement d'une présence par code (RG1) — Closes #4"
@@ -352,7 +382,7 @@ git grep -nE "target/|node_modules/|dist/" --name-only   # ne rien voir d'instan
 ## 5. Checklist finale
 
 **Conformité structure et dépôt**
-- [ ] Dépôt **public** `kfokam48-epreuve-<matricule>` (nom exact, matricule complet) — *repli B : 2e dépôt `kfokam48-gitlab-<matricule>`*
+- [ ] Dépôt **public** `kfokam48-epreuve-<matricule>` (nom exact, matricule complet) — **un seul dépôt**
 - [ ] Structure `docs/ · api/ · backend/ · frontend/` respectée
 - [ ] `.gitignore` Java + JS posé **avant** le premier commit de code, aucun fichier généré dans l'historique
 - [ ] Aucun secret nulle part dans l'historique
@@ -371,6 +401,7 @@ git grep -nE "target/|node_modules/|dist/" --name-only   # ne rien voir d'instan
 - [ ] `[JALON] v0.1` poussé (condition d'obtention de l'enveloppe)
 - [ ] `[JALON] v1.0` poussé
 - [ ] Les trois, **dans cet ordre**
+- [ ] **Aucun autre commit** ne porte le préfixe `[JALON]` — le test de connexion s'intitule `chore: verification du depot` (précision n° 2, malus −5)
 
 **Étape 3 (10 pts)**
 - [ ] Issue ouverte **avant** le premier commit de correction
@@ -405,7 +436,7 @@ git grep -nE "target/|node_modules/|dist/" --name-only   # ne rien voir d'instan
 
 | # | Piège | Conséquence | Source |
 | --- | --- | --- | --- |
-| P1 | Deux variantes du sujet (5 vs 6 étapes, barèmes Git 30/32 et Produit 17/15) | Mauvaise allocation de l'effort, livrable manquant | §0 de ce plan |
+| P1 | Ancienne rédaction du sujet : mot « ticket » vs « issue », 5 vs 6 étapes, `[JALON] depart` | Doutes en cours d'épreuve, malus −5 évitable | **Résolu par les 4 précisions du professeur — §0** |
 | P2 | Coder avant `[JALON] analyse` | −5, et les 38 pts d'analyse s'effondrent | `[SUJET §4 Malus]` |
 | P3 | Schéma de base non versionné à l'étape 3 | « tu le paieras cher » — migration impossible sans casser les données | `[SUJET §2 étape 3]` |
 | P4 | Une seule grosse poussée en fin de journée | −10 | `[SUJET §4 Malus]` |
@@ -450,7 +481,7 @@ git grep -nE "target/|node_modules/|dist/" --name-only   # ne rien voir d'instan
 | GitHub (dépôt + issues + PR) | 30 pts de Git y sont attachés | Pousser au fil de l'eau ; vérifier les droits d'écriture dès l'étape 0 `[LISEZ-MOI §2d]` |
 | Réseau | perte de travail = zéro | `git push` après chaque PR merge |
 | Plateforme de soumission (18h00) | après 18h00, plus rien n'est accepté | Soumission visée à 17h00, lien vérifié en navigation privée |
-| Fourniture de l'**enveloppe** de l'étape 3 | absente du dossier fourni | Demander au surveillant dès `[JALON] v0.1` poussé, en donnant l'adresse du dépôt `[LISEZ-MOI §1]`. *Repli B : script `./enveloppe`.* |
+| Fourniture de l'**enveloppe** de l'étape 3 | absente du dossier fourni | La **demander au surveillant** dès `[JALON] v0.1` poussé, en donnant l'adresse du dépôt `[LISEZ-MOI §1]` — aucun script (précision n° 4) |
 | Outils locaux (`git`, `java`, `node`) | bloquant | Vérification préalable ; manque = incident matériel, temps rendu `[LISEZ-MOI §2a]` |
 
 ---
