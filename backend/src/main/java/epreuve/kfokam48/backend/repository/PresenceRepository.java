@@ -11,6 +11,8 @@ public interface PresenceRepository extends JpaRepository<Presence, Long> {
 
     boolean existsBySessionIdAndEtudiantId(Long sessionId, Long etudiantId);
 
+    long countBySessionIdAndEtudiantId(Long sessionId, Long etudiantId);
+
     List<Presence> findBySessionIdOrderByMarqueLeAsc(Long sessionId);
 
     /** RG6 : le relecteur est tiré au hasard parmi les présents, auteur de l'exercice exclu. */
