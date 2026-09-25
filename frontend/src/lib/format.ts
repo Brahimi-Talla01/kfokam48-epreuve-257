@@ -25,6 +25,8 @@ export function libelleStatut(statut: string): string {
       return "En attente";
     case "RENDUE":
       return "Rendue";
+    case "PROVISOIRE":
+      return "Provisoire — un seul des deux relecteurs a rendu sa note";
     default:
       return statut;
   }

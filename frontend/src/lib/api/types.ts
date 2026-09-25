@@ -71,7 +71,7 @@ export interface ExerciceMisAJour {
   misAJourLe: string;
 }
 
-/** POST /api/relectures → 201 */
+/** POST /api/relectures → 201 (étape 3, RG18 : jusqu'à deux relectures créées d'un coup) */
 export interface RelectureCreee {
   id: number;
   exerciceId: number;
@@ -97,6 +97,18 @@ export interface RelectureRecue {
   note: number | null;
   commentaire: string | null;
   rendueLe?: string | null;
+}
+
+/**
+ * GET /api/exercices/{id}/relectures — étape 3 (RG18/RG19).
+ * `noteRetenue` : moyenne si les deux relectures sont rendues (définitive), la note
+ * seule si une seule est rendue (`provisoire = true`), `null` sinon. Calculée par
+ * l'API — jamais recalculée ici (F3 / ENF6).
+ */
+export interface NotesExercice {
+  noteRetenue: number | null;
+  provisoire: boolean;
+  relectures: RelectureRecue[];
 }
 
 /** Ligne du tableau récapitulatif (GET /api/tableau). */

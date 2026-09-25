@@ -5,12 +5,12 @@ import {
   deposerExercice,
   listerEtudiants,
   listerPromotions,
-  listerRelecturesExercice,
   listerSessions,
   marquerPresence,
+  obtenirNotesExercice,
   remplacerLienExercice,
 } from "@/lib/api";
-import type { Etudiant, RelectureRecue, Session } from "@/lib/api";
+import type { Etudiant, NotesExercice, Session } from "@/lib/api";
 import { Badge, Chargement, MessageErreur, MessageSucces } from "@/components/ui";
 import { useAction, useChargement } from "@/lib/feedback";
 import { formaterDate } from "@/lib/format";
@@ -35,8 +35,8 @@ export default function EcranEtudiant() {
   const [lien, setLien] = useState("");
   const [exerciceId, setExerciceId] = useState<number | null>(null);
 
-  const notes = useChargement<RelectureRecue[]>(
-    async () => (exerciceId === null ? [] : listerRelecturesExercice(exerciceId)),
+  const notes = useChargement<NotesExercice | null>(
+    async () => (exerciceId === null ? null : obtenirNotesExercice(exerciceId)),
     [],
   );
   // Les notes ne sont demandées qu'à l'explicitation de l'étudiant (bouton
@@ -317,13 +317,25 @@ export default function EcranEtudiant() {
         </div>
         {notes.enCours && <Chargement texte="Chargement de vos notes…" />}
         <MessageErreur texte={notes.erreur} />
+        {notesConsultees && !notes.enCours && !notes.erreur && notes.donnees && (
+          <p className="meta">
+            Note retenue :{" "}
+            {notes.donnees.noteRetenue === null ? "—" : notes.donnees.noteRetenue}
+            {notes.donnees.provisoire && (
+              <>
+                {" "}
+                <Badge statut="PROVISOIRE" />
+              </>
+            )}
+          </p>
+        )}
         {notesConsultees &&
           !notes.enCours &&
           !notes.erreur &&
-          (notes.donnees ?? []).length === 0 && (
+          (notes.donnees?.relectures ?? []).length === 0 && (
             <p className="hint">Aucune relecture sur cet exercice pour le moment.</p>
           )}
-        {(notes.donnees ?? []).map((relecture) => (
+        {(notes.donnees?.relectures ?? []).map((relecture) => (
           <article key={relecture.id} className="item-liste espace-bas">
             <div className="item-liste__entete">
               <h3>Relecture n° {relecture.id}</h3>
