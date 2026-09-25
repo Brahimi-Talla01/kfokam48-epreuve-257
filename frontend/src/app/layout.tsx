@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 import Link from "next/link";
-import { API_BASE_URL } from "@/lib/api";
+import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -31,12 +30,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </header>
 
         <main className="container main">{children}</main>
-
-        <footer className="site-footer">
-          <div className="container">
-            API interrogée : <code>{API_BASE_URL}</code>
-          </div>
-        </footer>
       </body>
     </html>
   );

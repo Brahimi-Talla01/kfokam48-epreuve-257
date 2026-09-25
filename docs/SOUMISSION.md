@@ -20,16 +20,16 @@
 |                                            |                                                           |
 | ------------------------------------------ | --------------------------------------------------------- |
 | Dépôt (public)                             | `https://github.com/Brahimi-Talla01/kfokam48-epreuve-257` |
-| Commit final — hash complet, 40 caractères | `d5af9c61f6559cc30f688688606c2942d53fd03a` |
+| Commit final — hash complet, 40 caractères | `d5af9c61f6559cc30f688688606c2942d53fd03a`                |
 | Branche                                    | `main`                                                    |
 
 ## Technique
 
-|                        |                                                                    |
-| ---------------------- | ------------------------------------------------------------------ |
+|                        |                                                                                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | Frontend utilisé       | Next.js 15 (App Router, TypeScript) — 3 écrans en routes natives, build de production en `next start`, sans rendu serveur applicatif exigé |
-| Base de données        | PostgreSQL 16 (Flyway : `V1` schéma, `V2` seed de démo, `V3` évolution étape 3) |
-| Commandes de démarrage | `git clone <dépôt>` puis `docker compose up --build` (1 commande) |
+| Base de données        | PostgreSQL 16 (Flyway : `V1` schéma, `V2` seed de démo, `V3` évolution étape 3)                                                            |
+| Commandes de démarrage | `git clone <dépôt>` puis `docker compose up --build` (1 commande)                                                                          |
 
 ## Ce que j'ai livré
 
@@ -59,4 +59,4 @@ et `docs/JOURNAL.md`, entrée étape 3).
 
 **Déclaration.** J'ai réalisé ce travail seul. Les outils d'IA étaient autorisés sans restriction et je les ai utilisés ; mon journal indique où et comment j'ai vérifié leurs réponses. Mes dépôts resteront publics et inchangés jusqu'à la publication des résultats.
 
-Signature : \***\*\*\*\*\***\_\_\***\*\*\*\*\*** Date : \***\*\_\_\*\***
+Signature : _ib_ Date : 25/09/2026
