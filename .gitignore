@@ -1,7 +1,5 @@
 # --- Documents d'épreuve (non destinés au dépôt public) ---
-/assets/*.pdf
-/assets/EPREUVE_KFOKAM48/
-/assets/INIT.md
+/assets
 
 # --- Java / Maven ---
 target/

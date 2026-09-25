@@ -39,7 +39,8 @@
 | 2026-09-25 | `develop` | `7558bd6` | docs: journal de bord — entrée de l'étape 1 (analyse) | #16 | 1 |
 | 2026-09-25 | `develop` | `7a5f523` | docs: suivi Git — trace de l'étape 1 et du backlog en issues | — | 1 |
 | 2026-09-25 | `develop` → `main` | `f730f76` | `[JALON] analyse` (commit vide) — `main` avancée en fast-forward de `develop` | — | 1 |
-| 2026-09-25 | `develop` | *(ce commit)* | docs: plan et suivi — étapes 0 et 1 cochées, décision Q4 `429` → `400` | — | 1 |
+| 2026-09-25 | `develop` | `1f25a72` | docs: plan et suivi — étapes 0 et 1 cochées, décision Q4 `429` → `400` | — | 1 |
+| 2026-09-25 | `develop` | *(ce commit)* | chore: gitignore retenu tel quel (`/assets` + Java/JS), plan §4.1 aligné | — | 1 |
 
 ---
 
