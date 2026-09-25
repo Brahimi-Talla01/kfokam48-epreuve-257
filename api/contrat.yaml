@@ -185,6 +185,10 @@ paths:
                     etudiantId: { type: integer, format: int64 }
                     nom: { type: string }
                     presences: { type: integer }
+                    # Propriété FACULTATIVE ajoutée par le candidat (RG13 / Q14) :
+                    # elle rend distinguables les présences relevées par le formateur.
+                    # Les six champs imposés ci-dessus sont inchangés, mêmes noms et mêmes types.
+                    presencesFormateur: { type: integer }
                     exercicesDeposes: { type: integer }
                     moyenne: { type: number, nullable: true }
                     relecturesEnAttente: { type: integer }
