@@ -10,5 +10,7 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 
     Optional<Session> findByCode(String code);
 
+    boolean existsByCode(String code);
+
     List<Session> findByPromotionIdOrderByIdDesc(Long promotionId);
 }

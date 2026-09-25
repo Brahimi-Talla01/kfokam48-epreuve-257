@@ -79,6 +79,11 @@ public class Session {
         return statut == StatutSession.OUVERTE;
     }
 
+    /** RG1 / Q2 : le code expire 15 minutes après l'ouverture, indépendamment du statut. */
+    public boolean estExpire(LocalDateTime maintenant) {
+        return maintenant.isAfter(expirationAt);
+    }
+
     public void cloturer(LocalDateTime maintenant) {
         this.statut = StatutSession.CLOTUREE;
         this.clotureAt = maintenant;
