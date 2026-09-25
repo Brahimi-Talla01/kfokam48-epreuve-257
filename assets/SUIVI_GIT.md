@@ -28,6 +28,8 @@
 | #26 | Promotions et liste des étudiants pour choisir son nom | `feature/choix-nom` | `develop` | **#11** | `merged` | [pull/26](https://github.com/Brahimi-Talla01/kfokam48-epreuve-257/pull/26) |
 | #27 | Remplacement du lien d'exercice | `feature/remplacement-lien` | `develop` | **#10** | `merged` | [pull/27](https://github.com/Brahimi-Talla01/kfokam48-epreuve-257/pull/27) |
 | #28 | Présence relevée par le formateur | `feature/presence-formateur` | `develop` | **#9** | `merged` | [pull/28](https://github.com/Brahimi-Talla01/kfokam48-epreuve-257/pull/28) |
+| #29 | Écrans formateur/etudiant/relecteur + couche d'appels API unique | `feature/api-layer-next` | `develop` | **#14** | `merged` | [pull/29](https://github.com/Brahimi-Talla01/kfokam48-epreuve-257/pull/29) |
+| #30 | Dockerisation postgres + backend + frontend | `infra/dockerisation` | `develop` | **#13** | `merged` | [pull/30](https://github.com/Brahimi-Talla01/kfokam48-epreuve-257/pull/30) |
 
 ---
 
@@ -78,7 +80,12 @@
 | 2026-09-25 | `develop` | `aa38a05` | Merge pull request #27 (feature/remplacement-lien → develop) | **#10** · PR #27 | 2 |
 | 2026-09-25 | `feature/presence-formateur` | `0cfa69a` | Presence relevee par le formateur tracée et visible au tableau (EF9, RG13, RG14) | **#9** | 2 |
 | 2026-09-25 | `develop` | `b5151f9` | Merge pull request #28 (feature/presence-formateur → develop) | **#9** · PR #28 | 2 |
-| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — PR #18 à #28 et issues #1 à #12 tracées | — | 2 |
+| 2026-09-25 | `develop` | `84b85ed` | docs: suivi Git — PR #18 à #28, issues #1 à #12 fermées | — | 2 |
+| 2026-09-25 | `feature/api-layer-next` | `00f220b` | Ecran formateur, etudiant et relecteur + couche d'appels API unique (F2, F3) | **#14** | 2 |
+| 2026-09-25 | `develop` | `037283f` | Merge pull request #29 (feature/api-layer-next → develop) | **#14** · PR #29 | 2 |
+| 2026-09-25 | `infra/dockerisation` | `022ec9b` | Dockerisation postgres + backend + frontend en une commande (demarrage, T2) | **#13** | 2 |
+| 2026-09-25 | `develop` | `6b66175` | Merge pull request #30 (infra/dockerisation → develop) | **#13** · PR #30 | 2 |
+| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — PR #29 et #30, issues #13 et #14 fermées | — | 2 |
 
 ---
 
@@ -101,8 +108,8 @@ La colonne **Références** les relie au cahier des charges et au contrat ; la c
 | 10 | Remplacer le lien tant qu'il n'est pas relu | `should` | EF10 · RG12 | `closed` · PR #27 |
 | 11 | Choisir mon nom dans la liste sans mot de passe | `should` | EF11 · Q1 | `closed` · PR #26 |
 | 12 | Flyway, schéma `V1` conforme à D2, seed `V2` | `must` | B5 · ENF4 | `closed` · PR #17 |
-| 13 | Dockeriser `postgres` + `backend` + `frontend` | `must` | démarrage · ENF4 | `open` |
-| 14 | Couche d'appels API Next.js avec états de charge | `must` | F3 · ENF3, ENF6 | `open` |
+| 13 | Dockeriser `postgres` + `backend` + `frontend` | `must` | démarrage · ENF4 | `closed` · PR #30 |
+| 14 | Couche d'appels API Next.js avec états de charge | `must` | F3 · ENF3, ENF6 | `closed` · PR #29 |
 | 15 | Blocage après 5 codes erronés | `could` | EF12 · RG3 | `open` |
 | 16 | Journal d'étape, changelog et soumission | `should` | journal 5 pts | `open` |
 

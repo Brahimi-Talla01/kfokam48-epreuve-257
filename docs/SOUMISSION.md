@@ -8,39 +8,39 @@
 
 ## Candidat
 
-| | |
-|---|---|
-| Nom et prénom(s) | |
-| Matricule | KF48-___-___ |
-| Centre | Yaoundé / Douala / Bafoussam |
-| Compte GitHub | |
+|                  |                                    |
+| ---------------- | ---------------------------------- |
+| Nom et prénom(s) | Talla Moussa Ibrahim               |
+| Matricule        | 257                                |
+| Centre           | Yaoundé                            |
+| Compte GitHub    | https://github.com/Brahimi-Talla01 |
 
 ## Projet
 
-| | |
-|---|---|
-| Dépôt (public) | `https://github.com/<compte>/kfokam48-epreuve-<matricule>` |
-| Commit final — hash complet, 40 caractères | |
-| Branche | `main` |
+|                                            |                                                           |
+| ------------------------------------------ | --------------------------------------------------------- |
+| Dépôt (public)                             | `https://github.com/Brahimi-Talla01/kfokam48-epreuve-257` |
+| Commit final — hash complet, 40 caractères |                                                           |
+| Branche                                    | `main`                                                    |
 
 ## Épreuve Git — étape 5
 
-| | |
-|---|---|
-| Dépôt (public) | `https://github.com/<compte>/kfokam48-gitlab-<matricule>` |
-| Commit final — hash complet, 40 caractères | |
+|                                            |                                                          |
+| ------------------------------------------ | -------------------------------------------------------- |
+| Dépôt (public)                             | `https://github.com/Brahimi-Talla01/kfokam48-gitlab-257` |
+| Commit final — hash complet, 40 caractères |                                                          |
 
 ## Technique
 
-| | |
-|---|---|
-| Frontend utilisé | React / Angular / Next.js |
-| Base de données | |
-| Commandes de démarrage | |
+|                        |          |
+| ---------------------- | -------- |
+| Frontend utilisé       | Next.js  |
+| Base de données        | Postgres |
+| Commandes de démarrage |          |
 
 ## Ce que j'ai livré
 
-*Trois à cinq lignes : ce qui fonctionne, ce qui ne fonctionne pas, ce que j'ai volontairement laissé de côté et pourquoi. Sois exact — un correcteur préfère un périmètre réduit et annoncé qu'une promesse non tenue.*
+_Trois à cinq lignes : ce qui fonctionne, ce qui ne fonctionne pas, ce que j'ai volontairement laissé de côté et pourquoi. Sois exact — un correcteur préfère un périmètre réduit et annoncé qu'une promesse non tenue._
 
 ---
 
@@ -57,4 +57,4 @@
 
 **Déclaration.** J'ai réalisé ce travail seul. Les outils d'IA étaient autorisés sans restriction et je les ai utilisés ; mon journal indique où et comment j'ai vérifié leurs réponses. Mes dépôts resteront publics et inchangés jusqu'à la publication des résultats.
 
-Signature : ______________________  Date : __________
+Signature : \***\*\*\*\*\***\_\_\***\*\*\*\*\*** Date : \***\*\_\_\*\***

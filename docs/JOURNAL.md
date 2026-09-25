@@ -40,11 +40,28 @@ qui sont des critères **imposés** par le sujet (B5, démarrage, F3).
 
 ## Étape 2 — Première version
 
-**Fait :**
+**Fait :** Backend Spring Boot (Java 21) conforme B1-B6 : contrôleur/service/repository/DTO
+séparés, validation + `@RestControllerAdvice` centralisé, schéma Flyway `V1` + seed `V2`,
+43 tests (unitaires + intégration, H2) tous verts. Les 14 issues `must` sont fermées par
+14 PR sur `develop` (#17 à #30). Frontend Next.js 15 : 3 écrans (`/formateur`, `/etudiant`,
+`/relecteur`), couche d'appels API unique `src/lib/api/`, moyenne jamais recalculée côté
+client, `npm run build` vert. Dockerisation : `backend/Dockerfile` (multi-stage maven → jre),
+`frontend/Dockerfile` (multi-stage node:20-alpine, next build → next start),
+`docker-compose.yml` (postgres + backend + frontend, healthchecks). Validé de bout en bout :
+`docker compose up --build` sur poste propre → API `:8080`, frontend `:3000`, données de
+démo chargées (session ouverte, code `K7F2M48`), présence enregistrée via l'API en conteneur.
+README réécrit avec la commande unique de démarrage et le choix du frontend justifié (F1).
 
-**Bloqué :**
+**Bloqué :** Le premier Dockerfile frontend copiait un dossier `public/` qui n'existe pas
+dans ce projet (`create-next-app` sans assets statiques) : le build Docker échouait sur
+`COPY --from=build /app/public`. Corrigé en retirant cette ligne, revalidé par
+`docker compose build` puis `docker compose up` avec smoke test API + frontend.
 
-**IA :**
+**IA :** demandé : rédaction des Dockerfile et du docker-compose.yml, du README. Vérifié :
+`docker compose up --build` exécuté réellement (pas de relecture de code seule), healthchecks
+`postgres`/`backend` passés à `healthy` avant démarrage du service suivant, `curl` sur
+`GET /api/tableau` et `POST /api/presences` avec le code de démo, `GET /` et `/etudiant` du
+frontend en `200` — le tout à travers les conteneurs, pas en local.
 
 ---
 
