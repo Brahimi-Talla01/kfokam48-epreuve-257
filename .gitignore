@@ -1,0 +1,28 @@
+# --- Documents d'épreuve (non destinés au dépôt public) ---
+/assets/*.pdf
+/assets/EPREUVE_KFOKAM48/
+/assets/INIT.md
+
+# --- Java / Maven ---
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+# --- Node / frontend ---
+node_modules/
+dist/
+build/
+.vite/
+.angular/
+.eslintcache
+
+# --- IDE / OS / environnement ---
+.idea/
+.vscode/
+*.iml
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
