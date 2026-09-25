@@ -8,6 +8,7 @@ import epreuve.kfokam48.backend.repository.EtudiantRepository;
 import epreuve.kfokam48.backend.repository.PresenceRepository;
 import epreuve.kfokam48.backend.repository.SessionRepository;
 import epreuve.kfokam48.backend.web.ApiException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,12 @@ import java.time.LocalDateTime;
  * Marquage d'une présence. Ordre des contrôles, identique à D3 et au contrat :
  * 400 code inconnu → 410 expiré (RG1) → 410 session terminée (RG2/RG16) →
  * 409 déjà présent (RG14) → 201.
+ *
+ * Issue #31 : la vérification d'existence puis l'écriture ne sont pas atomiques.
+ * Sous deux requêtes concurrentes sur la même présence, les deux vérifications
+ * peuvent passer avant que la première écriture ne soit validée ; la seconde
+ * écriture viole alors la contrainte UNIQUE en base — c'est la contrainte, et non
+ * la vérification applicative, qui garantit RG14 en dernier ressort.
  */
 @Service
 public class PresenceService {
@@ -59,6 +66,13 @@ public class PresenceService {
                 .orElseThrow(() -> ApiException.badRequest("ETUDIANT_INCONNU",
                         "L'étudiant demandé n'existe pas."));
 
-        return presences.save(new Presence(session, etudiant, source));
+        try {
+            return presences.save(new Presence(session, etudiant, source));
+        } catch (DataIntegrityViolationException collision) {
+            // Deux requêtes concurrentes ont franchi le contrôle d'existence avant que
+            // l'une des deux n'ait validé son écriture : la contrainte UNIQUE tranche.
+            throw ApiException.conflict("DEJA_PRESENT",
+                    "Votre présence est déjà enregistrée pour cette session.");
+        }
     }
 }
