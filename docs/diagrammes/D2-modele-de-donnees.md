@@ -11,7 +11,7 @@ erDiagram
     SESSION ||--o{ EXERCICE : "recue"
     ETUDIANT ||--o{ PRESENCE : "signe"
     ETUDIANT ||--o{ EXERCICE : "depot"
-    EXERCICE ||--o| RELECTURE : "est relu par"
+    EXERCICE ||--o{ RELECTURE : "est relu par (0 a 2, RG18 - etape 3)"
     ETUDIANT ||--o{ RELECTURE : "relit"
 
     PROMOTION {
@@ -74,7 +74,7 @@ erDiagram
 |---|---|
 | **`V1__init.sql`** | Les 6 tables + contraintes `UNIQUE` + `CHECK` + index |
 | **`V2__seed_demo.sql`** | 1–2 promotions, ~15 étudiants, 1 session ouverte avec code réel, quelques présences et exercices |
-| **`V3__*.sql`** (étape 3) | Ajouts provenant de l'évolution du besoin — **jamais** de modification en place (B5) |
+| **`V3__deux_relecteurs.sql`** (étape 3) | `uk_relecture_exercice` (1 relecteur) → `uk_relecture_exercice_relecteur` (2 relecteurs distincts, RG18) — **jamais** de modification en place de `V1`/`V2` (B5) |
 
 ## Contraintes d'intégrité (écrites dans `V1`)
 
@@ -82,7 +82,7 @@ erDiagram
 |---|---|---|
 | `uk_presence_etudiant_session` | 1 présence par (étudiant, session) → `409 DEJA_PRESENT` | RG14 |
 | `uk_exercice_etudiant_session` | 1 exercice par (étudiant, session) | logique métier |
-| `uk_relecture_exercice` | **Un seul relecteur par exercice** | RG5 |
+| `uk_relecture_exercice_relecteur` *(V3, remplace `uk_relecture_exercice`)* | **Deux relecteurs distincts par exercice** au maximum, jamais le même deux fois | RG18 |
 | `ck_note_entre_0_et_20` | `note IS NULL OR note BETWEEN 0 AND 20` | RG8 |
 | `ck_statut_session` | `IN ('OUVERTE','CLOTUREE')` | RG16 |
 | `ck_statut_relecture` | `IN ('EN_ATTENTE','RENDUE')` | RG10 |
@@ -93,5 +93,6 @@ erDiagram
 
 - **Pas de table `Relecteur`** : le relecteur est un `Etudiant` référencé par `RELECTURE` (cahier §2).
 - **`relecture.relecteur_id` est nullable** : cas « aucun pair présent à la session » (§7.2 du cahier) — l'exercice reste `EN_ATTENTE` et remonte dans `relecturesEnAttente` (Q11, RG10).
+- **Étape 3 (RG18/RG19, cahier §7.3)** : un exercice a **0, 1 ou 2** lignes `RELECTURE` — 2 si au moins deux pairs étaient présents, 1 si un seul pair était éligible (sa note devient alors définitive dès qu'elle est rendue), 0 si aucun. La note retenue (moyenne si 2 rendues, provisoire si 1 seule) est **calculée**, jamais stockée.
 - **`note` est nullable** : c'est ce qui rend `moyenne = null` possible dans `GET /api/tableau` (contrat) tant qu'aucune note n'existe (RG17).
 - **Deux timestamps de fin distincts** : `expiration_at` (code, Q2) ≠ `cloture_at` (session, Q3/Q12) — les confondre invaliderait RG1 et RG11.
