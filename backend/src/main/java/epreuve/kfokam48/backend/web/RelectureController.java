@@ -6,10 +6,13 @@ import epreuve.kfokam48.backend.service.RelectureService;
 import epreuve.kfokam48.backend.web.dto.RelectureCreateRequest;
 import epreuve.kfokam48.backend.web.dto.RelectureDetailResponse;
 import epreuve.kfokam48.backend.web.dto.RelectureResponse;
+import epreuve.kfokam48.backend.web.dto.RenduRequest;
+import epreuve.kfokam48.backend.web.dto.RenduResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +46,19 @@ public class RelectureController {
     public List<RelectureDetailResponse> lister(@RequestParam Long relecteurId,
                                                 @RequestParam(required = false) StatutRelecture statut) {
         return relectures.lister(relecteurId, statut).stream().map(this::versDetail).toList();
+    }
+
+    /** Opération imposée — 200 · 400 NOTE_INVALIDE · 403 AUTO_RELECTURE · 409 RELECTURE_DEJA_RENDUE. */
+    @PostMapping("/relectures/{id}")
+    public ResponseEntity<RenduResponse> rendre(@PathVariable Long id,
+                                                @Valid @RequestBody RenduRequest requete) {
+        Relecture relecture = relectures.rendre(id, requete.note(), requete.commentaire(),
+                requete.relecteurId());
+        return ResponseEntity.ok(new RenduResponse(relecture.getId(),
+                relecture.getExercice().getId(),
+                relecture.getStatut().name(),
+                relecture.getNote(),
+                relecture.getCommentaire()));
     }
 
     private RelectureResponse versDto(Relecture relecture) {
