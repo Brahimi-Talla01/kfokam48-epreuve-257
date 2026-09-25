@@ -129,11 +129,24 @@ l'issue #15 elle-même, pour que le sacrifice soit traçable des deux côtés.
 
 ## Étape 4 — Version finale
 
-**Fait :**
+**Fait :** `CHANGELOG.md` créé, cohérent avec l'historique Git réel (une entrée par
+jalon/étape, renvoyant aux issues et PR de `assets/SUIVI_GIT.md`), section Backlog à
+jour (16 issues fermées, 2 ouvertes avec leur état réel). README revalidé **depuis un
+clone vierge** dans un dossier temporaire séparé du dépôt de travail :
+`git clone` puis `docker compose up --build` en une seule commande → API `:8080`,
+frontend `:3000`, données de démo chargées, `GET /api/tableau` et pages `/` et
+`/etudiant` répondent `200`. Conteneurs et volume nettoyés après vérification. Backlog
+trié : `#15` documentée comme sacrifiée (étape 3), `#16` en cours de fermeture (ce
+fichier + `CHANGELOG.md`, `SOUMISSION.md` restant à l'étape 5).
 
-**Bloqué :**
+**Bloqué :** rien de notable — la dockerisation ayant déjà été validée à l'étape 2 et
+revalidée sur Postgres réel à l'étape 3, le clone vierge de l'étape 4 s'est déroulé sans
+surprise.
 
-**IA :**
+**IA :** demandé : rédaction du `CHANGELOG.md` à partir de l'historique Git réel.
+Vérifié : chaque entrée du changelog confrontée à `assets/SUIVI_GIT.md` (aucun élément
+inventé, aucun oublié) ; le clone vierge et `docker compose up --build` exécutés
+réellement dans un dossier séparé, pas seulement relus.
 
 ---
 
