@@ -472,7 +472,7 @@ git grep -nE "target/|node_modules/|dist/" --name-only
 
 ### 4.6 Fichier de suivi — `assets/SUIVI_GIT.md` (décision T5)
 
-**Règle :** chaque commit et chaque pull request de ce dépôt y figure, **mis à jour dans le même mouvement que la poussée** (le commit de mise à jour du suivi peut être lui-même tracé à la poussée suivante, pour ne pas se créer de commit parasite).
+**Règle :** chaque commit et chaque pull request de ce dépôt y figure, **mis à jour dans le même mouvement que la poussée**. Seule exception auto-référente : la ligne du commit qui modifie ce fichier porte la mention *(ce commit)*, son hash étant complété à la mise à jour suivante.
 
 **Format :**
 
