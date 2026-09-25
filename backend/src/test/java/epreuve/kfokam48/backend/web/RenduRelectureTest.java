@@ -79,7 +79,7 @@ class RenduRelectureTest {
 
         Exercice exercice = exercices.deposer(ouverte.getId(), monde.get(0).getId(),
                 "https://example.com/" + UUID.randomUUID().toString().substring(0, 8));
-        Relecture relecture = relectures.findByExerciceId(exercice.getId()).orElseThrow();
+        Relecture relecture = relectures.findAllByExerciceIdOrderByIdAsc(exercice.getId()).get(0);
         return new Cas(relecture.getId(), monde.get(0).getId());
     }
 

@@ -22,6 +22,11 @@ stateDiagram-v2
         Le nom du relecteur n'est jamais exposé
         à l'étudiant auteur (RG7 / Q8)
     end note
+    note right of RENDU
+        Étape 3 (RG18/RG19) : RENDU dès le premier des
+        deux relecteurs — la note affichée peut rester
+        "provisoire" tant que le second n'a pas rendu
+    end note
     note left of ABSENT
         ABSENT = aucun exercice enregistré
         pour cette session

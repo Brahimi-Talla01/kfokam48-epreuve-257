@@ -96,7 +96,7 @@ _Ce que tu exclus compte autant que ce que tu inclus. Un périmètre sans exclus
 | **RG2**  | Aucune présence ne peut être marquée **après la clôture** de la session                                                                                                     | `Q3`                                             |
 | **RG3**  | Après **5 codes erronés**, l'étudiant est bloqué **2 minutes**                                                                                                              | `Q4`                                             |
 | **RG4**  | Un étudiant **ne peut jamais relire son propre exercice** → `403 AUTO_RELECTURE`                                                                                            | `Q5`                                             |
-| **RG5**  | Un exercice a **un seul** relecteur                                                                                                                                         | `Q6`                                             |
+| **RG5**  | ~~Un exercice a **un seul** relecteur~~ **Remplacée à l'étape 3 (ENVELOPPE §2)** : un exercice est relu par **deux pairs distincts** — voir **RG18**, **RG19**              | `Q6` → `ENVELOPPE`                               |
 | **RG6**  | Le relecteur est choisi **au hasard** parmi les étudiants **présents à cette session**, auteur exclu                                                                        | `Q7`                                             |
 | **RG7**  | L'étudiant relu voit la note et le commentaire, **jamais le nom du relecteur**                                                                                              | `Q8`                                             |
 | **RG8**  | La note est un **entier de 0 à 20** ; sinon `400 NOTE_INVALIDE`                                                                                                             | `Q9`                                             |
@@ -109,6 +109,8 @@ _Ce que tu exclus compte autant que ce que tu inclus. Un périmètre sans exclus
 | **RG15** | Le tableau affiche, par étudiant : présences, exercices déposés, moyenne des notes reçues, relectures en attente                                                            | `Q16`                                            |
 | **RG16** | Une session a un statut `OUVERTE` → `CLOTUREE` ; **l'expiration du code (RG1) et la clôture (RG16) sont deux événements distincts** : le code expire, la session se clôture | _décision du candidat, comble un trou — voir §7_ |
 | **RG17** | La moyenne affichée est calculée **côté serveur uniquement**, arrondie à 2 décimales ; `null` si aucune note                                                                | `F3` + `Q16`                                     |
+| **RG18** | *(Étape 3, ENVELOPPE §2)* Un exercice est relu par **deux pairs distincts** tirés au hasard parmi les présents, auteur exclu (RG6 inchangée) ; s'il n'y a qu'**un seul** pair éligible, une seule relecture est créée — sa note, une fois rendue, est alors **définitive** (il n'y a pas de second avis à attendre) | `ENVELOPPE §2` |
+| **RG19** | *(Étape 3, ENVELOPPE §2)* La **note retenue** d'un exercice : si les **deux** relectures assignées sont rendues, c'est leur **moyenne** (définitive) ; si **une seule** est rendue, c'est **cette note-là, marquée `provisoire`** ; si aucune n'est rendue, aucune note n'est affichée (RG10 inchangée) | `ENVELOPPE §2` |
 
 ## 7. Zones d'ombre, hypothèses et contradictions
 
@@ -123,7 +125,7 @@ _Ce que tu exclus compte autant que ce que tu inclus. Un périmètre sans exclus
 | Point                                                                                                                                                                                                                 | Réponse client (Qx) ou hypothèse     | Décision retenue                                                                                                                                                             | Conséquence                                                                                                                             |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | **Le cycle de vie de la session n'existe pas** — `Q3` (« fin de la session »), `Q10` et `Q12` (« clôture par le formateur ») supposent un événement jamais défini ; aucune opération de clôture n'est dans le contrat | _trou repéré, aucune réponse client_ | **RG16** : statut `OUVERTE`/`CLOTUREE` + opération **`POST /api/sessions/{id}/cloturer`** ajoutée au contrat ; `expirationAt` = fin du code, `clotureAt` = fin de la session | `RG2`, `RG11` deviennent applicables ; D2 et D3 mentionnent le statut                                                                   |
-| **`Q6` + `Q11` : un seul relecteur qui ne rend jamais → l'étudiant n'a aucune note, jamais**                                                                                                                          | `Q6` + `Q11`                         | Signalé ici et dans le backlog ; la réponse viendra de l'évolution du besoin                                                                                                 | _point de vigilance : c'est exactement l'angle mort que le changement de besoin de l'étape 3 vient toucher_                             |
+| **`Q6` + `Q11` : un seul relecteur qui ne rend jamais → l'étudiant n'a aucune note, jamais**                                                                                                                          | `Q6` + `Q11`                         | **Résolu à l'étape 3** : deux relecteurs (RG18) et note provisoire dès qu'un seul a rendu (RG19), voir §7.3                                                                  | _c'était exactement l'angle mort que le changement de besoin de l'étape 3 est venu toucher_                             |
 | **`Q2` (expiration 15 min) ≠ `Q3` (fin de session)**                                                                                                                                                                  | `Q2`, `Q3`                           | Deux notions distinctes, **jamais confondues** : `expirationAt` pour le code, `clotureAt` pour la session                                                                    | Écran formateur affiche les deux                                                                                                        |
 | **`Q7` : quand l'affectation se déclenche-t-elle, et s'il n'y a aucun pair présent ?**                                                                                                                                | `Q7`                                 | Affectation **au dépôt de l'exercice**. Si aucun pair éligible : relecture `EN_ATTENTE` **sans relecteur**, visible dans le tableau (`relecturesEnAttente`)                  | Ajout de `POST /api/relectures` (création), le `POST /api/relectures/{id}` du contrat ne fait que **rendre** une relecture existante    |
 | **`Q13` : « tant que personne n'a commencé à le relire » — l'état `commencé` n'existe pas**                                                                                                                           | `Q13`                                | « Commencé » = **rendu** : tant que le statut est `EN_ATTENTE`, le lien est remplaçable (`RG12`, `EF10`)                                                                     | Un seul état, pas d'ajout de colonne                                                                                                    |
@@ -133,6 +135,33 @@ _Ce que tu exclus compte autant que ce que tu inclus. Un périmètre sans exclus
 | **`RG13` exige que le tableau distingue les présences relevées par le formateur, mais le schéma imposé du tableau n'a aucune colonne de source**                                                                      | `RG13`, `Q14`, `contrat`             | Propriété **facultative** `presencesFormateur` ajoutée à `GET /api/tableau` : les six champs imposés (noms, types, `required`) restent **strictement inchangés**             | La distinction est lisible côté formateur sans modifier chemin, verbe, codes de statut ni format d'erreur de l'opération imposée (`B2`) |
 
 **Exclusions assumées :** authentification (`Q1`), notifications, historique des notes, statistiques (§3). Toute demande nouvelle sortant de ce périmètre déclenche une **réécriture de cette section**, pas une extension silencieuse.
+
+### 7.3 Évolution du besoin — étape 3 (ENVELOPPE §2)
+
+Le client est revenu avec un changement qui casse **RG5** (issue de `Q6`) : *« un seul relecteur ça
+ne marche pas : quand il ne rend rien, l'étudiant n'a aucune note. »* Décisions prises pour
+l'absorber :
+
+- **RG5 remplacée par RG18 + RG19** (voir §6) : deux relecteurs distincts, note = moyenne si les
+  deux ont rendu, **provisoire** si un seul a rendu, rien si aucun.
+- **Cas limite tranché** : si un seul pair est éligible à la session (peu de présents), une seule
+  relecture est créée — sa note, une fois rendue, est **définitive** (pas de second avis possible),
+  pas provisoire. Sans cette précision, un exercice dans une petite session resterait éternellement
+  « provisoire », ce qui contredirait l'intention du client.
+- **Moyenne du tableau (RG15/RG17) inchangée dans son calcul** : elle continue d'agréger toutes les
+  notes individuellement reçues par l'étudiant (`avg` sur les relectures rendues), ce qui reste
+  correct qu'un exercice ait une ou deux notes rendues — **aucune modification de la requête du
+  tableau n'était nécessaire**.
+- **Migration** : nouvelle migration `V3__deux_relecteurs.sql` qui fait évoluer la contrainte
+  d'unicité de `relecture` (`UNIQUE(exercice_id)` → `UNIQUE(exercice_id, relecteur_id)`) ; `V1` et
+  `V2` ne sont pas modifiées, les données du seed restent valides sans backfill.
+- **Contrat** : `GET /api/exercices/{id}/relectures` change de forme — ajout de `noteRetenue` et
+  `provisoire` à côté de la liste des relectures individuelles (voir `api/contrat.yaml`).
+
+**Sacrifice de périmètre écrit** (ce Must tardif prend la place du temps prévu pour autre chose) :
+l'issue **#15** (blocage 2 minutes après 5 codes erronés, `RG3`, priorité `could`) **sort du
+périmètre de cette livraison**. Elle était déjà la priorité la plus basse du backlog ; c'est elle
+qui cède la place plutôt qu'un `must` déjà engagé. Voir `docs/JOURNAL.md`, entrée « Étape 3 ».
 
 ## 8. Contraintes techniques
 

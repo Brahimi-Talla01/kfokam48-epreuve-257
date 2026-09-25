@@ -19,18 +19,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Affectation du relecteur — issue #5, règles RG5 / RG6 / Q7.
- * Le tirage se fait parmi les PRÉSENTS à la session, auteur exclu ; sans pair présent,
- * la relecture existe quand même avec {@code relecteurId} null (cahier §7.2).
+ * Affectation des relecteurs — issue #5 (RG6 / Q7) et issue #33, RG18 (étape 3,
+ * ENVELOPPE §2, ex-RG5) : deux relecteurs distincts tirés parmi les PRÉSENTS à la
+ * session, auteur exclu ; un seul si un seul pair est éligible ; aucun sans pair
+ * présent — la relecture existe quand même avec {@code relecteurId} null (cahier §7.2).
  */
 @SpringBootTest
 @ActiveProfiles("test")
@@ -66,8 +68,11 @@ class RelectureAffectationTest {
     }
 
     @Test
-    @DisplayName("RG6 / Q7 : le relecteur est tiré parmi les présents, jamais l'auteur")
-    void relecteurTireParmiLesPresents() {
+    @DisplayName("RG18 : avec au moins deux pairs présents, deux relecteurs distincts sont affectés")
+    void deuxRelecteursDistinctsSiAuMoinsDeuxPresents() {
+        // Se limite aux 3 premiers étudiants (ordre alphabétique) pour ne pas fausser
+        // les compteurs de présence des autres étudiants du seed, vérifiés ailleurs
+        // (PresenceFormateurTest, TableauApiTest) sur la même promotion partagée.
         List<Etudiant> monde = etudiants(3);
         Etudiant auteur = monde.get(0);
         Etudiant present1 = monde.get(1);
@@ -80,25 +85,32 @@ class RelectureAffectationTest {
         Exercice exercice = exercices.deposer(session.getId(), auteur.getId(),
                 "https://example.com/devoir");
 
-        Relecture relecture = relectureRepository.findByExerciceId(exercice.getId()).orElseThrow();
-        assertNotNull(relecture.getRelecteur(), "un relecteur doit être affecté");
-        assertFalse(relecture.getRelecteur().getId().equals(auteur.getId()),
-                "on ne se relit jamais soi-même (RG4 / Q5)");
-        assertTrue(relecture.getRelecteur().getId().equals(present1.getId())
-                        || relecture.getRelecteur().getId().equals(present2.getId()),
-                "le relecteur doit faire partie des présents");
-        assertEquals(StatutRelecture.EN_ATTENTE, relecture.getStatut());
+        List<Relecture> creees = relectureRepository.findAllByExerciceIdOrderByIdAsc(exercice.getId());
+        assertEquals(2, creees.size(), "deux relecteurs doivent être affectés (RG18)");
+
+        Set<Long> idsRelecteurs = creees.stream()
+                .map(r -> r.getRelecteur().getId())
+                .collect(Collectors.toSet());
+        assertEquals(2, idsRelecteurs.size(), "les deux relecteurs doivent être distincts");
+        assertFalse(idsRelecteurs.contains(auteur.getId()), "on ne se relit jamais soi-même (RG4 / Q5)");
+        assertTrue(Set.of(present1.getId(), present2.getId()).containsAll(idsRelecteurs),
+                "les relecteurs doivent faire partie des présents");
+        creees.forEach(r -> assertEquals(StatutRelecture.EN_ATTENTE, r.getStatut()));
     }
 
     @Test
-    @DisplayName("RG5 : un seul relecteur par exercice — la seconde création répond 409")
-    void unSeulRelecteurParExercice() {
+    @DisplayName("RG18 : un seul pair éligible → une seule relecture affectée, et la seconde création répond 409")
+    void unSeulRelecteurSiUnSeulPairEligible() {
         List<Etudiant> monde = etudiants(2);
-        var session = sessions.creer("Session unicité", promotion().getId());
+        var session = sessions.creer("Session un seul pair", promotion().getId());
         presences.save(new Presence(session, monde.get(1), SourcePresence.ETUDIANT));
 
         Exercice exercice = exercices.deposer(session.getId(), monde.get(0).getId(),
                 "https://example.com/devoir-2");
+
+        List<Relecture> creees = relectureRepository.findAllByExerciceIdOrderByIdAsc(exercice.getId());
+        assertEquals(1, creees.size(), "un seul pair éligible => une seule relecture (RG18)");
+        assertEquals(monde.get(1).getId(), creees.get(0).getRelecteur().getId());
 
         ApiException erreur = assertThrows(ApiException.class, () -> relectures.creer(exercice.getId()));
         assertEquals("RELECTURE_DEJA_CREE", erreur.getCode());
@@ -114,8 +126,9 @@ class RelectureAffectationTest {
         Exercice exercice = exercices.deposer(session.getId(), seul.getId(),
                 "https://example.com/devoir-3");
 
-        Relecture relecture = relectureRepository.findByExerciceId(exercice.getId()).orElseThrow();
-        assertNull(relecture.getRelecteur(), "aucun pair n'était présent à la session");
-        assertEquals(StatutRelecture.EN_ATTENTE, relecture.getStatut());
+        List<Relecture> creees = relectureRepository.findAllByExerciceIdOrderByIdAsc(exercice.getId());
+        assertEquals(1, creees.size());
+        assertNull(creees.get(0).getRelecteur(), "aucun pair n'était présent à la session");
+        assertEquals(StatutRelecture.EN_ATTENTE, creees.get(0).getStatut());
     }
 }

@@ -4,6 +4,7 @@ import epreuve.kfokam48.backend.domain.Relecture;
 import epreuve.kfokam48.backend.domain.StatutRelecture;
 import epreuve.kfokam48.backend.service.RelectureService;
 import epreuve.kfokam48.backend.web.dto.NoteResponse;
+import epreuve.kfokam48.backend.web.dto.NotesExerciceResponse;
 import epreuve.kfokam48.backend.web.dto.RelectureCreateRequest;
 import epreuve.kfokam48.backend.web.dto.RelectureDetailResponse;
 import epreuve.kfokam48.backend.web.dto.RelectureResponse;
@@ -37,10 +38,11 @@ public class RelectureController {
         this.relectures = relectures;
     }
 
+    /** Étape 3 (RG18) : jusqu'à deux relectures créées et affectées d'un coup. */
     @PostMapping("/relectures")
-    public ResponseEntity<RelectureResponse> creer(@Valid @RequestBody RelectureCreateRequest requete) {
-        Relecture relecture = relectures.creer(requete.exerciceId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(versDto(relecture));
+    public ResponseEntity<List<RelectureResponse>> creer(@Valid @RequestBody RelectureCreateRequest requete) {
+        List<Relecture> creees = relectures.creer(requete.exerciceId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(creees.stream().map(this::versDto).toList());
     }
 
     @GetMapping("/relectures")
@@ -65,10 +67,12 @@ public class RelectureController {
     /**
      * Ajoutée (issue #8) — notes reçues sur un exercice : 200 · 404 EXERCICE_INCONNU.
      * RG7 / Q8 : aucun champ d'identité du relecteur dans la réponse.
+     * Étape 3 (RG19) : {@code noteRetenue} + {@code provisoire} calculés par l'API.
      */
     @GetMapping("/exercices/{id}/relectures")
-    public List<NoteResponse> notes(@PathVariable Long id) {
-        return relectures.listerPourExercice(id).stream()
+    public NotesExerciceResponse notes(@PathVariable Long id) {
+        var agregee = relectures.noteAgregee(id);
+        List<NoteResponse> items = agregee.relectures().stream()
                 .map(relecture -> new NoteResponse(
                         relecture.getId(),
                         relecture.getStatut().name(),
@@ -76,6 +80,7 @@ public class RelectureController {
                         relecture.getCommentaire(),
                         relecture.getRendueLe()))
                 .toList();
+        return new NotesExerciceResponse(agregee.noteRetenue(), agregee.provisoire(), items);
     }
 
     private RelectureResponse versDto(Relecture relecture) {

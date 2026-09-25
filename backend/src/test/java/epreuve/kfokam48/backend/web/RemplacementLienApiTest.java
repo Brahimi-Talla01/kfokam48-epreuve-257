@@ -107,7 +107,7 @@ class RemplacementLienApiTest {
     @DisplayName("409 RELECTURE_COMMENCEE — une note est déjà rendue (Q13)")
     void plusModifiableApresRendu() throws Exception {
         Long id = nouvelExercice().exerciceId();
-        Long relectureId = relectures.findByExerciceId(id).orElseThrow().getId();
+        Long relectureId = relectures.findAllByExerciceIdOrderByIdAsc(id).get(0).getId();
 
         mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders
                         .post("/api/relectures/" + relectureId)

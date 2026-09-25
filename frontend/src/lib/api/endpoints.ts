@@ -4,11 +4,11 @@ import type {
   ExerciceMisAJour,
   Etudiant,
   LigneTableau,
+  NotesExercice,
   Presence,
   Promotion,
   Relecture,
   RelectureCreee,
-  RelectureRecue,
   Session,
   SessionCloturee,
   SessionOuverte,
@@ -72,16 +72,20 @@ export function remplacerLienExercice(
   });
 }
 
-/** GET /api/exercices/{id}/relectures — notes et commentaires reçus (sans relecteur). */
-export function listerRelecturesExercice(id: number): Promise<RelectureRecue[]> {
-  return appelerApi<RelectureRecue[]>(`/api/exercices/${id}/relectures`);
+/**
+ * GET /api/exercices/{id}/relectures — note retenue + détail des relectures reçues
+ * (sans relecteur). Étape 3 (RG18/RG19) : jusqu'à deux relectures, `noteRetenue` et
+ * `provisoire` calculés côté API — jamais recalculés ici (F3 / ENF6).
+ */
+export function obtenirNotesExercice(id: number): Promise<NotesExercice> {
+  return appelerApi<NotesExercice>(`/api/exercices/${id}/relectures`);
 }
 
 // --- Relectures -----------------------------------------------------------
 
-/** POST /api/relectures — création / affectation d'une relecture. */
-export function creerRelecture(donnees: { exerciceId: number }): Promise<RelectureCreee> {
-  return appelerApi<RelectureCreee>("/api/relectures", corpsJson(donnees));
+/** POST /api/relectures — création / affectation des relectures (RG18 : jusqu'à deux). */
+export function creerRelecture(donnees: { exerciceId: number }): Promise<RelectureCreee[]> {
+  return appelerApi<RelectureCreee[]>("/api/relectures", corpsJson(donnees));
 }
 
 /** GET /api/relectures?relecteurId=&statut= — mes relectures. */

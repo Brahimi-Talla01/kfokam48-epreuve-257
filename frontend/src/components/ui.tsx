@@ -35,6 +35,7 @@ const CLASSES_STATUT: Record<string, string> = {
   CLOTUREE: "badge badge--cloturee",
   EN_ATTENTE: "badge badge--attente",
   RENDUE: "badge badge--rendue",
+  PROVISOIRE: "badge badge--attente",
 };
 
 /** Pastille de statut — on affiche la valeur renvoyée par l'API. */
