@@ -58,6 +58,23 @@ public class SessionService {
                         "La session demandée n'existe pas."));
     }
 
+    /**
+     * Clôture de session — POST /api/sessions/{id}/cloturer (issue #7 / RG16).
+     * Opération <b>ajoutée</b> au contrat : le sujet n'en décrit aucune alors que le cahier
+     * des charges en a besoin (Q3 / Q12 : on ne peut plus rien faire après) — trou n° 1 du §7.2.
+     * 200 · 404 SESSION_INCONNUE · 409 SESSION_DEJA_CLOTUREE.
+     */
+    @Transactional
+    public Session cloturer(Long id) {
+        Session session = trouver(id);
+        if (!session.estOuverte()) {
+            throw ApiException.conflict("SESSION_DEJA_CLOTUREE",
+                    "Cette session est déjà clôturée.");
+        }
+        session.cloturer(LocalDateTime.now());
+        return sessions.save(session);
+    }
+
     protected void verifierPromotionExistante(Long promotionId) {
         if (!promotions.existsById(promotionId)) {
             throw ApiException.notFound("PROMOTION_INCONNUE", "La promotion demandée n'existe pas.");

@@ -3,6 +3,7 @@ package epreuve.kfokam48.backend.web;
 import epreuve.kfokam48.backend.domain.Session;
 import epreuve.kfokam48.backend.service.SessionService;
 import epreuve.kfokam48.backend.web.dto.SessionCreateRequest;
+import epreuve.kfokam48.backend.web.dto.SessionClotureeResponse;
 import epreuve.kfokam48.backend.web.dto.SessionOuvertureResponse;
 import epreuve.kfokam48.backend.web.dto.SessionResponse;
 import jakarta.validation.Valid;
@@ -51,6 +52,18 @@ public class SessionController {
     @GetMapping("/sessions/{id}")
     public SessionResponse detail(@PathVariable Long id) {
         return versDto(sessions.trouver(id));
+    }
+
+    /**
+     * Ajoutée (issue #7 / RG16) — clôture de session : 200 {id, statut, clotureAt} ·
+     * 404 SESSION_INCONNUE · 409 SESSION_DEJA_CLOTUREE. Ferme le dépôt d'exercices (RG11)
+     * et le marquage des présences (RG2), sans rien changer à l'expiration du code (RG1).
+     */
+    @PostMapping("/sessions/{id}/cloturer")
+    public SessionClotureeResponse cloturer(@PathVariable Long id) {
+        Session session = sessions.cloturer(id);
+        return new SessionClotureeResponse(session.getId(), session.getStatut().name(),
+                session.getClotureAt());
     }
 
     private SessionResponse versDto(Session session) {
