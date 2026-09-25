@@ -5,7 +5,7 @@ import { API_BASE_URL } from "@/lib/api";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "KFOKAM48 — Présence et relecture par les pairs",
+  title: "KFOKAM48 : Présence et relecture par les pairs",
   description:
     "Ouverture de session, code de présence, dépôt d'exercices et relecture par les pairs.",
 };
@@ -17,7 +17,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <header className="site-header">
           <div className="container site-header__inner">
             <Link href="/" className="site-title">
-              KFOKAM48 — Présence et relecture par les pairs
+              <span className="site-title__badge" aria-hidden="true">
+                K48
+              </span>
+              KFOKAM48
             </Link>
             <nav className="nav" aria-label="Navigation principale">
               <Link href="/formateur">Formateur</Link>

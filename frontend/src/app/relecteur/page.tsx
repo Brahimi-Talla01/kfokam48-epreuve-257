@@ -5,6 +5,7 @@ import { listerEtudiants, listerPromotions, listerRelectures, rendreRelecture } 
 import type { Etudiant, Relecture, StatutRelecture } from "@/lib/api";
 import { Badge, Chargement, MessageErreur, MessageSucces } from "@/components/ui";
 import { useAction, useChargement } from "@/lib/feedback";
+import { VALEUR_VIDE } from "@/lib/format";
 
 export default function EcranRelecteur() {
   const promotions = useChargement(() => listerPromotions(), []);
@@ -48,7 +49,7 @@ export default function EcranRelecteur() {
                 setRelecteurChoisi(null);
               }}
             >
-              <option value="">— Choisir —</option>
+              <option value="">Choisir…</option>
               {(promotions.donnees ?? []).map((promotion) => (
                 <option key={promotion.id} value={promotion.id}>
                   {promotion.nom}
@@ -70,7 +71,7 @@ export default function EcranRelecteur() {
                 )
               }
             >
-              <option value="">— Choisir mon nom —</option>
+              <option value="">Choisir mon nom…</option>
               {(etudiants.donnees ?? []).map((etudiant) => (
                 <option key={etudiant.id} value={etudiant.id}>
                   {etudiant.nom}
@@ -161,7 +162,7 @@ function CarteRelecture({
     <article className="item-liste">
       <div className="item-liste__entete">
         <h3>
-          Relecture n° {relecture.id} — exercice n° {relecture.exerciceId}
+          Relecture n° {relecture.id} · exercice n° {relecture.exerciceId}
         </h3>
         <Badge statut={relecture.statut} />
       </div>
@@ -182,7 +183,7 @@ function CarteRelecture({
         <>
           <p className="meta">
             Note rendue :{" "}
-            {relecture.note === null || relecture.note === undefined ? "—" : relecture.note} / 20
+            {relecture.note === null || relecture.note === undefined ? VALEUR_VIDE : relecture.note} / 20
           </p>
           <p>{relecture.commentaire ?? "Aucun commentaire."}</p>
         </>

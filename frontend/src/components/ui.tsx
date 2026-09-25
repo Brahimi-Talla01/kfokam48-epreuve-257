@@ -38,7 +38,7 @@ const CLASSES_STATUT: Record<string, string> = {
   PROVISOIRE: "badge badge--attente",
 };
 
-/** Pastille de statut — on affiche la valeur renvoyée par l'API. */
+/** Pastille de statut : on affiche la valeur renvoyée par l'API. */
 export function Badge({ statut }: { statut: string }) {
   return (
     <span className={CLASSES_STATUT[statut] ?? "badge"}>{libelleStatut(statut)}</span>

@@ -13,7 +13,7 @@ import {
 import type { Etudiant, NotesExercice, Session } from "@/lib/api";
 import { Badge, Chargement, MessageErreur, MessageSucces } from "@/components/ui";
 import { useAction, useChargement } from "@/lib/feedback";
-import { formaterDate } from "@/lib/format";
+import { VALEUR_VIDE, formaterDate } from "@/lib/format";
 
 export default function EcranEtudiant() {
   const promotions = useChargement(() => listerPromotions(), []);
@@ -128,7 +128,7 @@ export default function EcranEtudiant() {
               value={promotionId === null ? "" : String(promotionId)}
               onChange={(event) => changerPromotion(event.target.value)}
             >
-              <option value="">— Choisir —</option>
+              <option value="">Choisir…</option>
               {(promotions.donnees ?? []).map((promotion) => (
                 <option key={promotion.id} value={promotion.id}>
                   {promotion.nom}
@@ -148,7 +148,7 @@ export default function EcranEtudiant() {
                 setEtudiantChoisi(event.target.value === "" ? null : Number(event.target.value))
               }
             >
-              <option value="">— Choisir mon nom —</option>
+              <option value="">Choisir mon nom…</option>
               {(etudiants.donnees ?? []).map((etudiant) => (
                 <option key={etudiant.id} value={etudiant.id}>
                   {etudiant.nom}
@@ -221,10 +221,10 @@ export default function EcranEtudiant() {
                   setSessionId(event.target.value === "" ? null : Number(event.target.value))
                 }
               >
-                <option value="">— Choisir une session —</option>
+                <option value="">Choisir une session…</option>
                 {(sessions.donnees ?? []).map((session) => (
                   <option key={session.id} value={session.id}>
-                    {session.titre} — {session.statut === "OUVERTE" ? "ouverte" : "clôturée"}
+                    {session.titre} ({session.statut === "OUVERTE" ? "ouverte" : "clôturée"})
                   </option>
                 ))}
               </select>
@@ -320,7 +320,7 @@ export default function EcranEtudiant() {
         {notesConsultees && !notes.enCours && !notes.erreur && notes.donnees && (
           <p className="meta">
             Note retenue :{" "}
-            {notes.donnees.noteRetenue === null ? "—" : notes.donnees.noteRetenue}
+            {notes.donnees.noteRetenue === null ? VALEUR_VIDE : notes.donnees.noteRetenue}
             {notes.donnees.provisoire && (
               <>
                 {" "}
@@ -343,8 +343,8 @@ export default function EcranEtudiant() {
             </div>
             <p className="meta">
               Note :{" "}
-              {relecture.note === null || relecture.note === undefined ? "—" : relecture.note}
-              {relecture.rendueLe ? ` — reçue le ${formaterDate(relecture.rendueLe)}` : ""}
+              {relecture.note === null || relecture.note === undefined ? VALEUR_VIDE : relecture.note}
+              {relecture.rendueLe ? `, reçue le ${formaterDate(relecture.rendueLe)}` : ""}
             </p>
             <p>
               {relecture.commentaire
