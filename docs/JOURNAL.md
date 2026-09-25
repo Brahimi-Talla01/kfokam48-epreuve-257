@@ -67,13 +67,63 @@ frontend en `200` — le tout à travers les conteneurs, pas en local.
 
 ## Étape 3 — Enveloppe
 
-**Fait :**
+**Fait :** Enveloppe lue (bug + changement de besoin). **Bug** (issue #31, ouverte avant
+tout code) : `PresenceService.marquer` faisait un contrôle d'existence puis une écriture
+non atomiques ; sous deux `POST /api/presences` concurrents sur la même présence, la
+seconde écriture violait la contrainte UNIQUE et l'exception n'était pas interceptée,
+remontant en `500` au lieu d'un `409 DEJA_PRESENT` propre — d'où la perte apparente côté
+client. Test rouge d'abord (`PresenceConcurrenteTest`, deux threads via `CyclicBarrier`,
+15 itérations), commit séparé, puis correctif (`catch DataIntegrityViolationException`
+→ `409`), 44/44 tests verts, branche `fix/presence-concurrente` (PR #32) distincte de
+l'évolution. **Changement de besoin** (issue #33) : deux relecteurs par exercice, note
+= moyenne si les deux ont rendu (définitive), note seule marquée provisoire si un seul
+a rendu, définitive d'emblée si un seul pair était éligible (cas limite tranché et écrit
+au cahier §7.3). Analyse mise à jour dans un commit dédié (cahier §6/§7.3, D2, D4)
+**avant** tout code de l'évolution. Migration `V3__deux_relecteurs.sql` : `V1`/`V2`
+jamais modifiées ; la contrainte `uk_relecture_exercice` (1 relecteur) devient
+`uk_relecture_exercice_relecteur` (2 relecteurs distincts) — la base du seed reste
+valide sans transformation. Contrat (`api/contrat.yaml`) mis à jour : `GET
+/api/exercices/{id}/relectures` expose désormais `{noteRetenue, provisoire,
+relectures[]}` ; `POST /api/relectures` renvoie un tableau (jusqu'à deux relectures
+créées d'un coup). Backend (`RelectureService`, tests) et frontend (écran étudiant :
+note retenue + badge « provisoire ») mis à jour, 46/46 tests backend verts, `npm run
+build` vert. Correctif et évolution séparés (2 branches, 2 PR : #32 et une PR dédiée
+à l'issue #33).
 
-**Bloqué :**
+**Bloqué :** ~45 min sur la migration `V3`. `ALTER TABLE relecture DROP CONSTRAINT
+uk_relecture_exercice` réussissait sans erreur, mais un index physique auto-généré par
+H2 pour cette contrainte restait actif en arrière-plan car réutilisé comme support de
+la clé étrangère `fk_relecture_exercice` — il continuait donc à interdire un second
+relecteur par exercice, même après le DROP CONSTRAINT et même après avoir ajouté la
+nouvelle contrainte composite en premier. Diagnostiqué en lisant le message d'erreur H2
+exact (« l'index appartient à la contrainte fk_relecture_exercice ») plutôt que de
+supposer un simple problème d'ordre SQL. Résolu en retirant explicitement la clé
+étrangère avant l'ancienne contrainte, puis en la recréant après la nouvelle — l'ordre
+inverse laisse un index orphelin. Vérifié en relançant la suite complète (46/46 verts)
+et en confirmant que le même schéma reste valide en Postgres (`DROP CONSTRAINT` y
+supprime nativement l'index associé, donc la séquence reste correcte sur les deux
+moteurs). Second point, plus rapide (10 min) : deux nouveaux tests ajoutaient des
+présences à des étudiants du seed déjà comptés par des assertions strictes d'anciens
+tests (`PresenceFormateurTest`, `TableauApiTest`) — corrigé en limitant les nouveaux
+scénarios aux trois premiers étudiants de la promotion, jamais touchés par ces
+assertions.
 
-**IA :**
+**IA :** demandé : rédaction de la migration V3, du service `RelectureService`
+(affectation à deux, note agrégée), des tests de concurrence et d'affectation, du
+contrat mis à jour, de l'écran étudiant. Vérifié : chaque test exécuté réellement
+(`./mvnw test`) avant et après chaque correctif — jamais une lecture de code seule ;
+le test de concurrence relu ligne à ligne pour confirmer qu'il reproduit vraiment la
+course (15 itérations, jamais de `500`, jamais deux `201`) ; la migration testée sur H2
+**et** mentalement rejouée sur la syntaxe Postgres réelle (pas seulement H2) avant de la
+figer ; `npm run build` et `npx tsc --noEmit` exécutés après les changements frontend.
 
-**Ce que je sors du périmètre pour absorber le changement, et pourquoi :**
+**Ce que je sors du périmètre pour absorber le changement, et pourquoi :** l'issue **#15**
+(blocage 2 minutes après 5 codes erronés, RG3, priorité `could` — la plus basse du
+backlog) sort du périmètre de cette livraison. Le changement de besoin de l'étape 3 est
+un `must` arrivé tard qui a consommé le temps qui lui était initialement réservé ; entre
+un `could` déjà en bas de liste et un `must` déjà engagé, c'est le `could` qui cède la
+place. Décision écrite également au cahier des charges §7.3 et en commentaire sur
+l'issue #15 elle-même, pour que le sacrifice soit traçable des deux côtés.
 
 ---
 
