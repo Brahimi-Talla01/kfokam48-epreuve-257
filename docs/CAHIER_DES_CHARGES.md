@@ -198,7 +198,7 @@ qui cède la place plutôt qu'un `must` déjà engagé. Voir `docs/JOURNAL.md`, 
 6. `frontend/` Next.js 15 conforme à F1–F3.
 7. `docker-compose.yml` + README d'installation testé depuis un clone vierge.
 8. `docs/JOURNAL.md` : une entrée par étape.
-9. `assets/PLAN_EPREUVE.md` et `assets/SUIVI_GIT.md` : plan d'exécution et traçabilité commits/PR.
+9. `docs/PLAN_EPREUVE.md` et `docs/SUIVI_GIT.md` : plan d'exécution et traçabilité commits/PR.
 10. `SOUMISSION.md` téléversé sur la plateforme avant 18h00.
 
 ## 10. Démarche prévue
@@ -219,7 +219,7 @@ qui cède la place plutôt qu'un `must` déjà engagé. Voir `docs/JOURNAL.md`, 
 - `./mvnw test` et `npm run build` passent ;
 - aucune règle métier n'a été dupliquée côté client ;
 - le commit cite l'`EFx` / `RGx` concerné ;
-- `assets/SUIVI_GIT.md` contient la ligne du commit et de la PR.
+- `docs/SUIVI_GIT.md` contient la ligne du commit et de la PR.
 
 ---
 

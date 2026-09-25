@@ -130,7 +130,7 @@ l'issue #15 elle-même, pour que le sacrifice soit traçable des deux côtés.
 ## Étape 4 — Version finale
 
 **Fait :** `CHANGELOG.md` créé, cohérent avec l'historique Git réel (une entrée par
-jalon/étape, renvoyant aux issues et PR de `assets/SUIVI_GIT.md`), section Backlog à
+jalon/étape, renvoyant aux issues et PR de `docs/SUIVI_GIT.md`), section Backlog à
 jour (16 issues fermées, 2 ouvertes avec leur état réel). README revalidé **depuis un
 clone vierge** dans un dossier temporaire séparé du dépôt de travail :
 `git clone` puis `docker compose up --build` en une seule commande → API `:8080`,
@@ -144,7 +144,7 @@ revalidée sur Postgres réel à l'étape 3, le clone vierge de l'étape 4 s'est
 surprise.
 
 **IA :** demandé : rédaction du `CHANGELOG.md` à partir de l'historique Git réel.
-Vérifié : chaque entrée du changelog confrontée à `assets/SUIVI_GIT.md` (aucun élément
+Vérifié : chaque entrée du changelog confrontée à `docs/SUIVI_GIT.md` (aucun élément
 inventé, aucun oublié) ; le clone vierge et `docker compose up --build` exécutés
 réellement dans un dossier séparé, pas seulement relus.
 
