@@ -292,17 +292,17 @@ flowchart LR
 
 - **Objectif** : un incrément fonctionnel et démontrable, derrière une discipline Git irréprochable.
 - **Tâches détaillées** :
-  1. **Backend** : création du projet Maven Spring Boot (**maintenant autorisé**) ; committer `mvnw` + `.gitattributes` (B1).
-  2. **Flyway + seed (décisions T3)** : `V1__init.sql` = schéma conforme à **D2**, `V2__seed_demo.sql` = données de démo (promotion, ~8 étudiants, 2 sessions dont une clôturée, présences, exercices). **Avant toute donnée** — « la plupart de ceux qui souffriront à l'étape 3 souffriront pour une seule raison : un schéma de base non versionné » `[SUJET §6]`.
-  3. Implémenter les 5 opérations du contrat à la lettre (B2), en couche Controller → Service → Repository, DTO obligatoires (B3), validation + `@RestControllerAdvice` centralisé renvoyant `{code,message}` (B4).
-  4. Tests : 1 unitaire sur une règle réelle (ex. expiration 15 min = RG1) + 1 intégration sur un endpoint, **sur H2** pour tourner sur poste vierge (B6).
-  5. **Frontend Next.js 15** (décision T1) : `create-next-app` (App Router + TypeScript), les **3 écrans** en routes `src/app/{formateur,etudiant,relecteur}` (F2), **une seule** couche d'appels `src/lib/api/` (F3), états chargement/erreur, moyenne **jamais recalculée** côté client (F3), base URL du backend via `NEXT_PUBLIC_API_URL`.
-  6. **Dockerisation (décision T2)** : `backend/Dockerfile` (multi-stage Maven → JRE), `frontend/Dockerfile` (multi-stage `next build` → `next start`), `docker-compose.yml` (`postgres` + `backend` + `frontend`), `depends_on` + `healthcheck` pour que Flyway/seed tournent après la montée de Postgres.
-  7. **Une branche par issue**, une **PR par branche** — **la PR cible `develop`** (décision T4) — commit fermant l'issue : `git commit -m "Enregistrement d'une présence par code (RG1) — Closes #4"` `[SUJET §2c]`.
-  8. Pousser **au fil de l'eau** ; **mettre à jour `assets/SUIVI_GIT.md` à chaque push** (décision T5) ; entrée « Étape 2 » du `JOURNAL.md`.
-  9. Merge `develop` → `main`, **puis** `git commit --allow-empty -m "[JALON] v0.1"` sur `main` + push `[SUJET §2]` (§4.2).
+  1. ✅ **Fait** — **Backend** : projet Maven Spring Boot (Java 21) ; `mvnw` + `.gitattributes` commités (B1).
+  2. ✅ **Fait** (`d58821c`, PR #17) — **Flyway + seed (décisions T3)** : `V1__init.sql` conforme à **D2**, `V2__seed_demo.sql` (2 promotions, 9 étudiants, 2 sessions dont une clôturée, présences, exercices, relectures).
+  3. ✅ **Fait** — Les 5 opérations imposées + les opérations complémentaires du contrat implémentées à la lettre (B2), couches Controller → Service → Repository, DTO obligatoires (B3), validation + `@RestControllerAdvice` centralisé renvoyant `{code,message}` (B4).
+  4. ✅ **Fait** — 43 tests (unitaires + intégration) sur H2, tous verts (`./mvnw test`), sans base locale (B6).
+  5. ✅ **Fait** (PR #29, Closes #14) — **Frontend Next.js 15** (décision T1) : **3 écrans** `src/app/{formateur,etudiant,relecteur}` (F2), **une seule** couche d'appels `src/lib/api/` (F3), états chargement/erreur, moyenne **jamais recalculée** côté client, `NEXT_PUBLIC_API_URL`. `npm run build` vert.
+  6. ✅ **Fait** (PR #30, Closes #13) — **Dockerisation (décision T2)** : `backend/Dockerfile` (multi-stage `eclipse-temurin:21-jdk` → `21-jre`), `frontend/Dockerfile` (multi-stage `node:20-alpine`, `next build` → `next start`), `docker-compose.yml` (`postgres` + `backend` + `frontend`, `depends_on` + `healthcheck`). Validé de bout en bout : `docker compose up --build` → API `:8080`, frontend `:3000`, données de démo, présence enregistrée via l'API en conteneur.
+  7. ✅ **Fait** — **Une branche par issue**, une **PR par branche** ciblant `develop` (décision T4), 14 issues `must` fermées par 14 PR (#17 à #30).
+  8. ✅ **Fait** — Poussé **au fil de l'eau** ; `assets/SUIVI_GIT.md` tenu à jour à chaque push (décision T5) ; entrée « Étape 2 » du `JOURNAL.md` écrite.
+  9. ✅ **Fait** (`974ff81`) — `[JALON] v0.1` (commit vide) créé sur `develop`, poussé, puis `main` avancée en fast-forward `[SUJET §2]` (§4.2).
 - **Livrable** : v0.1 démontrable en une commande, issues Must fermées par des PR sur `develop`, jalon poussé sur `main`, suivi à jour.
-- **Validation** : **clone vierge + `docker compose up`** → app opérationnelle **avec les données de démo** sur `:3000`, API sur `:8080` ; `./mvnw test` vert sans base locale ; `npm run build` vert ; aucune issue ouverte sans PR ; `assets/SUIVI_GIT.md` à jour.
+- **Validation** : **clone vierge + `docker compose up`** → app opérationnelle **avec les données de démo** sur `:3000`, API sur `:8080` ; `./mvnw test` vert sans base locale ; `npm run build` vert ; aucune issue Must ouverte sans PR ; `assets/SUIVI_GIT.md` à jour.
 - **Estimation** : 5 h à 6 h (Next 15 + Docker compris).
 
 ### Étape 3 — Ouvrir l'enveloppe — **10 pts de conduite du changement**
@@ -507,30 +507,30 @@ git grep -nE "target/|node_modules/|dist/" --name-only
 ## 5. Checklist finale
 
 **Conformité structure et dépôt**
-- [ ] Dépôt **public** `kfokam48-epreuve-<matricule>` (nom exact, matricule complet) — **un seul dépôt**
-- [ ] `develop` est la **branche par défaut** sur GitHub ; toutes les PR ciblent `develop` (T4)
-- [ ] `main` n'a reçu **que** des merges de `develop` (fast-forward aux 3 jalons), jamais de commit direct
-- [ ] Structure `docs/ · api/ · backend/ · frontend/` respectée (+ `docker-compose.yml` à la racine)
-- [ ] **`assets/SUIVI_GIT.md`** à jour : chaque commit et chaque PR tracé (T5)
-- [ ] Chaque commit : **auteur unique = moi**, aucun `Co-Authored-By` (T6) — vérifié avec `git log -1 --format='%an <%ae>'`
-- [ ] `.gitignore` Java + JS posé **avant** le premier commit de code, aucun fichier généré dans l'historique
-- [ ] Aucun secret nulle part dans l'historique
-- [ ] `main` toujours sain, aucun `push --force` destructeur
+- [x] Dépôt **public** `kfokam48-epreuve-257` — **un seul dépôt**
+- [x] `develop` est la **branche par défaut** sur GitHub ; toutes les PR ciblent `develop` (T4)
+- [x] `main` n'a reçu **que** des merges de `develop` (fast-forward aux jalons), jamais de commit direct
+- [x] Structure `docs/ · api/ · backend/ · frontend/` respectée (+ `docker-compose.yml` à la racine)
+- [x] **`assets/SUIVI_GIT.md`** à jour : chaque commit et chaque PR tracé (T5)
+- [x] Chaque commit : **auteur unique = moi**, aucun `Co-Authored-By` (T6) — vérifié avec `git log --format='%an <%ae>' | sort -u` → une seule identité
+- [x] `.gitignore` Java + JS posé **avant** le premier commit de code, aucun fichier généré dans l'historique
+- [x] Aucun secret nulle part dans l'historique
+- [x] `main` toujours sain, aucun `push --force` destructeur
 
 **Analyse (38 pts)**
-- [ ] `docs/CAHIER_DES_CHARGES.md` : 10 sections, dans l'ordre, `EFx` et `RGx` numérotés, critères « quand… alors… »
-- [ ] Section 7 : contradictions `Q10/Q15` tranchées **et justifiées**, trous identifiés avec décision écrite
-- [ ] D1, D2, D3 en Mermaid texte ; **D2 ≡ migrations**, **D3 ≡ codes HTTP du contrat**
-- [ ] D4 (bonus) états-transitions de l'exercice
-- [ ] ≈10 issues : titre = résultat, critères vérifiables, priorité Must/Should/Could, renvoi `EFx`/`RGx`
-- [ ] `api/contrat.yaml` complété **et figé avant le premier commit de code**
+- [x] `docs/CAHIER_DES_CHARGES.md` : 10 sections, dans l'ordre, `EFx` et `RGx` numérotés, critères « quand… alors… »
+- [x] Section 7 : contradictions `Q10/Q15` tranchées **et justifiées**, trous identifiés avec décision écrite
+- [x] D1, D2, D3 en Mermaid texte ; **D2 ≡ migrations**, **D3 ≡ codes HTTP du contrat**
+- [x] D4 (bonus) états-transitions de l'exercice
+- [x] 16 issues : titre = résultat, critères vérifiables, priorité Must/Should/Could, renvoi `EFx`/`RGx`
+- [x] `api/contrat.yaml` complété **et figé avant le premier commit de code**
 
 **Jalons (3 × malus −5)**
-- [ ] `[JALON] analyse` **avant** le premier commit de code, poussé
-- [ ] `[JALON] v0.1` poussé (condition d'obtention de l'enveloppe)
+- [x] `[JALON] analyse` **avant** le premier commit de code, poussé (`f730f76`)
+- [x] `[JALON] v0.1` poussé (condition d'obtention de l'enveloppe) (`974ff81`)
 - [ ] `[JALON] v1.0` poussé
-- [ ] Les trois, **dans cet ordre**
-- [ ] **Aucun autre commit** ne porte le préfixe `[JALON]` — le test de connexion s'intitule `chore: verification du depot` (précision n° 2, malus −5)
+- [ ] Les trois, **dans cet ordre** *(2/3 pour l'instant, ordre respecté)*
+- [x] **Aucun autre commit** ne porte le préfixe `[JALON]` — le test de connexion s'intitule `chore: verification du depot` (précision n° 2, malus −5)
 
 **Étape 3 (10 pts)**
 - [ ] Issue ouverte **avant** le premier commit de correction
@@ -542,16 +542,16 @@ git grep -nE "target/|node_modules/|dist/" --name-only
 - [ ] Correctif et évolution : **2 branches, 2 PR**
 
 **Produit et conformité (17 pts)**
-- [ ] 5 opérations du contrat exactes : chemins, verbes, codes HTTP, `{code,message}` pour **toute** erreur
-- [ ] Aucune stack trace, aucun corps vide, aucune page d'erreur Spring par défaut
-- [ ] B3–B6 : couches séparées, DTO, validation + `@RestControllerAdvice`, Flyway, 2 tests qui prouvent quelque chose
-- [ ] F1 : **Next.js 15** justifié **en une ligne** dans le `README`, `npm run build` passe · F2 : 3 écrans (`/formateur`, `/etudiant`, `/relecteur`) · F3 : couche `src/lib/api/` unique, états chargement/erreur, moyenne **jamais recalculée** côté client
-- [ ] **`docker compose up`** seul suffit à démarrer `postgres` + `backend` + `frontend` (T2)
-- [ ] Seed de démo chargé par la migration **`V2__seed_demo.sql`** au démarrage du backend (T3) — le correcteur ne tombe jamais sur une app vide
-- [ ] **Démarre chez un tiers depuis le seul `README`**, avec données de démonstration (clone vierge, une commande)
+- [x] 5 opérations du contrat exactes : chemins, verbes, codes HTTP, `{code,message}` pour **toute** erreur
+- [x] Aucune stack trace, aucun corps vide, aucune page d'erreur Spring par défaut (`GlobalExceptionHandler`)
+- [x] B3–B6 : couches séparées, DTO, validation + `@RestControllerAdvice`, Flyway, 43 tests qui prouvent des règles réelles
+- [x] F1 : **Next.js 15** justifié **en une ligne** dans le `README`, `npm run build` passe · F2 : 3 écrans (`/formateur`, `/etudiant`, `/relecteur`) · F3 : couche `src/lib/api/` unique, états chargement/erreur, moyenne **jamais recalculée** côté client
+- [x] **`docker compose up`** seul suffit à démarrer `postgres` + `backend` + `frontend` (T2) — validé (healthchecks OK, API + frontend répondent)
+- [x] Seed de démo chargé par la migration **`V2__seed_demo.sql`** au démarrage du backend (T3) — le correcteur ne tombe jamais sur une app vide
+- [x] **Démarre chez un tiers depuis le seul `README`**, avec données de démonstration (clone vierge, une commande) — smoke-testé en conteneurs
 
 **Journal et livraison**
-- [ ] `docs/JOURNAL.md` : **une entrée par étape** (Fait / Bloqué / IA + vérification), écrite en temps réel
+- [ ] `docs/JOURNAL.md` : **une entrée par étape** (Fait / Bloqué / IA + vérification), écrite en temps réel *(étapes 1 et 2 faites, 3/4/5 à venir)*
 - [ ] `CHANGELOG.md` cohérent avec l'historique
 - [ ] README testé depuis un **clone vierge**
 - [ ] Backlog restant trié

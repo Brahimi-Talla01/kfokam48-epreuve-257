@@ -85,7 +85,9 @@
 | 2026-09-25 | `develop` | `037283f` | Merge pull request #29 (feature/api-layer-next → develop) | **#14** · PR #29 | 2 |
 | 2026-09-25 | `infra/dockerisation` | `022ec9b` | Dockerisation postgres + backend + frontend en une commande (demarrage, T2) | **#13** | 2 |
 | 2026-09-25 | `develop` | `6b66175` | Merge pull request #30 (infra/dockerisation → develop) | **#13** · PR #30 | 2 |
-| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — PR #29 et #30, issues #13 et #14 fermées | — | 2 |
+| 2026-09-25 | `develop` | `8a8ccd2` | docs: suivi Git (PR #29-#30, issues #13-#14 fermées), journal étape 2, soumission et cahier des charges à jour | — | 2 |
+| 2026-09-25 | `develop` → `main` | `974ff81` | `[JALON] v0.1` (commit vide) — `main` avancée en fast-forward de `develop` | — | 2 |
+| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — jalon v0.1 tracé | — | 2 |
 
 ---
 
