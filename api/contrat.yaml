@@ -106,7 +106,7 @@ paths:
                   sessionId: { type: integer, format: int64 }
                   etudiantId: { type: integer, format: int64 }
                   source: { type: string, enum: [ETUDIANT, FORMATEUR] }
-        "400": { $ref: "#/components/responses/Erreur" }   # CODE_INCONNU
+        "400": { $ref: "#/components/responses/Erreur" }   # CODE_INCONNU · TROP_DE_TENTATIVES (RG3/Q4, issue #15 — même code 400 que CODE_INCONNU, distingué par `code`, aucun nouveau statut HTTP sur l'opération imposée)
         "409": { $ref: "#/components/responses/Erreur" }   # DEJA_PRESENT
         "410": { $ref: "#/components/responses/Erreur" }   # CODE_EXPIRE
 
