@@ -306,13 +306,16 @@ paths:
 
   /api/relectures:
     post:
-      summary: Création / affectation d'une relecture — Q7
+      summary: Création / affectation des relectures — Q7
       description: |
         Le POST imposé sur /api/relectures/{id} REND une relecture existante ;
         il faut donc une opération qui la CRÉE, au dépôt de l'exercice.
-        Relecteur tiré au hasard parmi les étudiants présents à la session,
-        auteur exclu (RG6). Si aucun pair éligible : `relecteurId` null et
-        statut EN_ATTENTE, visible dans le tableau (Q11 / RG10).
+        Relecteurs tirés au hasard parmi les étudiants présents à la session,
+        auteur exclu (RG6). Étape 3 (RG18, ENVELOPPE §2) — FORME CHANGÉE : jusqu'à
+        DEUX relecteurs distincts sont créés et affectés d'un coup (un tableau, plus
+        un objet unique) ; un seul si un seul pair est éligible ; aucun si personne
+        (un placeholder `relecteurId` null, EN_ATTENTE, visible dans le tableau —
+        Q11 / RG10, inchangé).
       requestBody:
         required: true
         content:
@@ -324,20 +327,22 @@ paths:
                 exerciceId: { type: integer, format: int64 }
       responses:
         "201":
-          description: Relecture créée et affectée
+          description: Une à deux relectures créées et affectées (RG18)
           content:
             application/json:
               schema:
-                type: object
-                required: [id, exerciceId, relecteurId, statut]
-                properties:
-                  id: { type: integer, format: int64 }
-                  exerciceId: { type: integer, format: int64 }
-                  relecteurId:
-                    type: integer
-                    format: int64
-                    nullable: true
-                  statut: { type: string, enum: [EN_ATTENTE, RENDUE] }
+                type: array
+                items:
+                  type: object
+                  required: [id, exerciceId, relecteurId, statut]
+                  properties:
+                    id: { type: integer, format: int64 }
+                    exerciceId: { type: integer, format: int64 }
+                    relecteurId:
+                      type: integer
+                      format: int64
+                      nullable: true
+                    statut: { type: string, enum: [EN_ATTENTE, RENDUE] }
         "400": { $ref: "#/components/responses/Erreur" }   # EXERCICE_INCONNU
         "409": { $ref: "#/components/responses/Erreur" }   # RELECTURE_DEJA_CREE
 
@@ -375,7 +380,14 @@ paths:
   /api/exercices/{id}/relectures:
     get:
       summary: Notes et commentaires reçus sur mon exercice — Q8 / RG7
-      description: Le nom du relecteur n'est JAMAIS renvoyé (RG7).
+      description: |
+        Le nom du relecteur n'est JAMAIS renvoyé (RG7).
+        Étape 3 (ENVELOPPE §2, RG18/RG19) — FORME CHANGÉE : chaque exercice a
+        désormais jusqu'à DEUX relectures distinctes au lieu d'une seule. La réponse
+        n'est plus un tableau nu : elle expose en plus la note retenue, calculée par
+        l'API (jamais par le front, F3/ENF6) — `noteRetenue` = moyenne des deux si
+        les deux sont rendues (définitive), la note seule si une seule est rendue
+        (`provisoire = true`), `null` si aucune n'est rendue.
       parameters:
         - name: id
           in: path
@@ -383,24 +395,35 @@ paths:
           schema: { type: integer, format: int64 }
       responses:
         "200":
-          description: Relectures de l'exercice, sans identité du relecteur
+          description: Note retenue de l'exercice + détail des relectures, sans identité du relecteur
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  required: [id, statut, note, commentaire]
-                  properties:
-                    id: { type: integer, format: int64 }
-                    statut: { type: string, enum: [EN_ATTENTE, RENDUE] }
-                    note:
-                      type: integer
-                      minimum: 0
-                      maximum: 20
-                      nullable: true
-                    commentaire: { type: string, nullable: true }
-                    rendueLe: { type: string, format: date-time, nullable: true }
+                type: object
+                required: [noteRetenue, provisoire, relectures]
+                properties:
+                  noteRetenue:
+                    type: number
+                    nullable: true
+                    description: Moyenne des deux notes rendues, ou la seule note rendue si une seule (RG19)
+                  provisoire:
+                    type: boolean
+                    description: true si une seule des deux relectures assignées a été rendue (RG19)
+                  relectures:
+                    type: array
+                    items:
+                      type: object
+                      required: [id, statut, note, commentaire]
+                      properties:
+                        id: { type: integer, format: int64 }
+                        statut: { type: string, enum: [EN_ATTENTE, RENDUE] }
+                        note:
+                          type: integer
+                          minimum: 0
+                          maximum: 20
+                          nullable: true
+                        commentaire: { type: string, nullable: true }
+                        rendueLe: { type: string, format: date-time, nullable: true }
         "404": { $ref: "#/components/responses/Erreur" }   # EXERCICE_INCONNU
 
   /api/exercices/{id}/lien:

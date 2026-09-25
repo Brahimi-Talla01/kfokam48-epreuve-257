@@ -16,14 +16,17 @@ import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 
 /**
- * Relecture d'un exercice par un pair : un seul relecteur (RG5), tiré au hasard parmi
- * les présents (RG6), note entière 0–20 (RG8), définitive une fois rendue (RG9 / Q15).
+ * Relecture d'un exercice par un pair, tiré au hasard parmi les présents (RG6), note
+ * entière 0–20 (RG8), définitive une fois rendue (RG9 / Q15).
  * {@code relecteur_id} est nullable : aucun pair éligible à la session (cahier §7.2).
+ * Étape 3 (RG18/RG19, cahier §7.3) : un exercice a jusqu'à **deux** relectures distinctes
+ * (V3) ; la note retenue (moyenne ou provisoire) est calculée par {@code RelectureService},
+ * jamais stockée sur cette entité.
  */
 @Entity
 @Table(name = "relecture",
-        uniqueConstraints = @UniqueConstraint(name = "uk_relecture_exercice",
-                columnNames = {"exercice_id"}))
+        uniqueConstraints = @UniqueConstraint(name = "uk_relecture_exercice_relecteur",
+                columnNames = {"exercice_id", "relecteur_id"}))
 public class Relecture {
 
     @Id
