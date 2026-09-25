@@ -27,6 +27,19 @@ Le sujet employait des termes ambigus ou deux versions divergentes. Voici les **
 | **3** | **L'étape 5 (épreuve Git) est supprimée** : l'épreuve sur dépôt fourni disparaît, **le bundle n'existait pas**. **« Soumettre » devient l'étape 5**, et le sujet parle de **cinq étapes partout**. | 5 étapes : Analyser → Construire → Enveloppe → Finaliser → Soumettre. Un seul dépôt public, barème **Git 30 / Produit 17**, plus aucun second dépôt ni `git-lab.bundle` dans ce plan. |
 | **4** | **L'étape 3 ne mentionne plus le script `./enveloppe`** : l'enveloppe **se demande au surveillant**, une fois le commit `[JALON] v0.1` poussé. | §3 étape 3 et §6.4 : plus aucune référence au script. |
 
+### 🎯 Décisions techniques validées (le 25/09) — à appliquer telles quelles
+
+| # | Décision | Conséquences dans ce plan |
+| --- | --- | --- |
+| **T1** | **Frontend = Next.js 15** (App Router, **TypeScript**, composants **client**) | §2.1 · §2.2 · F1 justification en 1 ligne dans le README · F2 = 3 routes App Router · F3 = couche `src/lib/api/` unique |
+| **T2** | **Front et backend dockerisés** : `docker compose up` → `postgres` + `backend` (Spring Boot) + `frontend` (Next 15, `next build` puis `next start`) | §2.1 · §2.2 (`docker-compose.yml`, `backend/Dockerfile`, `frontend/Dockerfile`) · §3 étape 2 · validation « clone vierge » = une seule commande |
+| **T3** | **Seed de démonstration via une migration Flyway dédiée** (`V2__seed_demo.sql`), exécutée au démarrage du backend | §3 étape 2 · **numérotation des migrations : `V1` schéma, `V2` seed, `V3` changement de l'étape 3** (cf. §3 étape 3) · conforme B5 |
+| **T4** | **Branche `develop` sous `main`** : toutes les PR ciblent `develop`, `develop` est la **branche par défaut** sur GitHub, `main` n'avance que par merge de `develop` **aux trois jalons** | §4.2 · §4.4 · §5 checklist |
+| **T5** | **`assets/SUIVI_GIT.md`** : **chaque commit et chaque PR** y est tracé (date · branche · hash · message · issue · PR n°+lien), **mis à jour à chaque poussée** | §4.6 · §5 checklist — fichier versionné dans `assets/` (hors périmètre imposé, il ne gêne pas la structure `docs/·api/·backend/·frontend/`) |
+| **T6** | **Jamais de co-author dans les commits** : l'auteur est **uniquement** le candidat (`user.name` / `user.email`), aucun trailer `Co-Authored-By`, aucune mention d'outil | §4.3 · §5 checklist |
+
+
+
 ### Note d'archive — deux versions du sujet détectées dans `assets/`
 
 Les documents fournissaient deux variantes divergentes ; **les précisions ci-dessus tranchent en faveur de la variante A (les PDF à la racine)**, la variante B étant obsolète.
@@ -81,7 +94,9 @@ La demande est **incomplète et se contredit par endroits** : deux réponses du 
 | Démarrage | `docker compose up` **ou 3 commandes max**, testées depuis un clone vierge, **+ données de démonstration** | `[SUJET §3 Démarrage]` |
 | Langages docs | Markdown + **Mermaid/PlantUML texte** (aucun PNG) | `[SUJET §2b]` |
 
-**Hors contrainte, à décider et écrire :** base de données (H2/PostgreSQL…), front exact, hébergement. ⚠️ **Information non trouvée dans les documents fournis** : aucune base de données ni hébergement n'est imposé.
+**Choix arrêtés (décisions T1–T3, cf. §0)** : frontend **Next.js 15** (App Router + TypeScript) · base **PostgreSQL** · **`docker compose up`** (`postgres` + `backend` + `frontend`) · seed de démo en migration Flyway **`V2__seed_demo.sql`**.
+
+⚠️ **Information non trouvée dans les documents fournis** : aucune base de données, aucun hébergement ni framework de front n'est imposé par le sujet — ces choix relèvent du candidat et doivent être écrits en section 8 du cahier des charges.
 
 ### 1.4 Livrables attendus
 
@@ -118,18 +133,33 @@ La demande est **incomplète et se contredit par endroits** : deux réponses du 
 
 ### 2.1 Stack
 
-- **Frontend : React (Vite + TypeScript)** — recommandé. *Justification 1 ligne à mettre dans le README (F1)* : « React choisi pour son écosystème et la vitesse de mise en place d'une SPA à 3 écrans ; aucun rendu côté serveur n'est exigé. » Angular et Next.js restent acceptés `[SUJET §3 F1]`.
+- **Frontend : Next.js 15 (App Router) + TypeScript**, composants **client** (`'use client'`) pour les trois écrans — *décision T1*.
+  *Justification 1 ligne à mettre dans le `README` (F1)* : « Next.js 15 (App Router) choisi pour ses trois écrans en routes natives, sa couche serveur légère et son build statique de production ; aucun rendu côté serveur applicatif n'est exigé. »
+  *Forme retenue :* pas de Server Components ni de Route Handlers proxy — les pages appellent le backend directement **via une seule couche dédiée** `src/lib/api/` (F3), ce qui garde les états chargement/erreur explicites.
 - **Backend : Java 21 / Spring Boot 3 / Maven**, wrapper `mvnw` commité `[SUJET §3 B1]`.
-- **Persistance : PostgreSQL + Flyway** en production/ démo, **H2 en mémoire pour les tests** (poste vierge, B5/B6). Base non imposée par le sujet ⚠️ (hypothèse à écrire dans la section 8 du cahier des charges).
-- **Conteneurisation : `docker compose up`** (backend + base + front statique), alternative : 3 commandes max dans le README `[SUJET §3 Démarrage]`.
+- **Persistance : PostgreSQL + Flyway** (`V1` schéma, `V2` seed de démo), **H2 en mémoire pour les tests** (poste vierge, B5/B6). Base non imposée par le sujet ⚠️ (hypothèse à écrire en section 8 du cahier des charges).
+- **Seed de démonstration : migration Flyway `V2__seed_demo.sql`** — *décision T3* : une promotion, ~8 étudiants, 2 sessions (une ouverte, une clôturée), quelques présences et exercices. Elle tourne **au démarrage du backend**, donc à chaque `docker compose up`, et survive aux migrations suivantes.
+- **Conteneurisation : `docker compose up`** — *décision T2* — trois services :
+
+  | Service | Image / build | Port | Rôle |
+  | --- | --- | --- | --- |
+  | `postgres` | `postgres:16-alpine` | 5432 (interne) | base, volume persistant |
+  | `backend` | `backend/Dockerfile` (multi-stage : `maven:3.9-eclipse-temurin-21` → `eclipse-temurin:21-jre`) | 8080 | Spring Boot, Flyway + seed au boot |
+  | `frontend` | `frontend/Dockerfile` (multi-stage : `node:20-alpine` → `next build` → `next start`) | 3000 | Next.js 15 |
+
+  Une seule commande au démarrage → conforme à « `docker compose up`, ou trois commandes maximum » `[SUJET §3 Démarrage]`.
 
 ### 2.2 Arborescence cible (structure imposée `[SUJET §Ton dépôt]`)
 
 ```
 kfokam48-epreuve-<matricule>/
 ├── .gitignore                  # Java + JS, posé AVANT le premier commit de code
-├── README.md                   # install, démarrage, choix du front justifié (F1)
+├── README.md                   # install, démarrage (docker compose up), choix du front justifié (F1)
 ├── CHANGELOG.md                # étape 4
+├── docker-compose.yml          # postgres + backend + frontend (décision T2)
+├── assets/
+│   ├── PLAN_EPREUVE.md         # ce document
+│   └── SUIVI_GIT.md            # chaque commit et chaque PR (décision T5)
 ├── docs/
 │   ├── CAHIER_DES_CHARGES.md   # 10 sections
 │   ├── JOURNAL.md              # 1 entrée par étape
@@ -141,32 +171,46 @@ kfokam48-epreuve-<matricule>/
 ├── api/
 │   └── contrat.yaml            # figé avant le 1er commit de code
 ├── backend/                    # Spring Boot (Java 17+, Maven, mvnw)
+│   ├── Dockerfile              # multi-stage maven → jre
 │   ├── pom.xml · mvnw · mvnw.cmd
 │   └── src/main/java/.../{controller,service,repository,dto,config,exception}
-│       └── src/main/resources/{application.yml, db/migration/V*.sql}
-│       └── src/test/java/...   # 1 unitaire + 1 intégration mini (B6)
-└── frontend/                   # React | Angular | Next.js
-    └── src/{api/, screens/, components/, state/}
+│       └── src/main/resources/{application.yml, db/migration/V1__init.sql, V2__seed_demo.sql, V3__*.sql}
+│       └── src/test/java/...   # 1 unitaire + 1 intégration (B6)
+└── frontend/                   # Next.js 15 (App Router, TypeScript)
+    ├── Dockerfile              # multi-stage next build → next start
+    ├── next.config.ts · tsconfig.json · package.json
+    └── src/
+        ├── app/                # F2 — 3 écrans = 3 routes
+        │   ├── formateur/page.tsx      # ouvrir une session + tableau
+        │   ├── etudiant/page.tsx       # marquer sa présence + déposer son exercice
+        │   └── relecteur/page.tsx      # faire une relecture
+        ├── lib/api/            # F3 — UNIQUE couche d'appels API
+        ├── components/         # états chargement / erreur
+        └── types/              # types partagés avec le contrat
 ```
+
+**Numérotation des migrations (décision T3) :** `V1__init.sql` (schéma conforme à D2) · `V2__seed_demo.sql` (données de démo) · `V3__deux_relecteurs.sql` (étape 3, **ajoutée**, `V1`/`V2` jamais modifiées).
 
 ### 2.3 Schéma d'architecture (Mermaid)
 
 ```mermaid
 flowchart LR
-    subgraph Client
-      B1[Écran formateur]
-      B2[Écran étudiant]
-      B3[Écran relecteur]
+    subgraph Docker["docker compose up (décision T2)"]
+      subgraph Client["frontend : Next.js 15 (port 3000)"]
+        B1[Écran formateur<br/>/formateur]
+        B2[Écran étudiant<br/>/etudiant]
+        B3[Écran relecteur<br/>/relecteur]
+      end
+      F["couche API dédiée<br/>src/lib/api/ — états chargement / erreur"]
+      API["backend : Spring Boot :8080<br/>Controller → DTO"]
+      S["Service<br/>règles RG1..RGn"]
+      R["Repository"]
+      DB[("PostgreSQL 16<br/>Flyway V1 schéma · V2 seed")]
+      B1 & B2 & B3 --> F --> API --> S --> R --> DB
     end
-    F[Couche API dédiée frontend<br/>états chargement / erreur]
-    API[Spring Boot<br/>Controller DTO]
-    S[Service<br/>règles RG1..RGn]
-    R[Repository]
-    DB[(PostgreSQL + Flyway)]
-    B1 & B2 & B3 --> F --> API --> S --> R --> DB
 ```
 
-*Contraintes respectées :* aucune requête base dans un contrôleur, aucune entité JPA exposée (DTO), erreurs centralisées par `@RestControllerAdvice` renvoyant `{code,message}` `[SUJET §3 B3/B4]`, moyenne calculée **côté API** uniquement `[SUJET §3 F3]`.
+*Contraintes respectées :* aucune requête base dans un contrôleur, aucune entité JPA exposée (DTO), erreurs centralisées par `@RestControllerAdvice` renvoyant `{code,message}` `[SUJET §3 B3/B4]`, moyenne calculée **côté API** uniquement `[SUJET §3 F3]`, seed en migration Flyway donc identique pour tous les correcteurs `[SUJET §3 Démarrage]`.
 
 ### 2.4 Modèle de données minimal (à aligner sur D2 et les migrations)
 
@@ -181,16 +225,24 @@ flowchart LR
 
 ### Étape 0 — Mise en place du dépôt (prérequis)
 
-- **Objectif** : avoir un dépôt conforme, public, poussable, avant toute analyse.
+- **Objectif** : avoir un dépôt conforme, public, poussable, avec l'arbre de branches et le suivi en place, avant toute analyse.
 - **Tâches détaillées** :
   1. `git --version` (2.x), `java -version` (17+), `node --version` (18+) — sinon prévenir le surveillant `[LISEZ-MOI §2a]`.
   2. Créer le dépôt GitHub **public** `kfokam48-epreuve-<matricule>` `[LISEZ-MOI §2c]`.
   3. Vérifier le push : `git commit --allow-empty -m "chore: verification du depot" && git push` (ce commit **n'est pas** un jalon, ne jamais utiliser le préfixe `[JALON]` ailleurs) `[LISEZ-MOI §2d]`.
-  4. Écrire un vrai `.gitignore` **Java + JS** (`.gitignore` actuel = `/assets` seulement → **non conforme**, voir §4.1) **avant le premier commit de code** `[SUJET §4 Git 5 pts]`.
-  5. Créer l'arborescence `docs/ docs/diagrammes/ api/`, y copier `contrat.yaml` et les 3 modèles depuis `assets/EPREUVE_KFOKAM48/`.
-- **Livrable** : dépôt public conforme, arborescence vide initialisée, premier commit de structure.
-- **Validation** : `git clone` de test dans `/tmp` + `git push` accepté ; `.gitignore` contient bien `target/`, `node_modules/`, `dist/`, `.env`.
-- **Estimation** : 20 min.
+  4. **Poser l'arbre de branches (décision T4)** :
+     ```bash
+     git checkout -b develop              # à partir de main
+     git push -u origin develop
+     gh repo edit --default-branch develop    # develop = branche par défaut
+     ```
+     `main` ne devient qu'une branche « release » : elle n'avance que par merge de `develop` **aux trois jalons** (§4.2).
+  5. Écrire un vrai `.gitignore` **Java + JS** (`.gitignore` actuel = `/assets` seulement → **non conforme**, voir §4.1) **avant le premier commit de code** `[SUJET §4 Git 5 pts]`.
+  6. Créer **`assets/SUIVI_GIT.md`** (décision T5) : en-tête + tableau, puis **backfill** des commits déjà poussés. Désormais, **tout commit et toute PR** y figurent (§4.6).
+  7. Créer l'arborescence `docs/ docs/diagrammes/ api/`, y copier `contrat.yaml` et les 3 modèles depuis `assets/EPREUVE_KFOKAM48/`.
+- **Livrable** : dépôt public conforme, `develop` = branche par défaut, `.gitignore` complet, `assets/SUIVI_GIT.md` initialisé, arborescence créée.
+- **Validation** : `git clone` de test dans `/tmp` → branche locale `develop` et non `main` ; `git push` accepté ; `.gitignore` contient bien `target/`, `node_modules/`, `dist/`, `.env` ; `assets/SUIVI_GIT.md` liste chaque commit existant.
+- **Estimation** : 30 min.
 
 ### Étape 1 — Analyser, spécifier, concevoir — **38 pts, aucun code**
 
@@ -240,18 +292,18 @@ flowchart LR
 
 - **Objectif** : un incrément fonctionnel et démontrable, derrière une discipline Git irréprochable.
 - **Tâches détaillées** :
-  1. `spring init` / création du projet Maven **maintenant autorisé** ; committer `mvnw` + `.gitattributes` (B1).
-  2. Flyway dès la première table : `V1__init.sql` **avant** toute donnée (B5) — « la plupart de ceux qui souffriront à l'étape 3 souffriront pour une seule raison : un schéma de base non versionné » `[SUJET §6]`.
+  1. **Backend** : création du projet Maven Spring Boot (**maintenant autorisé**) ; committer `mvnw` + `.gitattributes` (B1).
+  2. **Flyway + seed (décisions T3)** : `V1__init.sql` = schéma conforme à **D2**, `V2__seed_demo.sql` = données de démo (promotion, ~8 étudiants, 2 sessions dont une clôturée, présences, exercices). **Avant toute donnée** — « la plupart de ceux qui souffriront à l'étape 3 souffriront pour une seule raison : un schéma de base non versionné » `[SUJET §6]`.
   3. Implémenter les 5 opérations du contrat à la lettre (B2), en couche Controller → Service → Repository, DTO obligatoires (B3), validation + `@RestControllerAdvice` centralisé renvoyant `{code,message}` (B4).
-  4. Tests : 1 unitaire sur une règle réelle (ex. expiration 15 min = RG1) + 1 intégration sur un endpoint (B6).
-  5. Frontend : 3 écrans (F2), couche d'appels API unique (F3), états chargement/erreur, moyenne **jamais recalculée** côté client (F3).
-  6. Données de démonstration chargées au démarrage (une promotion, ~8 étudiants, 2 sessions, quelques exercices) `[SUJET §3 Démarrage]`.
-  7. **Une branche par issue**, une **PR par branche**, commit fermant l'issue : `git commit -m "Enregistrement d'une présence par code (RG1) — Closes #4"` `[SUJET §2c]`.
-  8. Pousser **au fil de l'eau** ; entrée « Étape 2 » du journal.
-  9. **`git commit --allow-empty -m "[JALON] v0.1"` + push** `[SUJET §2]`.
-- **Livrable** : v0.1 démontrable, issues Must fermées, jalon poussé.
-- **Validation** : `docker compose up` (ou 3 commandes) depuis un clone vierge ouvre une app **avec données de démo** ; `./mvnw test` vert sur poste vierge ; le build front passe ; aucune issue ouverte sans PR.
-- **Estimation** : 4 h à 5 h.
+  4. Tests : 1 unitaire sur une règle réelle (ex. expiration 15 min = RG1) + 1 intégration sur un endpoint, **sur H2** pour tourner sur poste vierge (B6).
+  5. **Frontend Next.js 15** (décision T1) : `create-next-app` (App Router + TypeScript), les **3 écrans** en routes `src/app/{formateur,etudiant,relecteur}` (F2), **une seule** couche d'appels `src/lib/api/` (F3), états chargement/erreur, moyenne **jamais recalculée** côté client (F3), base URL du backend via `NEXT_PUBLIC_API_URL`.
+  6. **Dockerisation (décision T2)** : `backend/Dockerfile` (multi-stage Maven → JRE), `frontend/Dockerfile` (multi-stage `next build` → `next start`), `docker-compose.yml` (`postgres` + `backend` + `frontend`), `depends_on` + `healthcheck` pour que Flyway/seed tournent après la montée de Postgres.
+  7. **Une branche par issue**, une **PR par branche** — **la PR cible `develop`** (décision T4) — commit fermant l'issue : `git commit -m "Enregistrement d'une présence par code (RG1) — Closes #4"` `[SUJET §2c]`.
+  8. Pousser **au fil de l'eau** ; **mettre à jour `assets/SUIVI_GIT.md` à chaque push** (décision T5) ; entrée « Étape 2 » du `JOURNAL.md`.
+  9. Merge `develop` → `main`, **puis** `git commit --allow-empty -m "[JALON] v0.1"` sur `main` + push `[SUJET §2]` (§4.2).
+- **Livrable** : v0.1 démontrable en une commande, issues Must fermées par des PR sur `develop`, jalon poussé sur `main`, suivi à jour.
+- **Validation** : **clone vierge + `docker compose up`** → app opérationnelle **avec les données de démo** sur `:3000`, API sur `:8080` ; `./mvnw test` vert sans base locale ; `npm run build` vert ; aucune issue ouverte sans PR ; `assets/SUIVI_GIT.md` à jour.
+- **Estimation** : 5 h à 6 h (Next 15 + Docker compris).
 
 ### Étape 3 — Ouvrir l'enveloppe — **10 pts de conduite du changement**
 
@@ -266,11 +318,11 @@ flowchart LR
   3. **Changement de besoin — 2 relecteurs, moyenne, note provisoire** `[ENVELOPPE §2]` :
      - **mettre à jour l'analyse** (cdd : RG issue de `Q6`, exigences, section 7 + diagrammes devenus faux) **dans un commit qui le dit** (3 pts) ;
      - mettre à jour `api/contrat.yaml` si la forme des réponses change ;
-     - **nouvelle migration `V2__…sql`**, jamais modifier `V1`, la base remplie doit survivre ;
+     - **nouvelle migration `V3__deux_relecteurs.sql`**, jamais modifier `V1` (schéma) ni `V2` (seed), la base remplie doit survivre (décision T3) ;
      - découper en **issues** et **re-prioriser** : ce Must tardif fait sortir quelque chose du périmètre → **écrire le sacrifice** dans le journal ou le cahier des charges ;
-     - **2 branches, 2 PR** : correctif et évolution ne mélangent jamais un commit.
+     - **2 branches, 2 PR** (les deux ciblent `develop`) : correctif et évolution ne mélangent jamais un commit ;
 - **Livrable** : issue + test rouge + fix d'un côté, migration V2 + analyse mise à jour + contrat mis à jour + sacrifice écrit de l'autre.
-- **Validation** : la chronologie Git prouve que l'issue précède le premier commit de correction ; la migration `V1` est inchangée dans le diff ; les 2 PR sont distinctes ; les 6 lignes du tableau de l'enveloppe sont cochables.
+- **Validation** : la chronologie Git prouve que l'issue précède le premier commit de correction ; les migrations `V1` et `V2` sont **inchangées** dans le diff (seul `V3` apparaît) ; la base de démo peuplée par `V2` contient toujours ses données après `V3` ; les 2 PR sont distinctes ; les 6 lignes du tableau de l'enveloppe sont cochables.
 - **Estimation** : 1 h 30 à 2 h.
 
 ### Étape 4 — Livrer la version finale
@@ -302,13 +354,13 @@ flowchart LR
 
 | Étape | Durée | Réserve |
 | --- | ---: | ---: |
-| 0 — Mise en place | 20 min | |
+| 0 — Mise en place (branches + suivi) | 30 min | |
 | 1 — Analyse (38 pts) | 3 h 30 | **ne pas la comprimer** |
-| 2 — v0.1 | 5 h | |
+| 2 — v0.1 (backend + Next 15 + Docker) | 5 h 30 | le plus long : Docker/Next sont neufs |
 | 3 — Enveloppe (10 pts) | 2 h | |
 | 4 — Final | 45 min | |
 | 5 — Soumission | 20 min | fin opérationnelle visée **17h00** |
-| **Total** | **≈ 11 h 55** | ~1 h de marge |
+| **Total** | **≈ 12 h 35** | ~30 min de marge |
 
 ⚠️ **Information non trouvée dans les documents fournis** : horaire exact d'ouverture de l'épreuve. Seule l'échéance de 18h00 est donnée `[SUJET]`.
 
@@ -326,18 +378,46 @@ flowchart LR
 | `assets/` entièrement ignoré donc le plan non versionné | `git check-ignore -v assets/PLAN_EPREUVE.md` | **Résolu** par la ligne ci-dessus : `assets/PLAN_EPREUVE.md` devient suivi. Les documents d'épreuve (PDF, dossier `EPREUVE_KFOKAM48/`) restent hors du dépôt public : la structure imposée n'autorise que `docs/ · api/ · backend/ · frontend/`. *Alternative à retenir plus tard : migrer ce plan vers `docs/PLAN_EPREUVE.md`.* |
 | Visibilité du dépôt | à vérifier sur GitHub | **Publique** — un dépôt privé = partie non corrigée `[SUJET §Ton dépôt]`. |
 
-### 4.2 Stratégie de branches
+### 4.2 Stratégie de branches (décision T4)
 
-- `main` : toujours sain, toujours poussé, **jamais** de `push --force` destructeur (−5).
-- `feature/<slug-issue>` : **une branche par issue** (`feature/presence-code`, `feature/tableau-formateur`, `fix/presences-simultanees`, `evolution/deux-relecteurs`…).
-- `release` non nécessaire ; la PR est l'unité de revue, **rattachée à son issue** (7 pts).
-- **Jamais de `push --force` sur `main`** (−5) : aucun endroit de l'épreuve ne l'autorise.
+```mermaid
+gitGraph
+    commit id: "first commit"
+    commit id: "chore: verification du depot"
+    branch develop
+    checkout develop
+    commit id: "docs: plan / cahier des charges"
+    checkout main
+    merge develop id: "[JALON] analyse"
+    checkout develop
+    commit id: "feat: ..."
+    branch feature/presence-code
+    commit id: "Présence par code (RG1) — Closes #4"
+    checkout develop
+    merge feature/presence-code id: "PR #4"
+    checkout main
+    merge develop id: "[JALON] v0.1"
+```
+
+| Branche | Rôle | Qui la pousse |
+| --- | --- | --- |
+| `develop` | **Branche par défaut** (sur GitHub) et branche d'intégration : **toutes les PR visent `develop`** | après chaque PR merge, et à chaque jalon |
+| `main` | Branche « release » : **elle n'avance que par merge (fast-forward) de `develop` aux trois jalons** — toujours saine, toujours poussée | aux jalons uniquement |
+| `feature/<slug-issue>` | **Une branche par issue**, créée depuis `develop`, mergée par une **PR unique dans `develop`** | le commit de la PR |
+| `fix/…` · `evolution/…` | Même règle, pour séparer **correctif** et **évolution** à l'étape 3 (2 branches, 2 PR) | |
+
+**Cadre strict :**
+- **Jamais de `push --force` destructeur** (−5) : aucun endroit de l'épreuve ne l'autorise.
+- `main` ne reçoit **jamais** de commit direct : uniquement des merges de `develop`.
+- **Jalon** : commit vide créé sur `develop`, poussé, puis remonté sur `main` par `git merge --ff-only develop` → historique `main` linéaire et lisible, `[JALON] analyse` forcément **avant** le premier commit de code.
+- `release` inutile ; la PR est l'unité de revue, **rattachée à son issue** (7 pts).
 
 ### 4.3 Convention de commits
 
 - Messages **en français**, impératif, une idée par commit : `Enregistrement d'une présence par code (RG1) — Closes #4` `[SUJET §2c]`.
 - Toujours citer la règle/l'exigence (`RG1`, `EF4`) **et/ou** l'issue (`#12`).
 - Interdits : `update`, `fix`, `test2` (valent zéro) `[SUJET §4 Git]`.
+- **Aucun co-author** — *décision T6 :* chaque commit porte **exclusivement** l'identité du candidat (`git config user.name` / `user.email`). **Pas de trailer `Co-Authored-By`**, pas de mention d'outil ou d'IA dans le message. L'IA est autorisée, mais c'est **toi l'auteur** de chaque commit (le journal est l'endroit où l'on dit ce qu'on a demandé à l'IA, pas les messages de commit) `[SUJET §5 RÈGLES]`.
 - Trois commits **vides de code**, messages **exacts** :
 
   ```bash
@@ -354,28 +434,73 @@ flowchart LR
 ### 4.4 Commandes essentielles
 
 ```bash
-# cycle normal d'une issue
+# --- mise en place (étape 0) ---
+git checkout -b develop && git push -u origin develop
+gh repo edit --default-branch develop
+
+# --- cycle normal d'une issue ---
+git checkout develop && git pull
 git checkout -b feature/presence-code
 # ... travailler, committer par idées atomiques ...
 git commit -m "Enregistrement d'une présence par code (RG1) — Closes #4"
 git push -u origin feature/presence-code
-gh pr create --fill            # PR liée à l'issue
-gh issue close 4               # sinon fermée automatiquement par "Closes #4"
+gh pr create --base develop --fill      # PR liée à l'issue, cible develop
+gh pr merge --squash --delete-branch    # ferme l'issue si "Closes #4"
+# → mettre assets/SUIVI_GIT.md à jour (§4.6), committer, pousser sur develop
 
-# jalons
-git commit --allow-empty -m "[JALON] v0.1" && git push
+# --- jalon : commit vide sur develop, remontée sur main ---
+git commit --allow-empty -m "[JALON] v0.1"
+git push
+git checkout main && git merge --ff-only develop && git push
+git checkout develop
 
-# vérifications répétées avant chaque push
+# --- vérifications répétées avant chaque push ---
 git status --short
 git log --oneline --graph --decorate -15
-git grep -nE "target/|node_modules/|dist/" --name-only   # ne rien voir d'instancié
+git log -1 --format='%an <%ae>'        # uniquement ton identité, jamais de co-author (T6)
+git grep -nE "target/|node_modules/|dist/" --name-only
 ```
+
+> **Note sur `gh` :** si la CLI GitHub n'est pas disponible ou pas autorisée, les mêmes opérations se font dans l'onglet GitHub (Issues → New, Compare & pull request, Merge). **Ce qui compte pour le barème, c'est l'issue, la branche, la PR et le lien entre eux** — pas l'outil qui les a créés.
 
 ### 4.5 Synchronisation avec le remote
 
 - Pousser **après chaque PR merge** et **après chaque entrée de journal** ; jamais tout pousser à la fin (historique concentré sur la dernière heure = −10).
-- Vérifier régulièrement que `origin/main` est identique au local : `git fetch && git status`.
+- Vérifier régulièrement que `origin/develop` et `origin/main` sont conformes au local : `git fetch --all && git status` + `git log --oneline origin/develop -5`.
+- Pousser **au fil de l'eau**, jamais un gros batch final : « un travail excellent resté en local vaut zéro » `[SUJET §Ton dépôt]`.
 - Aucun secret (token, `.env`) **jamais** commité : −5 et partie potentiellement non corrigée.
+
+### 4.6 Fichier de suivi — `assets/SUIVI_GIT.md` (décision T5)
+
+**Règle :** chaque commit et chaque pull request de ce dépôt y figure, **mis à jour dans le même mouvement que la poussée** (le commit de mise à jour du suivi peut être lui-même tracé à la poussée suivante, pour ne pas se créer de commit parasite).
+
+**Format :**
+
+```markdown
+# Suivi Git — dépôt kfokam48-epreuve-<matricule>
+
+> Traçabilité de tous les commits et de toutes les pull requests.
+> Règle : une ligne par objet, ajoutée dès qu'il est poussé (décision T5).
+
+## Pull requests
+
+| # | Titre | Branche source | Branche cible | Issue | État | Lien |
+|---|---|---|---|---|---|---|
+| 4 | L'étudiant marque sa présence avec un code | `feature/presence-code` | `develop` | #4 | merged | https://github.com/…/pull/4 |
+
+## Commits
+
+| Date | Branche | Hash | Message | Issue / PR | Étape |
+|---|---|---|---|---|---|
+| 2026-09-25 | `main` | `07a7d22` | docs: plan d'implémentation enrichi… | — | 0 |
+| 2026-09-25 | `develop` | `abc1234` | Enregistrement d'une présence par code (RG1) — Closes #4 | #4 · PR 4 | 2 |
+```
+
+**Obligations :**
+- **Toute PR** du dépôt a sa ligne (titre, source, cible `develop`, issue liée, état, lien).
+- **Tout commit poussé** a sa ligne : date, branche, hash court, message exact, renvoi issue/PR, étape de l'épreuve.
+- La colonne « étape » relie le travail à la chronologie officielle (0 à 5) : le correcteur voit d'un coup d'œil où en est le travail.
+- Le fichier est lui-même versionné et poussé sur `develop` ; il est repris dans le merge vers `main` à chaque jalon.
 
 ---
 
@@ -383,7 +508,11 @@ git grep -nE "target/|node_modules/|dist/" --name-only   # ne rien voir d'instan
 
 **Conformité structure et dépôt**
 - [ ] Dépôt **public** `kfokam48-epreuve-<matricule>` (nom exact, matricule complet) — **un seul dépôt**
-- [ ] Structure `docs/ · api/ · backend/ · frontend/` respectée
+- [ ] `develop` est la **branche par défaut** sur GitHub ; toutes les PR ciblent `develop` (T4)
+- [ ] `main` n'a reçu **que** des merges de `develop` (fast-forward aux 3 jalons), jamais de commit direct
+- [ ] Structure `docs/ · api/ · backend/ · frontend/` respectée (+ `docker-compose.yml` à la racine)
+- [ ] **`assets/SUIVI_GIT.md`** à jour : chaque commit et chaque PR tracé (T5)
+- [ ] Chaque commit : **auteur unique = moi**, aucun `Co-Authored-By` (T6) — vérifié avec `git log -1 --format='%an <%ae>'`
 - [ ] `.gitignore` Java + JS posé **avant** le premier commit de code, aucun fichier généré dans l'historique
 - [ ] Aucun secret nulle part dans l'historique
 - [ ] `main` toujours sain, aucun `push --force` destructeur
@@ -406,7 +535,7 @@ git grep -nE "target/|node_modules/|dist/" --name-only   # ne rien voir d'instan
 **Étape 3 (10 pts)**
 - [ ] Issue ouverte **avant** le premier commit de correction
 - [ ] Bug reproduit par un **test qui échoue** avant la correction
-- [ ] **Nouvelle** migration (`V2`), `V1` jamais modifiée, données existantes préservées
+- [ ] **Nouvelle** migration (`V3`), `V1` et `V2` jamais modifiées, données de démo `V2` préservées
 - [ ] `api/contrat.yaml` mis à jour si la forme des réponses a changé
 - [ ] Analyse (cahier des charges + diagrammes) mise à jour dans un commit qui le dit
 - [ ] Sacrifice de périmètre **écrit**
@@ -416,8 +545,10 @@ git grep -nE "target/|node_modules/|dist/" --name-only   # ne rien voir d'instan
 - [ ] 5 opérations du contrat exactes : chemins, verbes, codes HTTP, `{code,message}` pour **toute** erreur
 - [ ] Aucune stack trace, aucun corps vide, aucune page d'erreur Spring par défaut
 - [ ] B3–B6 : couches séparées, DTO, validation + `@RestControllerAdvice`, Flyway, 2 tests qui prouvent quelque chose
-- [ ] F1–F3 : front justifié 1 ligne + build OK, 3 écrans, couche API dédiée, moyenne non recalculée côté client
-- [ ] Démarre chez un tiers depuis le seul README, **avec données de démonstration**
+- [ ] F1 : **Next.js 15** justifié **en une ligne** dans le `README`, `npm run build` passe · F2 : 3 écrans (`/formateur`, `/etudiant`, `/relecteur`) · F3 : couche `src/lib/api/` unique, états chargement/erreur, moyenne **jamais recalculée** côté client
+- [ ] **`docker compose up`** seul suffit à démarrer `postgres` + `backend` + `frontend` (T2)
+- [ ] Seed de démo chargé par la migration **`V2__seed_demo.sql`** au démarrage du backend (T3) — le correcteur ne tombe jamais sur une app vide
+- [ ] **Démarre chez un tiers depuis le seul `README`**, avec données de démonstration (clone vierge, une commande)
 
 **Journal et livraison**
 - [ ] `docs/JOURNAL.md` : **une entrée par étape** (Fait / Bloqué / IA + vérification), écrite en temps réel
@@ -448,6 +579,9 @@ git grep -nE "target/|node_modules/|dist/" --name-only   # ne rien voir d'instan
 | P10 | Rendu visuel soigné | **zéro point** — aucun temps à y consacrer | `[SUJET §1]` |
 | P11 | Bug corrigé sans issue ni test | **la moitié des points** de l'étape 3 | `[ENVELOPPE §1]` |
 | P12 | Migration modifiée en place | non conforme, casse la base remplie | `[ENVELOPPE §2]` |
+| P13 | `docker compose up` qui rate le jour J (image non tirée, port occupé, healthcheck trop court) | le correcteur ne voit rien tourner → 3 pts + mauvaise impression | **Pré-tirer les images et valider sur clone vierge dès l'étape 2** ; `restart: unless-stopped` ; documenter un repli de 3 commandes dans le README |
+| P14 | Node trop ancien pour **Next.js 15** (exigé : 18.18+ ou 20.9+ ; le LISEZ-MOI annonce « 18 ou plus ») | build front qui casse sur le poste du correcteur | Fixer `"engines"` dans `package.json`, builder dans `node:20-alpine`, vérifier `npm run build` dans l'image Docker |
+| P15 | Ajouter un `Co-Authored-By` ou une mention d'outil dans un commit | auteurage dilué — contraire à la consigne (T6) | Vérifier avant chaque push : `git log -1 --format='%an <%ae>%s'` |
 
 ### 6.2 Contradictions et trous du `CLIENT.md` (à traiter en section 7 du cahier des charges)
 
@@ -471,7 +605,7 @@ git grep -nE "target/|node_modules/|dist/" --name-only   # ne rien voir d'instan
 ### 6.3 Contraintes de temps
 
 - Une seule échéance : **18h00** `[SUJET]`. ⚠️ **Information non trouvée dans les documents fournis** : heure de début.
-- Temps réel estimé : ≈11 h 55 (§3) → viser **17h00** pour la soumission.
+- Temps réel estimé : ≈12 h 35 (§3) → viser **17h00** pour la soumission.
 - L'IA est **totalement libre**, sans trace à fournir ; seule exigence : dire **comment on a vérifié** sa réponse, dans le journal `[SUJET §5 RÈGLES]`.
 
 ### 6.4 Dépendances externes
@@ -483,6 +617,7 @@ git grep -nE "target/|node_modules/|dist/" --name-only   # ne rien voir d'instan
 | Plateforme de soumission (18h00) | après 18h00, plus rien n'est accepté | Soumission visée à 17h00, lien vérifié en navigation privée |
 | Fourniture de l'**enveloppe** de l'étape 3 | absente du dossier fourni | La **demander au surveillant** dès `[JALON] v0.1` poussé, en donnant l'adresse du dépôt `[LISEZ-MOI §1]` — aucun script (précision n° 4) |
 | Outils locaux (`git`, `java`, `node`) | bloquant | Vérification préalable ; manque = incident matériel, temps rendu `[LISEZ-MOI §2a]` |
+| Docker Hub (tirage des images `postgres`, `maven`, `temurin`, `node`) | `docker compose up` qui échoue hors-ligne, ou lenteur le jour J | **Tirer les images dès l'étape 2** et valider le compose sur clone vierge ; README : documenter les 3 commandes de repli (P13) |
 
 ---
 
