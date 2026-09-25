@@ -1,5 +1,6 @@
 package epreuve.kfokam48.backend.service;
 
+import epreuve.kfokam48.backend.domain.SourcePresence;
 import epreuve.kfokam48.backend.domain.StatutRelecture;
 import epreuve.kfokam48.backend.repository.EtudiantRepository;
 import epreuve.kfokam48.backend.repository.PromotionRepository;
@@ -33,12 +34,14 @@ public class TableauService {
             throw ApiException.notFound("PROMOTION_INCONNUE", "La promotion demandée n'existe pas.");
         }
 
-        List<Object[]> lignes = etudiants.tableauPromotion(promotionId, StatutRelecture.EN_ATTENTE);
+        List<Object[]> lignes = etudiants.tableauPromotion(promotionId,
+                StatutRelecture.EN_ATTENTE, SourcePresence.FORMATEUR);
         return lignes.stream()
                 .map(ligne -> new TableauLigneResponse(
                         (Long) ligne[0],
                         (String) ligne[1],
                         nombre(ligne[2]),
+                        nombre(ligne[6]),
                         nombre(ligne[3]),
                         moyenneArrondie(ligne[4]),
                         nombre(ligne[5])))

@@ -130,6 +130,7 @@ L'objectif n'est pas seulement de livrer une application : il faut transformer u
 | **`Q4` : aucun code HTTP prévu pour le blocage** | `Q4` | Réponse en **`400`** avec `code = TROP_DE_TENTATIVES` : on refuse d'ajouter un code de statut à une opération imposée (`B2`). **Priorité Could** — implémenté en dernier | Contrat des 5 opérations intact |
 | **`Q1` : qui crée promotions et étudiants ? Comment le formateur est-il identifié ?** | `Q1` | **Seed** (`V2__seed_demo.sql`) crée promotions et étudiants ; le formateur n'est **pas identifié** (exclu, §3) | `GET /api/promotions` et `GET /api/promotions/{id}/etudiants` ajoutés pour le choix sans mot de passe |
 | **`Q14` : comment distinguer une présence ajoutée par le formateur si le corps imposé est `{code, etudiantId}` ?** | `Q14`, `contrat` | Champ **optionnel** `source` (défaut `ETUDIANT`) sur `POST /api/presences` : chemin, verbe, codes de statut et format d'erreur restent **identiques** au contrat | `RG13`, `EF9` |
+| **`RG13` exige que le tableau distingue les présences relevées par le formateur, mais le schéma imposé du tableau n'a aucune colonne de source** | `RG13`, `Q14`, `contrat` | Propriété **facultative** `presencesFormateur` ajoutée à `GET /api/tableau` : les six champs imposés (noms, types, `required`) restent **strictement inchangés** | La distinction est lisible côté formateur sans modifier chemin, verbe, codes de statut ni format d'erreur de l'opération imposée (`B2`) |
 
 **Exclusions assumées :** authentification (`Q1`), notifications, historique des notes, statistiques (§3). Toute demande nouvelle sortant de ce périmètre déclenche une **réécriture de cette section**, pas une extension silencieuse.
 
@@ -156,7 +157,7 @@ L'objectif n'est pas seulement de livrer une application : il faut transformer u
 - **Base :** **PostgreSQL 16** en conteneur ; **H2** pour les tests (poste vierge).
 - **Schéma :** Flyway — `V1__init.sql` (schéma, conforme à D2), `V2__seed_demo.sql` (données de démo), `V3__*` (ajouts ultérieurs, jamais de modification en place).
 - **Conteneurs :** `backend/Dockerfile` (Maven → JRE), `frontend/Dockerfile` (`next build` → `next start`), `docker-compose.yml` avec `healthcheck` Postgres.
-- **API :** Spring Boot 3, DTO systématiques, erreurs centralisées `{code, message}`.
+- **API :** Spring Boot 4 (Java 21), DTO systématiques, erreurs centralisées `{code, message}`.
 
 ## 9. Livrables
 
