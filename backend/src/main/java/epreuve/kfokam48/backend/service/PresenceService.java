@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 
 /**
  * Marquage d'une présence. Ordre des contrôles, identique à D3 et au contrat :
- * 400 code inconnu → 410 expiré (RG1) → 410 session terminée (RG2/RG16) →
- * 409 déjà présent (RG14) → 201.
+ * 400 trop de tentatives (RG3, issue #15) → 400 code inconnu → 410 expiré (RG1) →
+ * 410 session terminée (RG2/RG16) → 409 déjà présent (RG14) → 201.
  *
  * Issue #31 : la vérification d'existence puis l'écriture ne sont pas atomiques.
  * Sous deux requêtes concurrentes sur la même présence, les deux vérifications
@@ -31,21 +31,28 @@ public class PresenceService {
     private final SessionRepository sessions;
     private final EtudiantRepository etudiants;
     private final PresenceRepository presences;
+    private final TentativePresenceTracker tentatives;
 
     public PresenceService(SessionRepository sessions, EtudiantRepository etudiants,
-                           PresenceRepository presences) {
+                           PresenceRepository presences, TentativePresenceTracker tentatives) {
         this.sessions = sessions;
         this.etudiants = etudiants;
         this.presences = presences;
+        this.tentatives = tentatives;
     }
 
     @Transactional
     public Presence marquer(String code, Long etudiantId, SourcePresence source) {
         LocalDateTime maintenant = LocalDateTime.now();
 
+        tentatives.verifierNonBloque(etudiantId);
+
         Session session = sessions.findByCode(code)
-                .orElseThrow(() -> ApiException.badRequest("CODE_INCONNU",
-                        "Le code de présence est inconnu. Vérifiez le code affiché au tableau."));
+                .orElseThrow(() -> {
+                    tentatives.enregistrerEchec(etudiantId);
+                    return ApiException.badRequest("CODE_INCONNU",
+                            "Le code de présence est inconnu. Vérifiez le code affiché au tableau.");
+                });
 
         if (session.estExpire(maintenant)) {
             throw ApiException.gone("CODE_EXPIRE",
@@ -67,7 +74,9 @@ public class PresenceService {
                         "L'étudiant demandé n'existe pas."));
 
         try {
-            return presences.save(new Presence(session, etudiant, source));
+            Presence presence = presences.save(new Presence(session, etudiant, source));
+            tentatives.reinitialiser(etudiantId);
+            return presence;
         } catch (DataIntegrityViolationException collision) {
             // Deux requêtes concurrentes ont franchi le contrôle d'existence avant que
             // l'une des deux n'ait validé son écriture : la contrainte UNIQUE tranche.

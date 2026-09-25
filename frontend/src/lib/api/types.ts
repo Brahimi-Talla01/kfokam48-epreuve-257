@@ -90,7 +90,7 @@ export interface Relecture {
   commentaire?: string | null;
 }
 
-/** Note et commentaire reçus sur mon exercice — jamais le nom du relecteur. */
+/** Note et commentaire reçus sur mon exercice : jamais le nom du relecteur. */
 export interface RelectureRecue {
   id: number;
   statut: StatutRelecture;
@@ -100,10 +100,10 @@ export interface RelectureRecue {
 }
 
 /**
- * GET /api/exercices/{id}/relectures — étape 3 (RG18/RG19).
+ * GET /api/exercices/{id}/relectures : étape 3 (RG18/RG19).
  * `noteRetenue` : moyenne si les deux relectures sont rendues (définitive), la note
  * seule si une seule est rendue (`provisoire = true`), `null` sinon. Calculée par
- * l'API — jamais recalculée ici (F3 / ENF6).
+ * l'API : jamais recalculée ici (F3 / ENF6).
  */
 export interface NotesExercice {
   noteRetenue: number | null;
@@ -117,7 +117,7 @@ export interface LigneTableau {
   nom: string;
   presences: number;
   exercicesDeposes: number;
-  /** `null` tant qu'aucune note n'existe — jamais recalculée ici. */
+  /** `null` tant qu'aucune note n'existe : jamais recalculée ici. */
   moyenne: number | null;
   relecturesEnAttente: number;
 }

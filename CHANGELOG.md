@@ -1,6 +1,6 @@
 # Changelog — KFOKAM48 présence et relecture par les pairs
 
-> Cohérent avec l'historique Git réel (voir `assets/SUIVI_GIT.md` pour le détail commit
+> Cohérent avec l'historique Git réel (voir `docs/SUIVI_GIT.md` pour le détail commit
 > par commit). Chaque entrée renvoie aux issues et PR fermées.
 
 ## [v1.0] — Étape 4, version finale
@@ -63,13 +63,13 @@ Incrément fonctionnel complet sur les stories **Must**, jalon `[JALON] v0.1`.
 - Dépôt public `kfokam48-epreuve-257`, `develop` branche par défaut, `main` en
   branche « release » (merges fast-forward aux jalons uniquement).
 - `.gitignore` Java + JS posé avant le premier commit de code.
-- `assets/SUIVI_GIT.md` initialisé : traçabilité de chaque commit et chaque PR.
+- `docs/SUIVI_GIT.md` initialisé : traçabilité de chaque commit et chaque PR.
 
 ---
 
 ## Backlog
 
-Voir `assets/SUIVI_GIT.md` § Issues (backlog) pour le détail complet avec liens de
+Voir `docs/SUIVI_GIT.md` § Issues (backlog) pour le détail complet avec liens de
 fermeture. État au [v1.0] :
 
 - **18 issues** créées (16 à l'étape 1, 2 à l'étape 3) — **16 fermées**, **2 ouvertes**.

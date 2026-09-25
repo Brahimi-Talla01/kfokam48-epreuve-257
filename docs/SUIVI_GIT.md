@@ -44,7 +44,7 @@
 | 2026-09-25 | `main` *(avant convention)* | `07a7d22` | docs: plan d'implémentation enrichi à partir des documents officiels KFOKAM48 | — | 0 |
 | 2026-09-25 | `main` *(avant convention)* | `90849d2` | docs: plan aligné sur les 4 précisions du prof (issues, chore de test, 5 étapes, enveloppe au surveillant) | — | 0 |
 | 2026-09-25 | `develop` | `76798d1` | docs: décisions techniques — Next.js 15, docker compose, seed Flyway, branche develop, suivi Git | — | 0 |
-| 2026-09-25 | `develop` | `b30509c` | docs: création du suivi Git (assets/SUIVI_GIT.md) | — | 0 |
+| 2026-09-25 | `develop` | `b30509c` | docs: création du suivi Git (docs/SUIVI_GIT.md) | — | 0 |
 | 2026-09-25 | `develop` | `69576fa` | docs: convention auto-référente du suivi Git explicite (§4.6) | — | 0 |
 | 2026-09-25 | `develop` | `eda97be` | docs: suivi Git — hash du commit de création complété | — | 0 |
 | 2026-09-25 | `develop` | `0113e7f` | docs: configuration du dépôt tracée — develop branche par défaut, étape 0 avancée | — | 0 |
@@ -101,7 +101,10 @@
 | 2026-09-25 | `develop` | `232e45c` | docs: plan et suivi — étape 3 cochée (PR #32, #34), issues #31/#33 tracées | — | 3 |
 | 2026-09-25 | `develop` | `21f41cb` | Changelog et journal de bord — étape 4, README revalidé depuis un clone vierge | — | 4 |
 | 2026-09-25 | `develop` → `main` | `9382fa7` | `[JALON] v1.0` (commit vide) — `main` avancée en fast-forward de `develop` | — | 4 |
-| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — jalon v1.0 tracé, étape 4 cochée | — | 4 |
+| 2026-09-25 | `develop` | `c35e4d1` | docs: plan et suivi — jalon v1.0 tracé, étape 4 cochée | — | 4 |
+| 2026-09-25 | `develop` | `d5af9c6` | docs: soumission complétée (technique, livraison, backlog) | **#16** | 5 |
+| 2026-09-25 | `develop` → `main` | `d5af9c6` | Synchronisation finale de `main` (fast-forward, pas un jalon) — **hash déclaré dans `SOUMISSION.md`** | — | 5 |
+| 2026-09-25 | `develop` | *(ce commit)* | docs: soumission — hash final renseigné, journal étape 5, checklist plan à jour | — | 5 |
 
 ---
 
@@ -129,7 +132,7 @@ La colonne **Références** les relie au cahier des charges et au contrat ; la c
 | 13 | Dockeriser `postgres` + `backend` + `frontend` | `must` | démarrage · ENF4 | `closed` · PR #30 |
 | 14 | Couche d'appels API Next.js avec états de charge | `must` | F3 · ENF3, ENF6 | `closed` · PR #29 |
 | 15 | Blocage après 5 codes erronés | `could` | EF12 · RG3 | `open` · **sacrifiée à l'étape 3** (cahier §7.3, journal) |
-| 16 | Journal d'étape, changelog et soumission | `should` | journal 5 pts | `open` |
+| 16 | Journal d'étape, changelog et soumission | `should` | journal 5 pts | `closed` |
 | 31 | Presence perdue sous ecriture concurrente (bug ENVELOPPE §1) | `must` | RG14 · B4 | `closed` · PR #32 |
 | 33 | Deux relecteurs par exercice, note = moyenne, note provisoire (ENVELOPPE §2) | `must` | RG18, RG19 · ex-RG5/Q6 | `closed` · PR #34 |
 

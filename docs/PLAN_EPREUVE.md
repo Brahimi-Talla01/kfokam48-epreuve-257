@@ -14,7 +14,7 @@
 | `EPREUVE_FINALE_KFOKAM48_SUJET.pdf` (8 p.) | **Sujet principal — version faisant foi** (précisions n° 1 à 4) | **5 étapes** (étape 5 = soumettre) · barème **Git 30 / Produit 17** · un seul dépôt · pas d'épreuve Git annexe · besoin en 5 points · 6 sections de règles du jeu · contraintes B1–B6, F1–F3 · barème détaillé et malus · Annexes A (16 questions), B (contrat), C (modèles) |
 | `assets/EPREUVE_KFOKAM48/` (fichier sans extension = **dossier**) | Dossier d'épreuve — **version obsolète sur la structure** (6 étapes), **mais commun** pour `CLIENT.md`, `api/contrat.yaml`, `modeles/` | `SUJET.pdf` + `SUJET.md` (**6 étapes**, étape 5 = épreuve Git → **supprimé**, précision n° 3), `CLIENT.md` (16 questions), `api/contrat.yaml` (contrat OpenAPI complet), `LISEZ-MOI.md`, `ENVELLOPE.md`, `modeles/` (`CAHIER_DES_CHARGES.md`, `JOURNAL.md`, `SOUMISSION.md`) |
 | `ENVELOPPE_etape3_KFOKAM48.pdf` (2 p.) | Contenu de l'étape 3, remis après `[JALON] v0.1` | **Bug** : deux présences quasi simultanées, une seule enregistrée → issue avant de coder, test qui échoue, branche dédiée, test vert · **Changement de besoin** : **2 relecteurs par exercice, note = moyenne des deux, note d'un seul relecteur = « provisoire »** · touche base + contrat + frontend · analyse à mettre à jour, **nouvelle** migration (jamais modifier la existante), re-priorisation écrite, correctif et évolution séparés (2 branches, 2 PR) · **10 points** |
-| `assets/PLAN_EPREUVE.md` (avant réécriture) | Plan existant, à adapter | Couvrait la variante B (6 étapes) · barèmes, malus, jalons, contradictions `Q10/Q15`, trous du `CLIENT.md`, RG1–RG15 · **incomplet** sur la comparaison des deux variantes du sujet, sur l'enveloppe (contenu réel non intégré), sur l'architecture cible et sur les estimations de durée |
+| `docs/PLAN_EPREUVE.md` (avant réécriture) | Plan existant, à adapter | Couvrait la variante B (6 étapes) · barèmes, malus, jalons, contradictions `Q10/Q15`, trous du `CLIENT.md`, RG1–RG15 · **incomplet** sur la comparaison des deux variantes du sujet, sur l'enveloppe (contenu réel non intégré), sur l'architecture cible et sur les estimations de durée |
 
 ### ✅ Précisions du professeur (dernière mise à jour) — elles font foi
 
@@ -35,7 +35,7 @@ Le sujet employait des termes ambigus ou deux versions divergentes. Voici les **
 | **T2** | **Front et backend dockerisés** : `docker compose up` → `postgres` + `backend` (Spring Boot) + `frontend` (Next 15, `next build` puis `next start`) | §2.1 · §2.2 (`docker-compose.yml`, `backend/Dockerfile`, `frontend/Dockerfile`) · §3 étape 2 · validation « clone vierge » = une seule commande |
 | **T3** | **Seed de démonstration via une migration Flyway dédiée** (`V2__seed_demo.sql`), exécutée au démarrage du backend | §3 étape 2 · **numérotation des migrations : `V1` schéma, `V2` seed, `V3` changement de l'étape 3** (cf. §3 étape 3) · conforme B5 |
 | **T4** | **Branche `develop` sous `main`** : toutes les PR ciblent `develop`, `develop` est la **branche par défaut** sur GitHub, `main` n'avance que par merge de `develop` **aux trois jalons** | §4.2 · §4.4 · §5 checklist |
-| **T5** | **`assets/SUIVI_GIT.md`** : **chaque commit et chaque PR** y est tracé (date · branche · hash · message · issue · PR n°+lien), **mis à jour à chaque poussée** | §4.6 · §5 checklist — fichier versionné dans `assets/` (hors périmètre imposé, il ne gêne pas la structure `docs/·api/·backend/·frontend/`) |
+| **T5** | **`docs/SUIVI_GIT.md`** : **chaque commit et chaque PR** y est tracé (date · branche · hash · message · issue · PR n°+lien), **mis à jour à chaque poussée** | §4.6 · §5 checklist — fichier versionné dans `docs/`, aux côtés de ce plan (`docs/PLAN_EPREUVE.md`), pour rester visible dans la structure imposée `docs/·api/·backend/·frontend/` |
 | **T6** | **Jamais de co-author dans les commits** : l'auteur est **uniquement** le candidat (`user.name` / `user.email`), aucun trailer `Co-Authored-By`, aucune mention d'outil | §4.3 · §5 checklist |
 
 
@@ -157,10 +157,9 @@ kfokam48-epreuve-<matricule>/
 ├── README.md                   # install, démarrage (docker compose up), choix du front justifié (F1)
 ├── CHANGELOG.md                # étape 4
 ├── docker-compose.yml          # postgres + backend + frontend (décision T2)
-├── assets/
-│   ├── PLAN_EPREUVE.md         # ce document
-│   └── SUIVI_GIT.md            # chaque commit et chaque PR (décision T5)
 ├── docs/
+│   ├── PLAN_EPREUVE.md         # ce document
+│   ├── SUIVI_GIT.md            # chaque commit et chaque PR (décision T5)
 │   ├── CAHIER_DES_CHARGES.md   # 10 sections
 │   ├── JOURNAL.md              # 1 entrée par étape
 │   └── diagrammes/             # D1-D4 en Mermaid
@@ -237,11 +236,11 @@ flowchart LR
      gh repo edit --default-branch develop    # develop = branche par défaut — VÉRIFIÉ
      ```
      `main` ne devient qu'une branche « release » : elle n'avance que par merge de `develop` **aux trois jalons** (§4.2).
-  5. ✅ **Fait** — `.gitignore` : ignores des documents d'épreuve **(`/assets`)** + entrées Java/JS (`target/`, `node_modules/`, `dist/`, `.env`) **avant le premier commit de code** `[SUJET §4 Git 5 pts]` (détail §4.1) — *choix du candidat : on garde `/assets` (voir §4.1) ; `PLAN_EPREUVE.md` et `SUIVI_GIT.md` restent suivis car déjà versionnés, se mettent à jour avec `git add -u assets/<fichier>`, et tout **nouveau** fichier d'`assets/` exige `git add -f` — un ajout devient donc un acte explicite.*
-  6. ✅ **Fait** — **`assets/SUIVI_GIT.md`** créé (décision T5) avec backfill des commits existants. Désormais, **tout commit et toute PR** y figurent (§4.6).
+  5. ✅ **Fait** — `.gitignore` : ignores des documents d'épreuve **(`/assets`)** + entrées Java/JS (`target/`, `node_modules/`, `dist/`, `.env`) **avant le premier commit de code** `[SUJET §4 Git 5 pts]` (détail §4.1) — *choix du candidat (révisé) : `/assets` est ignoré **sans exception** ; ce plan et le suivi Git vivent dans `docs/PLAN_EPREUVE.md` et `docs/SUIVI_GIT.md`, versionnés normalement au même titre que les autres documents du dépôt. `assets/` ne contient plus que les documents d'épreuve fournis, jamais publiés.*
+  6. ✅ **Fait** — **`docs/SUIVI_GIT.md`** créé (décision T5) avec backfill des commits existants. Désormais, **tout commit et toute PR** y figurent (§4.6).
   7. ✅ **Fait** (`6f5cccb`) — arborescence `docs/ docs/diagrammes/ api/` créée ; `contrat.yaml` copié dans `api/`, les 3 modèles copiés dans `docs/` (`CAHIER_DES_CHARGES.md`, `JOURNAL.md`, `SOUMISSION.md`).
-- **Livrable** : dépôt public conforme, `develop` = branche par défaut, `.gitignore` complet, `assets/SUIVI_GIT.md` initialisé, arborescence créée.
-- **Validation** : `git clone` de test dans `/tmp` → branche locale `develop` et non `main` ; `git push` accepté ; `.gitignore` contient bien `target/`, `node_modules/`, `dist/`, `.env` ; `assets/SUIVI_GIT.md` liste chaque commit existant.
+- **Livrable** : dépôt public conforme, `develop` = branche par défaut, `.gitignore` complet, `docs/SUIVI_GIT.md` initialisé, arborescence créée.
+- **Validation** : `git clone` de test dans `/tmp` → branche locale `develop` et non `main` ; `git push` accepté ; `.gitignore` contient bien `target/`, `node_modules/`, `dist/`, `.env` ; `docs/SUIVI_GIT.md` liste chaque commit existant.
 - **Estimation** : 30 min.
 
 ### Étape 1 — Analyser, spécifier, concevoir — **38 pts, aucun code**
@@ -299,10 +298,10 @@ flowchart LR
   5. ✅ **Fait** (PR #29, Closes #14) — **Frontend Next.js 15** (décision T1) : **3 écrans** `src/app/{formateur,etudiant,relecteur}` (F2), **une seule** couche d'appels `src/lib/api/` (F3), états chargement/erreur, moyenne **jamais recalculée** côté client, `NEXT_PUBLIC_API_URL`. `npm run build` vert.
   6. ✅ **Fait** (PR #30, Closes #13) — **Dockerisation (décision T2)** : `backend/Dockerfile` (multi-stage `eclipse-temurin:21-jdk` → `21-jre`), `frontend/Dockerfile` (multi-stage `node:20-alpine`, `next build` → `next start`), `docker-compose.yml` (`postgres` + `backend` + `frontend`, `depends_on` + `healthcheck`). Validé de bout en bout : `docker compose up --build` → API `:8080`, frontend `:3000`, données de démo, présence enregistrée via l'API en conteneur.
   7. ✅ **Fait** — **Une branche par issue**, une **PR par branche** ciblant `develop` (décision T4), 14 issues `must` fermées par 14 PR (#17 à #30).
-  8. ✅ **Fait** — Poussé **au fil de l'eau** ; `assets/SUIVI_GIT.md` tenu à jour à chaque push (décision T5) ; entrée « Étape 2 » du `JOURNAL.md` écrite.
+  8. ✅ **Fait** — Poussé **au fil de l'eau** ; `docs/SUIVI_GIT.md` tenu à jour à chaque push (décision T5) ; entrée « Étape 2 » du `JOURNAL.md` écrite.
   9. ✅ **Fait** (`974ff81`) — `[JALON] v0.1` (commit vide) créé sur `develop`, poussé, puis `main` avancée en fast-forward `[SUJET §2]` (§4.2).
 - **Livrable** : v0.1 démontrable en une commande, issues Must fermées par des PR sur `develop`, jalon poussé sur `main`, suivi à jour.
-- **Validation** : **clone vierge + `docker compose up`** → app opérationnelle **avec les données de démo** sur `:3000`, API sur `:8080` ; `./mvnw test` vert sans base locale ; `npm run build` vert ; aucune issue Must ouverte sans PR ; `assets/SUIVI_GIT.md` à jour.
+- **Validation** : **clone vierge + `docker compose up`** → app opérationnelle **avec les données de démo** sur `:3000`, API sur `:8080` ; `./mvnw test` vert sans base locale ; `npm run build` vert ; aucune issue Must ouverte sans PR ; `docs/SUIVI_GIT.md` à jour.
 - **Estimation** : 5 h à 6 h (Next 15 + Docker compris).
 
 ### Étape 3 — Ouvrir l'enveloppe — **10 pts de conduite du changement**
@@ -329,7 +328,7 @@ flowchart LR
 
 - **Objectif** : un état livrable, traçable et vérifiable par un tiers.
 - **Tâches détaillées** :
-  1. ✅ **Fait** — `CHANGELOG.md` créé, **cohérent avec l'historique réel** (une entrée par étape/jalon, renvoyant aux issues et PR de `assets/SUIVI_GIT.md`).
+  1. ✅ **Fait** — `CHANGELOG.md` créé, **cohérent avec l'historique réel** (une entrée par étape/jalon, renvoyant aux issues et PR de `docs/SUIVI_GIT.md`).
   2. ✅ **Fait** — `README` **testé depuis un clone vierge dans un dossier séparé** : `git clone` + `docker compose up --build` (une commande) → API `:8080`, frontend `:3000`, données de démo, vérifié par requêtes réelles puis conteneurs/volume nettoyés.
   3. ✅ **Fait** — Backlog restant trié : `#15` documentée comme sacrifiée (étape 3), `#16` en cours de fermeture.
   4. ✅ **Fait** — Mise à jour du `JOURNAL.md` (entrée étape 4).
@@ -374,8 +373,8 @@ flowchart LR
 | --- | --- | --- |
 | Remote `https://github.com/Brahimi-Talla01/kfokam48-epreuve-257.git` | `git remote -v` | ⚠️ Le nom imposé est `kfokam48-epreuve-<matricule>` avec un matricule type `KF48-YAO-042` `[LISEZ-MOI §2c]`. Si `257` n'est pas le matricule complet, **renommer sur GitHub (Settings → Rename)** + `git remote set-url`. |
 | Un seul commit `first commit` (README.md seul) | `git log --oneline` | Acceptable tant qu'il n'y a **pas** de code ; le message est faible mais n'entre dans aucun malus tant que l'historique reste lisible. |
-| `.gitignore` = **`/assets`** + entrées Java/JS | `cat .gitignore` | **Décision retenue (choix du candidat, confirmé) :** on ignore `/assets` en entier **et** on complète avec les entrées Java + JS (`target/`, `node_modules/`, `dist/`, `.idea/`, `.env`, `*.log`) — le critère noté est « `.gitignore` Java + JS posé avant le premier commit de code, aucun fichier généré » (5 pts), ce qui est vérifié. **Effet de bord assumé :** aucun **nouveau** fichier d'`assets/` n'est ajoutable sans `git add -f` (les fichiers déjà suivis se mettent à jour normalement avec `git add -u`). Le dépôt public reste ainsi limité de fait à `docs/ · api/ · backend/ · frontend/` + les fichiers de suivi déjà versionnés. |
-| `assets/` entièrement ignoré donc le plan non versionné | `git ls-files assets/` | **Déjà suivi :** `assets/PLAN_EPREUVE.md` et `assets/SUIVI_GIT.md` sont versionnés depuis avant le changement — l'ignore ne s'applique qu'aux fichiers **non suivis**, donc ils continuent à être commités et poussés. Les documents d'épreuve (PDF, dossier `EPREUVE_KFOKAM48/`, `INIT.md`) restent hors du dépôt public. *Alternative à retenir plus tard : migrer ce plan vers `docs/PLAN_EPREUVE.md`.* |
+| `.gitignore` = **`/assets`** + entrées Java/JS | `cat .gitignore` | **Décision retenue (révisée) :** `/assets` est ignoré **entièrement, sans exception**, complété par les entrées Java + JS (`target/`, `node_modules/`, `dist/`, `.idea/`, `.env`, `*.log`) — le critère noté est « `.gitignore` Java + JS posé avant le premier commit de code, aucun fichier généré » (5 pts), ce qui est vérifié. Le dépôt public est ainsi strictement limité à `docs/ · api/ · backend/ · frontend/` : aucun document d'épreuve (PDF, dossier `EPREUVE_KFOKAM48/`, `INIT.md`) n'y apparaît jamais. |
+| Le plan et le suivi Git doivent rester publics et versionnés | `git ls-files docs/` | **Migrés** : ce plan et le suivi Git vivent dans `docs/PLAN_EPREUVE.md` et `docs/SUIVI_GIT.md` (déplacés hors d'`assets/`, `git mv`), versionnés comme n'importe quel autre document du dépôt — plus d'exception à gérer dans `.gitignore`. |
 | Visibilité du dépôt | à vérifier sur GitHub | **Publique** — un dépôt privé = partie non corrigée `[SUJET §Ton dépôt]`. |
 
 ### 4.2 Stratégie de branches (décision T4)
@@ -446,7 +445,7 @@ git commit -m "Enregistrement d'une présence par code (RG1) — Closes #4"
 git push -u origin feature/presence-code
 gh pr create --base develop --fill      # PR liée à l'issue, cible develop
 gh pr merge --squash --delete-branch    # ferme l'issue si "Closes #4"
-# → mettre assets/SUIVI_GIT.md à jour (§4.6), committer, pousser sur develop
+# → mettre docs/SUIVI_GIT.md à jour (§4.6), committer, pousser sur develop
 
 # --- jalon : commit vide sur develop, remontée sur main ---
 git commit --allow-empty -m "[JALON] v0.1"
@@ -470,7 +469,7 @@ git grep -nE "target/|node_modules/|dist/" --name-only
 - Pousser **au fil de l'eau**, jamais un gros batch final : « un travail excellent resté en local vaut zéro » `[SUJET §Ton dépôt]`.
 - Aucun secret (token, `.env`) **jamais** commité : −5 et partie potentiellement non corrigée.
 
-### 4.6 Fichier de suivi — `assets/SUIVI_GIT.md` (décision T5)
+### 4.6 Fichier de suivi — `docs/SUIVI_GIT.md` (décision T5)
 
 **Règle :** chaque commit et chaque pull request de ce dépôt y figure, **mis à jour dans le même mouvement que la poussée**. Seule exception auto-référente : la ligne du commit qui modifie ce fichier porte la mention *(ce commit)*, son hash étant complété à la mise à jour suivante.
 
@@ -511,7 +510,7 @@ git grep -nE "target/|node_modules/|dist/" --name-only
 - [x] `develop` est la **branche par défaut** sur GitHub ; toutes les PR ciblent `develop` (T4)
 - [x] `main` n'a reçu **que** des merges de `develop` (fast-forward aux jalons), jamais de commit direct
 - [x] Structure `docs/ · api/ · backend/ · frontend/` respectée (+ `docker-compose.yml` à la racine)
-- [x] **`assets/SUIVI_GIT.md`** à jour : chaque commit et chaque PR tracé (T5)
+- [x] **`docs/SUIVI_GIT.md`** à jour : chaque commit et chaque PR tracé (T5)
 - [x] Chaque commit : **auteur unique = moi**, aucun `Co-Authored-By` (T6) — vérifié avec `git log --format='%an <%ae>' | sort -u` → une seule identité
 - [x] `.gitignore` Java + JS posé **avant** le premier commit de code, aucun fichier généré dans l'historique
 - [x] Aucun secret nulle part dans l'historique
@@ -551,13 +550,13 @@ git grep -nE "target/|node_modules/|dist/" --name-only
 - [x] **Démarre chez un tiers depuis le seul `README`**, avec données de démonstration (clone vierge, une commande) — smoke-testé en conteneurs
 
 **Journal et livraison**
-- [ ] `docs/JOURNAL.md` : **une entrée par étape** (Fait / Bloqué / IA + vérification), écrite en temps réel *(étapes 1 à 4 faites, étape 5 à venir)*
+- [x] `docs/JOURNAL.md` : **une entrée par étape** (Fait / Bloqué / IA + vérification), écrite en temps réel *(5/5 étapes)*
 - [x] `CHANGELOG.md` cohérent avec l'historique
 - [x] README testé depuis un **clone vierge**
 - [x] Backlog restant trié
-- [ ] `SOUMISSION.md` rempli, hash **40 caractères**, liens testés **en navigation privée**
-- [ ] Téléversement sur la plateforme **avant 18h00** (viser 17h00)
-- [ ] Le dépôt reste **public** jusqu'à la publication des résultats
+- [x] `SOUMISSION.md` rempli, hash **40 caractères** (`d5af9c6...`), accessibilité publique vérifiée sans authentification
+- [ ] Téléversement sur la plateforme **avant 18h00** (viser 17h00) — **action du candidat**, hors de portée de cette session
+- [ ] Le dépôt reste **public** jusqu'à la publication des résultats — engagement à tenir après la soumission
 
 ---
 
@@ -691,9 +690,11 @@ assets/
 │   ├── LISEZ-MOI.md · ENVELLOPE.md
 │   ├── api/contrat.yaml                   # contrat OpenAPI complet
 │   └── modeles/{CAHIER_DES_CHARGES,JOURNAL,SOUMISSION}.md
-├── PLAN_EPREUVE.md                        # ce document
 └── INIT.md                                # ordre de traitement
 ```
+
+> `assets/` est entièrement ignoré par `.gitignore` (documents d'épreuve, jamais publiés).
+> Ce plan et le suivi Git vivent désormais dans `docs/PLAN_EPREUVE.md` et `docs/SUIVI_GIT.md`.
 
 ---
 

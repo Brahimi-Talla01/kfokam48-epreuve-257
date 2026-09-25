@@ -13,7 +13,7 @@ import {
 import type { Etudiant, LigneTableau, Promotion, Session, SessionOuverte } from "@/lib/api";
 import { Badge, Chargement, MessageErreur, MessageSucces } from "@/components/ui";
 import { useAction, useChargement } from "@/lib/feedback";
-import { formaterDate, formaterMoyenne } from "@/lib/format";
+import { VALEUR_VIDE, formaterDate, formaterMoyenne } from "@/lib/format";
 
 export default function EcranFormateur() {
   const promotions = useChargement(() => listerPromotions(), []);
@@ -123,7 +123,7 @@ export default function EcranFormateur() {
               value={promotionId === null ? "" : String(promotionId)}
               onChange={(event) => changerPromotion(event.target.value)}
             >
-              <option value="">— Choisir —</option>
+              <option value="">Choisir…</option>
               {promotionsDonnees.map((promotion) => (
                 <option key={promotion.id} value={promotion.id}>
                   {promotion.nom}
@@ -166,7 +166,7 @@ export default function EcranFormateur() {
                 <p className="code-libelle">Code de présence</p>
                 <p className="code-valeur">{sessionCreee.code}</p>
                 <p className="meta">
-                  Session n° {sessionCreee.id} — ouverte le{" "}
+                  Session n° {sessionCreee.id}, ouverte le{" "}
                   {formaterDate(sessionCreee.ouvertureAt)}.
                 </p>
                 <p className="meta">
@@ -224,7 +224,7 @@ export default function EcranFormateur() {
                               Clôturer
                             </button>
                           ) : (
-                            <span className="hint">—</span>
+                            <span className="hint">{VALEUR_VIDE}</span>
                           )}
                         </td>
                       </tr>
@@ -253,7 +253,7 @@ export default function EcranFormateur() {
                     )
                   }
                 >
-                  <option value="">— Choisir un étudiant —</option>
+                  <option value="">Choisir un étudiant…</option>
                   {(etudiants.donnees ?? []).map((etudiant) => (
                     <option key={etudiant.id} value={etudiant.id}>
                       {etudiant.nom}
