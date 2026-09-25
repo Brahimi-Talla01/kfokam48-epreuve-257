@@ -79,6 +79,18 @@ public class RelectureService {
         return relectures.findByRelecteurIdAndStatutOrderByIdDesc(relecteur.getId(), statut);
     }
 
+    /**
+     * Notes et commentaires reçus sur un exercice — GET /api/exercices/{id}/relectures.
+     * RG7 / Q8 : l'identité du relecteur n'est jamais exposée à l'auteur de l'exercice.
+     */
+    @Transactional(readOnly = true)
+    public List<Relecture> listerPourExercice(Long exerciceId) {
+        if (exerciceId == null || !exercices.existsById(exerciceId)) {
+            throw ApiException.notFound("EXERCICE_INCONNU", "L'exercice demandé n'existe pas.");
+        }
+        return relectures.findAllByExerciceIdOrderByIdAsc(exerciceId);
+    }
+
     @Transactional(readOnly = true)
     public Relecture trouver(Long id) {
         return relectures.findById(id)
