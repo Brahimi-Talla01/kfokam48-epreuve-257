@@ -46,7 +46,7 @@
 
 ## Issues (backlog)
 
-16 issues ouvertes le 2026-09-25, étiquetées `must` / `should` / `could` — **9 · 6 · 1**.
+16 issues ouvertes le 2026-09-25, étiquetées `must` / `should` / `could` — **10 · 5 · 1** (10 `must`, 5 `should`, 1 `could`).
 La colonne **Références** les relie au cahier des charges et au contrat.
 
 | # | Titre (extrait) | Label | Références |

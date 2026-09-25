@@ -227,7 +227,7 @@ flowchart LR
 
 - **Objectif** : avoir un dépôt conforme, public, poussable, avec l'arbre de branches et le suivi en place, avant toute analyse.
 - **Tâches détaillées** :
-  1. ✅ **Fait** — `git 2.x` · `java 21` · `node 24` · `mvn` · `docker` : environnement conforme `[LISEZ-MOI §2a]`.
+  1. ✅ **Fait** — `git 2.43` · `java 21` · `node 22` · `maven 3.8.7` · `docker 29` : environnement conforme `[LISEZ-MOI §2a]`.
   2. ✅ **Fait** — dépôt GitHub **public** `kfokam48-epreuve-257` créé (⚠️ confirmer que `257` est bien le matricule complet, cf. §4.1) `[LISEZ-MOI §2c]`.
   3. ✅ **Fait** — push vérifié sur `main` puis sur `develop` (les poussées successives font foi). Ce type de commit de test **n'est pas** un jalon, ne jamais utiliser le préfixe `[JALON]` ailleurs `[LISEZ-MOI §2d]`.
   4. ✅ **Fait** — **arbre de branches posé (décision T4)** :
@@ -251,7 +251,7 @@ flowchart LR
   1. ✅ **Fait** (`f8c2f52`) — **`docs/CAHIER_DES_CHARGES.md`** — 10 sections dans l'ordre imposé `[SUJET §2a]` :
      1. Contexte et objectif · 2. Acteurs et rôles · 3. Périmètre (**inclus et explicitement exclus**) · 4. Exigences fonctionnelles `EF1…` avec critère « quand… alors… » + priorité · 5. Exigences non fonctionnelles (volumétrie, mobile, temps de réponse) · 6. Règles de gestion `RG1…` **avec source `Qx`** · 7. Zones d'ombre, hypothèses et **contradictions tranchées** · 8. Contraintes techniques (B1–B6, F1–F3) · 9. Livrables · 10. Démarche prévue + **Definition of Done**.
   2. ✅ **Fait** (`f8c2f52`) — **3 diagrammes Mermaid** dans `docs/diagrammes/` (D1 cas d'utilisation, D2 classes/cardinalités **cohérent avec les migrations**, D3 séquence présence nominal + **410 CODE_EXPIRE** + **409 DEJA_PRESENT** **cohérent avec le contrat**) + **D4 bonus** états-transitions de l'exercice `[SUJET §2b]`.
-  3. ✅ **Fait** — **Backlog en issues** (*16 issues, #1 → #16 : 9 `must` · 6 `should` · 1 `could`*) — *précision n° 1 du professeur : il n'y a qu'un seul mot, « issue » ; « ticket » est abandonné.*
+  3. ✅ **Fait** — **Backlog en issues** (*16 issues, #1 → #16 : 10 `must` · 5 `should` · 1 `could`*) — *précision n° 1 du professeur : il n'y a qu'un seul mot, « issue » ; « ticket » est abandonné.*
 
      > **Oui, tu dois créer des issues.** Une issue est une **fiche de travail que tu ouvres toi-même** dans l'onglet Issues de ton dépôt GitHub. **Une issue = une chose à faire.** Elles constituent ton plan de travail, et c'est à elles que tu rattacheras tes branches et tes commits `[SUJET §2c]`.
      >
