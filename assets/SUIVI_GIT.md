@@ -30,6 +30,8 @@
 | #28 | Présence relevée par le formateur | `feature/presence-formateur` | `develop` | **#9** | `merged` | [pull/28](https://github.com/Brahimi-Talla01/kfokam48-epreuve-257/pull/28) |
 | #29 | Écrans formateur/etudiant/relecteur + couche d'appels API unique | `feature/api-layer-next` | `develop` | **#14** | `merged` | [pull/29](https://github.com/Brahimi-Talla01/kfokam48-epreuve-257/pull/29) |
 | #30 | Dockerisation postgres + backend + frontend | `infra/dockerisation` | `develop` | **#13** | `merged` | [pull/30](https://github.com/Brahimi-Talla01/kfokam48-epreuve-257/pull/30) |
+| #32 | Correctif : presence perdue sous ecriture concurrente | `fix/presence-concurrente` | `develop` | **#31** | `merged` | [pull/32](https://github.com/Brahimi-Talla01/kfokam48-epreuve-257/pull/32) |
+| #34 | Deux relecteurs par exercice, note = moyenne, note provisoire | `evolution/deux-relecteurs` | `develop` | **#33** | `merged` | [pull/34](https://github.com/Brahimi-Talla01/kfokam48-epreuve-257/pull/34) |
 
 ---
 
@@ -87,13 +89,24 @@
 | 2026-09-25 | `develop` | `6b66175` | Merge pull request #30 (infra/dockerisation → develop) | **#13** · PR #30 | 2 |
 | 2026-09-25 | `develop` | `8a8ccd2` | docs: suivi Git (PR #29-#30, issues #13-#14 fermées), journal étape 2, soumission et cahier des charges à jour | — | 2 |
 | 2026-09-25 | `develop` → `main` | `974ff81` | `[JALON] v0.1` (commit vide) — `main` avancée en fast-forward de `develop` | — | 2 |
-| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — jalon v0.1 tracé | — | 2 |
+| 2026-09-25 | `develop` | `8954b2f` | docs: plan et suivi — étape 2 cochée, jalon v0.1 tracé | — | 2 |
+| 2026-09-25 | `fix/presence-concurrente` | `854583e` | test: reproduit la perte de presence sous ecriture concurrente | **#31** | 3 |
+| 2026-09-25 | `fix/presence-concurrente` | `0d152d3` | Intercepte la violation de contrainte concurrente et renvoie 409 DEJA_PRESENT (RG14) | **#31** | 3 |
+| 2026-09-25 | `develop` | `48e6b34` | Correctif : presence perdue sous ecriture concurrente (squash PR #32) | **#31** · PR #32 | 3 |
+| 2026-09-25 | `evolution/deux-relecteurs` | `6db9305` | Analyse mise a jour suite au changement de besoin (deux relecteurs) | **#33** | 3 |
+| 2026-09-25 | `evolution/deux-relecteurs` | `5f216cc` | Deux relecteurs par exercice, note = moyenne, note provisoire (migration V3) | **#33** | 3 |
+| 2026-09-25 | `evolution/deux-relecteurs` | `6dca0be` | Frontend etudiant : note retenue et badge provisoire (RG19) | **#33** | 3 |
+| 2026-09-25 | `evolution/deux-relecteurs` | `48a65ff` | docs: journal de bord — entree de l'etape 3 (bug + evolution), sacrifice ecrit | **#33** | 3 |
+| 2026-09-25 | `develop` | `d60b181` | Deux relecteurs par exercice, note = moyenne, note provisoire (squash PR #34) | **#33** · PR #34 | 3 |
+| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — PR #32 et #34, issues #31 et #33 tracées, étape 3 cochée | — | 3 |
 
 ---
 
 ## Issues (backlog)
 
-16 issues ouvertes le 2026-09-25, étiquetées `must` / `should` / `could` — **10 · 5 · 1** (10 `must`, 5 `should`, 1 `could`).
+16 issues ouvertes le 2026-09-25 pour l'analyse initiale, étiquetées `must` / `should` / `could` —
+**10 · 5 · 1**. **2 issues supplémentaires** ouvertes à l'étape 3 (ENVELOPPE), #31 (bug) et #33
+(évolution), toutes deux `must` — soit **18 issues** au total, **12 · 5 · 1**.
 La colonne **Références** les relie au cahier des charges et au contrat ; la colonne **État** donne la PR de fermeture.
 
 | # | Titre (extrait) | Label | Références | État |
@@ -112,8 +125,10 @@ La colonne **Références** les relie au cahier des charges et au contrat ; la c
 | 12 | Flyway, schéma `V1` conforme à D2, seed `V2` | `must` | B5 · ENF4 | `closed` · PR #17 |
 | 13 | Dockeriser `postgres` + `backend` + `frontend` | `must` | démarrage · ENF4 | `closed` · PR #30 |
 | 14 | Couche d'appels API Next.js avec états de charge | `must` | F3 · ENF3, ENF6 | `closed` · PR #29 |
-| 15 | Blocage après 5 codes erronés | `could` | EF12 · RG3 | `open` |
+| 15 | Blocage après 5 codes erronés | `could` | EF12 · RG3 | `open` · **sacrifiée à l'étape 3** (cahier §7.3, journal) |
 | 16 | Journal d'étape, changelog et soumission | `should` | journal 5 pts | `open` |
+| 31 | Presence perdue sous ecriture concurrente (bug ENVELOPPE §1) | `must` | RG14 · B4 | `closed` · PR #32 |
+| 33 | Deux relecteurs par exercice, note = moyenne, note provisoire (ENVELOPPE §2) | `must` | RG18, RG19 · ex-RG5/Q6 | `closed` · PR #34 |
 
 ---
 

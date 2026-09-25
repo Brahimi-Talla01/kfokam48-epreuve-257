@@ -309,20 +309,20 @@ flowchart LR
 
 - **Objectif** : encaisser le bug + le changement de besoin **à la méthode**, ce qui est ce qui est noté.
 - **Tâches détaillées** (dans cet ordre, l'ordre se lit dans l'historique) :
-  1. **Demander l'enveloppe au surveillant**, en lui donnant l'adresse de ton dépôt — elle ne te sera remise qu'une fois ton commit `[JALON] v0.1` poussé, et tu ne peux pas l'obtenir avant `[SUJET §2 étape 3]`, `[LISEZ-MOI §1]`. *(Précision n° 4 : aucun script, pas de `./enveloppe`.)*
-  2. **Bug — présences simultanées perdues** `[ENVELOPPE §1]` :
-     - ouvrir une **issue** décrivant le problème **et la façon de le reproduire** *avant* de toucher au code ;
-     - écrire un **test qui échoue** (deux `POST /api/presences` concurrents, une seule présence) ;
-     - corriger dans une **branche dédiée**, commit référençant l'issue (cause probable : contrainte d'unicité non gérée / read-then-write non atomique → contrainte DB `UNIQUE(session, etudiant)` + gestion du `DataIntegrityViolationException` → `409`) ;
-     - re-vérifier le test au vert.
-  3. **Changement de besoin — 2 relecteurs, moyenne, note provisoire** `[ENVELOPPE §2]` :
-     - **mettre à jour l'analyse** (cdd : RG issue de `Q6`, exigences, section 7 + diagrammes devenus faux) **dans un commit qui le dit** (3 pts) ;
-     - mettre à jour `api/contrat.yaml` si la forme des réponses change ;
-     - **nouvelle migration `V3__deux_relecteurs.sql`**, jamais modifier `V1` (schéma) ni `V2` (seed), la base remplie doit survivre (décision T3) ;
-     - découper en **issues** et **re-prioriser** : ce Must tardif fait sortir quelque chose du périmètre → **écrire le sacrifice** dans le journal ou le cahier des charges ;
-     - **2 branches, 2 PR** (les deux ciblent `develop`) : correctif et évolution ne mélangent jamais un commit ;
-- **Livrable** : issue + test rouge + fix d'un côté, migration V2 + analyse mise à jour + contrat mis à jour + sacrifice écrit de l'autre.
-- **Validation** : la chronologie Git prouve que l'issue précède le premier commit de correction ; les migrations `V1` et `V2` sont **inchangées** dans le diff (seul `V3` apparaît) ; la base de démo peuplée par `V2` contient toujours ses données après `V3` ; les 2 PR sont distinctes ; les 6 lignes du tableau de l'enveloppe sont cochables.
+  1. ✅ **Fait** — enveloppe déjà présente dans `assets/` (contenu confirmé identique à l'analyse déjà écrite en §0/§1.2/§6.2 avant même l'ouverture), lue après `[JALON] v0.1` poussé.
+  2. ✅ **Fait** — **Bug — présences perdues sous écriture concurrente** `[ENVELOPPE §1]` (issue #31) :
+     - issue #31 ouverte **avant** tout code, décrivant le problème et sa reproduction ;
+     - test rouge d'abord (`PresenceConcurrenteTest`, commit séparé) : deux `POST /api/presences` concurrents sur la même présence, race entre le contrôle d'existence et l'écriture → `500` au lieu de `409` ;
+     - corrigé sur `fix/presence-concurrente` : `catch DataIntegrityViolationException` → `409 DEJA_PRESENT` (Closes #31) ;
+     - test revérifié au vert (et suite complète : 44/44 puis 46/46).
+  3. ✅ **Fait** — **Changement de besoin — 2 relecteurs, moyenne, note provisoire** `[ENVELOPPE §2]` (issue #33) :
+     - analyse mise à jour **avant tout code de l'évolution** : cahier §6 (RG5 → RG18/RG19), §7.3 (nouvelle sous-section dédiée), D2 et D4, dans un commit dédié ;
+     - `api/contrat.yaml` mis à jour : `GET /api/exercices/{id}/relectures` expose `{noteRetenue, provisoire, relectures[]}`, `POST /api/relectures` renvoie un tableau ;
+     - **`V3__deux_relecteurs.sql`** ajoutée, `V1`/`V2` intactes, seed toujours valide (vérifié sur PostgreSQL réel via `docker compose`, pas seulement H2) ;
+     - sacrifice écrit (cahier §7.3 + journal + commentaire sur l'issue #15) : l'issue #15 (`could`) sort du périmètre ;
+     - **2 branches, 2 PR distinctes** : `fix/presence-concurrente` (PR #32) et `evolution/deux-relecteurs` (PR #34), aucun commit mélangé.
+- **Livrable** : issue #31 + test rouge + fix (PR #32) d'un côté, issue #33 + migration V3 + analyse mise à jour + contrat mis à jour + sacrifice écrit (PR #34) de l'autre.
+- **Validation** : chronologie Git confirmée (issue avant code, test rouge avant fix) ; `V1`/`V2` inchangées dans le diff (seul `V3` apparaît) ; base de démo peuplée par `V2` toujours intacte après `V3` (vérifié `GET /api/tableau` sur Postgres réel) ; 2 PR distinctes, mergées ; 46/46 tests backend verts, `npm run build` vert.
 - **Estimation** : 1 h 30 à 2 h.
 
 ### Étape 4 — Livrer la version finale
@@ -533,13 +533,13 @@ git grep -nE "target/|node_modules/|dist/" --name-only
 - [x] **Aucun autre commit** ne porte le préfixe `[JALON]` — le test de connexion s'intitule `chore: verification du depot` (précision n° 2, malus −5)
 
 **Étape 3 (10 pts)**
-- [ ] Issue ouverte **avant** le premier commit de correction
-- [ ] Bug reproduit par un **test qui échoue** avant la correction
-- [ ] **Nouvelle** migration (`V3`), `V1` et `V2` jamais modifiées, données de démo `V2` préservées
-- [ ] `api/contrat.yaml` mis à jour si la forme des réponses a changé
-- [ ] Analyse (cahier des charges + diagrammes) mise à jour dans un commit qui le dit
-- [ ] Sacrifice de périmètre **écrit**
-- [ ] Correctif et évolution : **2 branches, 2 PR**
+- [x] Issue ouverte **avant** le premier commit de correction (#31, #33)
+- [x] Bug reproduit par un **test qui échoue** avant la correction (`PresenceConcurrenteTest`, commit séparé)
+- [x] **Nouvelle** migration (`V3`), `V1` et `V2` jamais modifiées, données de démo `V2` préservées (vérifié sur PostgreSQL réel)
+- [x] `api/contrat.yaml` mis à jour si la forme des réponses a changé
+- [x] Analyse (cahier des charges + diagrammes) mise à jour dans un commit qui le dit
+- [x] Sacrifice de périmètre **écrit** (issue #15, cahier §7.3, journal)
+- [x] Correctif et évolution : **2 branches, 2 PR** (#32, #34)
 
 **Produit et conformité (17 pts)**
 - [x] 5 opérations du contrat exactes : chemins, verbes, codes HTTP, `{code,message}` pour **toute** erreur
