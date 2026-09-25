@@ -20,35 +20,37 @@
 |                                            |                                                           |
 | ------------------------------------------ | --------------------------------------------------------- |
 | Dépôt (public)                             | `https://github.com/Brahimi-Talla01/kfokam48-epreuve-257` |
-| Commit final — hash complet, 40 caractères |                                                           |
+| Commit final — hash complet, 40 caractères | `<à compléter en tout dernier, juste avant le televersement>` |
 | Branche                                    | `main`                                                    |
-
-## Épreuve Git — étape 5
-
-|                                            |                                                          |
-| ------------------------------------------ | -------------------------------------------------------- |
-| Dépôt (public)                             | `https://github.com/Brahimi-Talla01/kfokam48-gitlab-257` |
-| Commit final — hash complet, 40 caractères |                                                          |
 
 ## Technique
 
-|                        |          |
-| ---------------------- | -------- |
-| Frontend utilisé       | Next.js  |
-| Base de données        | Postgres |
-| Commandes de démarrage |          |
+|                        |                                                                    |
+| ---------------------- | ------------------------------------------------------------------ |
+| Frontend utilisé       | Next.js 15 (App Router, TypeScript) — 3 écrans en routes natives, build de production en `next start`, sans rendu serveur applicatif exigé |
+| Base de données        | PostgreSQL 16 (Flyway : `V1` schéma, `V2` seed de démo, `V3` évolution étape 3) |
+| Commandes de démarrage | `git clone <dépôt>` puis `docker compose up --build` (1 commande) |
 
 ## Ce que j'ai livré
 
-_Trois à cinq lignes : ce qui fonctionne, ce qui ne fonctionne pas, ce que j'ai volontairement laissé de côté et pourquoi. Sois exact — un correcteur préfère un périmètre réduit et annoncé qu'une promesse non tenue._
+Les 5 besoins sont couverts de bout en bout (présence par code, dépôt d'exercice,
+affectation aléatoire, relecture notée, tableau formateur), avec l'évolution de
+l'étape 3 : deux relecteurs par exercice, note = moyenne, note provisoire tant qu'un
+seul a rendu. Le bug de présence concurrente (étape 3) est corrigé et couvert par un
+test dédié. 46 tests backend passent, `npm run build` passe, `docker compose up
+--build` démarre l'application avec des données de démonstration depuis un clone
+vierge. Volontairement laissé de côté : le blocage de 2 minutes après 5 codes
+erronés (RG3, priorité `could` dès l'étape 1) — sacrifié pour absorber le
+changement de besoin tardif de l'étape 3 (détail : `docs/CAHIER_DES_CHARGES.md` §7.3
+et `docs/JOURNAL.md`, entrée étape 3).
 
 ---
 
 ## Avant de téléverser, vérifie
 
-- [ ] Mes deux dépôts sont **publics** et s'ouvrent en navigation privée
-- [ ] Les deux hash font bien **40 caractères** et existent sur GitHub
-- [ ] Tout mon travail est **poussé** — `git status` est propre sur les deux dépôts
+- [ ] Mon dépôt est **public** et s'ouvre en navigation privée
+- [ ] Le hash fait bien **40 caractères** et existe sur GitHub
+- [ ] Tout mon travail est **poussé** — `git status` est propre
 - [ ] Mon `README` a été testé depuis un clone vierge, dans un dossier vide
 - [ ] Mon `JOURNAL.md` et mon cahier des charges sont dans `docs/`
 - [ ] Les trois commits `[JALON]` sont poussés et dans le bon ordre
