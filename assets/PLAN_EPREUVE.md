@@ -239,7 +239,7 @@ flowchart LR
      `main` ne devient qu'une branche « release » : elle n'avance que par merge de `develop` **aux trois jalons** (§4.2).
   5. ✅ **Fait** — `.gitignore` réécrit : ignores des seuls documents d'épreuve + entrées Java/JS (`target/`, `node_modules/`, `dist/`, `.env`) **avant le premier commit de code** `[SUJET §4 Git 5 pts]` (détail §4.1).
   6. ✅ **Fait** — **`assets/SUIVI_GIT.md`** créé (décision T5) avec backfill des commits existants. Désormais, **tout commit et toute PR** y figurent (§4.6).
-  7. ☐ **À faire** — créer l'arborescence `docs/ docs/diagrammes/ api/`, y copier `contrat.yaml` et les 3 modèles depuis `assets/EPREUVE_KFOKAM48/`.
+  7. ✅ **Fait** (`6f5cccb`) — arborescence `docs/ docs/diagrammes/ api/` créée ; `contrat.yaml` copié dans `api/`, les 3 modèles copiés dans `docs/` (`CAHIER_DES_CHARGES.md`, `JOURNAL.md`, `SOUMISSION.md`).
 - **Livrable** : dépôt public conforme, `develop` = branche par défaut, `.gitignore` complet, `assets/SUIVI_GIT.md` initialisé, arborescence créée.
 - **Validation** : `git clone` de test dans `/tmp` → branche locale `develop` et non `main` ; `git push` accepté ; `.gitignore` contient bien `target/`, `node_modules/`, `dist/`, `.env` ; `assets/SUIVI_GIT.md` liste chaque commit existant.
 - **Estimation** : 30 min.
@@ -248,10 +248,10 @@ flowchart LR
 
 - **Objectif** : produire les 4 livrables d'analyse puis poser `[JALON] analyse`.
 - **Tâches détaillées** :
-  1. **`docs/CAHIER_DES_CHARGES.md`** — 10 sections dans l'ordre imposé `[SUJET §2a]` :
+  1. ✅ **Fait** (`f8c2f52`) — **`docs/CAHIER_DES_CHARGES.md`** — 10 sections dans l'ordre imposé `[SUJET §2a]` :
      1. Contexte et objectif · 2. Acteurs et rôles · 3. Périmètre (**inclus et explicitement exclus**) · 4. Exigences fonctionnelles `EF1…` avec critère « quand… alors… » + priorité · 5. Exigences non fonctionnelles (volumétrie, mobile, temps de réponse) · 6. Règles de gestion `RG1…` **avec source `Qx`** · 7. Zones d'ombre, hypothèses et **contradictions tranchées** · 8. Contraintes techniques (B1–B6, F1–F3) · 9. Livrables · 10. Démarche prévue + **Definition of Done**.
-  2. **3 diagrammes Mermaid** dans `docs/diagrammes/` (D1 cas d'utilisation, D2 classes/cardinalités **cohérent avec les migrations**, D3 séquence présence nominal + **410 CODE_EXPIRE** + **409 DEJA_PRESENT** **cohérent avec le contrat**) + **D4 bonus** états-transitions de l'exercice `[SUJET §2b]`.
-  3. **Backlog en issues** — *précision n° 1 du professeur : il n'y a qu'un seul mot, « issue » ; « ticket » est abandonné.*
+  2. ✅ **Fait** (`f8c2f52`) — **3 diagrammes Mermaid** dans `docs/diagrammes/` (D1 cas d'utilisation, D2 classes/cardinalités **cohérent avec les migrations**, D3 séquence présence nominal + **410 CODE_EXPIRE** + **409 DEJA_PRESENT** **cohérent avec le contrat**) + **D4 bonus** états-transitions de l'exercice `[SUJET §2b]`.
+  3. ✅ **Fait** — **Backlog en issues** (*16 issues, #1 → #16 : 9 `must` · 6 `should` · 1 `could`*) — *précision n° 1 du professeur : il n'y a qu'un seul mot, « issue » ; « ticket » est abandonné.*
 
      > **Oui, tu dois créer des issues.** Une issue est une **fiche de travail que tu ouvres toi-même** dans l'onglet Issues de ton dépôt GitHub. **Une issue = une chose à faire.** Elles constituent ton plan de travail, et c'est à elles que tu rattacheras tes branches et tes commits `[SUJET §2c]`.
      >
@@ -280,10 +280,10 @@ flowchart LR
      ```
 
      Écrire **`Closes #4`** dans le message ferme automatiquement l'issue n° 4 quand la branche est fusionnée. **C'est ce lien entre ton plan et ton code que le correcteur regarde.**
-  4. **`api/contrat.yaml` complété** : les 5 opérations imposées **plus** celles nécessaires — à minima : ouverture/clôture de session (trou du `CLIENT.md`, §6.2), liste des sessions, création d'une relecture « en attente » (**nécessaire** : `POST /api/relectures/{id}` opère sur une relecture déjà existante), présence ajoutée par le formateur (Q14), gestion des tentatives échouées (Q4, `429`), tableau de l'étudiant (Q8/Q16) `[CONTRAT]`, `[SUJET §2d]`.
-  5. **Trancher les contradictions et trous** (§6) dans la section 7 du cahier des charges, en citant `Qx`.
-  6. Entrée « Étape 1 » du `JOURNAL.md` (Fait / Bloqué / IA) `[SUJET §4 Journal]`.
-  7. `git add` + commit des docs, puis **`git commit --allow-empty -m "[JALON] analyse"` + `git push`** `[SUJET §2]`.
+  4. ✅ **Fait** (`d7c4e34`) — **`api/contrat.yaml` complété** : les 5 opérations imposées **plus** celles nécessaires — à minima : ouverture/clôture de session (trou du `CLIENT.md`, §6.2), liste des sessions, création d'une relecture « en attente » (**nécessaire** : `POST /api/relectures/{id}` opère sur une relecture déjà existante), présence ajoutée par le formateur (Q14), gestion des tentatives échouées (Q4 — **`400 TROP_DE_TENTATIVES`** et non `429` : ajouter un code de statut à l'opération imposée fragiliserait `B2`, décision écrite au cahier §7.2), tableau de l'étudiant (Q8/Q16) `[CONTRAT]`, `[SUJET §2d]`.
+  5. ✅ **Fait** — **Trancher les contradictions et trous** (§6) dans la section 7 du cahier des charges, en citant `Qx`.
+  6. ✅ **Fait** (`7558bd6`) — Entrée « Étape 1 » du `JOURNAL.md` (Fait / Bloqué / IA) `[SUJET §4 Journal]`.
+  7. ✅ **Fait** (`f730f76`) — `git add` + commit des docs, puis **`git commit --allow-empty -m "[JALON] analyse"` + `git push`** `[SUJET §2]` — puis fast-forward de `main` sur `develop`.
 - **Livrable** : cahier des charges complet, 4 diagrammes, ≈10 issues, contrat figé, jalon d'analyse poussé.
 - **Validation** : le commit `[JALON] analyse` existe **avant** tout commit contenant du code (ordre dans l'historique = ce qui est noté) ; chaque `EFx`/`RGx` cité existe ; D2 correspond ligne à ligne aux migrations ; D3 correspond aux codes du contrat.
 - **Estimation** : 3 h à 3 h 30.
@@ -597,7 +597,7 @@ git grep -nE "target/|node_modules/|dist/" --name-only
 - **Expiration du code (15 min, `Q2`) ≠ fin de session (`Q3`)** : deux notions distinctes jamais reliées.
 - **`Q7` — assignation aléatoire parmi les présents** : quand se déclenche-t-elle ? que fait-on s'il n'y a **aucun pair présent**, ou si l'exercice est déposé **après** la session (`Q12`) alors que la liste des présents est figée ?
 - **`Q13` vs `Q7`** : « remplaçable tant que personne n'a commencé à le relire » — mais le modèle ne connaît que *rendu* / *en attente*, pas *commencé*.
-- **`Q4` — blocage 2 min après 5 erreurs** : bloqué par étudiant ? par IP ? par session ? **Aucun code HTTP prévu** au contrat (à ajouter : `429`).
+- **`Q4` — blocage 2 min après 5 erreurs** : bloqué par étudiant ? par IP ? par session ? **Aucun code HTTP prévu** au contrat. **Décision : `400` avec `code = TROP_DE_TENTATIVES`** — ajouter le `429` viendrait modifier les codes de statut de l'opération imposée `POST /api/presences` (B2). Priorité **Could** dans le backlog (#15).
 - **`Q1` — pas de mot de passe** : rien ne dit qui crée promotions/étudiants, ni comment le formateur est identifié.
 - **`Q6` + `Q11` — le trou le plus probable** : un seul relecteur, et « s'il ne rend jamais, l'exercice reste en attente » → **aucune note n'existe jamais**. C'est précisément le point que le client redécouvre à l'étape 3 `[ENVELOPPE §2]`. À signaler dès l'étape 1.
 - **`Q6`** est de toute façon **cassée par l'enveloppe** (2 relecteurs) : la section 7 et les RG doivent être réécrites à l'étape 3. `[ENVELOPPE §2]`

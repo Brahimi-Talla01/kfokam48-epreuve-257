@@ -37,8 +37,9 @@
 | 2026-09-25 | `develop` | `f8c2f52` | docs: cahier des charges et 4 diagrammes Mermaid (D1-D4) de l'étape 1 | #1 → #16 | 1 |
 | 2026-09-25 | `develop` | `d7c4e34` | api: contrat complété et figé avant le premier commit de code (9 opérations ajoutées) | — | 1 |
 | 2026-09-25 | `develop` | `7558bd6` | docs: journal de bord — entrée de l'étape 1 (analyse) | #16 | 1 |
-| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — trace de l'étape 1 et du backlog en issues | — | 1 |
-| 2026-09-25 | `develop` → `main` | *(à suivre)* | `[JALON] analyse` (commit vide) puis fast-forward de `main` | — | 1 |
+| 2026-09-25 | `develop` | `7a5f523` | docs: suivi Git — trace de l'étape 1 et du backlog en issues | — | 1 |
+| 2026-09-25 | `develop` → `main` | `f730f76` | `[JALON] analyse` (commit vide) — `main` avancée en fast-forward de `develop` | — | 1 |
+| 2026-09-25 | `develop` | *(ce commit)* | docs: plan et suivi — étapes 0 et 1 cochées, décision Q4 `429` → `400` | — | 1 |
 
 ---
 
