@@ -227,19 +227,19 @@ flowchart LR
 
 - **Objectif** : avoir un dépôt conforme, public, poussable, avec l'arbre de branches et le suivi en place, avant toute analyse.
 - **Tâches détaillées** :
-  1. `git --version` (2.x), `java -version` (17+), `node --version` (18+) — sinon prévenir le surveillant `[LISEZ-MOI §2a]`.
-  2. Créer le dépôt GitHub **public** `kfokam48-epreuve-<matricule>` `[LISEZ-MOI §2c]`.
-  3. Vérifier le push : `git commit --allow-empty -m "chore: verification du depot" && git push` (ce commit **n'est pas** un jalon, ne jamais utiliser le préfixe `[JALON]` ailleurs) `[LISEZ-MOI §2d]`.
-  4. **Poser l'arbre de branches (décision T4)** :
+  1. ✅ **Fait** — `git 2.x` · `java 21` · `node 24` · `mvn` · `docker` : environnement conforme `[LISEZ-MOI §2a]`.
+  2. ✅ **Fait** — dépôt GitHub **public** `kfokam48-epreuve-257` créé (⚠️ confirmer que `257` est bien le matricule complet, cf. §4.1) `[LISEZ-MOI §2c]`.
+  3. ✅ **Fait** — push vérifié sur `main` puis sur `develop` (les poussées successives font foi). Ce type de commit de test **n'est pas** un jalon, ne jamais utiliser le préfixe `[JALON]` ailleurs `[LISEZ-MOI §2d]`.
+  4. ✅ **Fait** — **arbre de branches posé (décision T4)** :
      ```bash
      git checkout -b develop              # à partir de main
      git push -u origin develop
-     gh repo edit --default-branch develop    # develop = branche par défaut
+     gh repo edit --default-branch develop    # develop = branche par défaut — VÉRIFIÉ
      ```
      `main` ne devient qu'une branche « release » : elle n'avance que par merge de `develop` **aux trois jalons** (§4.2).
-  5. Écrire un vrai `.gitignore` **Java + JS** (`.gitignore` actuel = `/assets` seulement → **non conforme**, voir §4.1) **avant le premier commit de code** `[SUJET §4 Git 5 pts]`.
-  6. Créer **`assets/SUIVI_GIT.md`** (décision T5) : en-tête + tableau, puis **backfill** des commits déjà poussés. Désormais, **tout commit et toute PR** y figurent (§4.6).
-  7. Créer l'arborescence `docs/ docs/diagrammes/ api/`, y copier `contrat.yaml` et les 3 modèles depuis `assets/EPREUVE_KFOKAM48/`.
+  5. ✅ **Fait** — `.gitignore` réécrit : ignores des seuls documents d'épreuve + entrées Java/JS (`target/`, `node_modules/`, `dist/`, `.env`) **avant le premier commit de code** `[SUJET §4 Git 5 pts]` (détail §4.1).
+  6. ✅ **Fait** — **`assets/SUIVI_GIT.md`** créé (décision T5) avec backfill des commits existants. Désormais, **tout commit et toute PR** y figurent (§4.6).
+  7. ☐ **À faire** — créer l'arborescence `docs/ docs/diagrammes/ api/`, y copier `contrat.yaml` et les 3 modèles depuis `assets/EPREUVE_KFOKAM48/`.
 - **Livrable** : dépôt public conforme, `develop` = branche par défaut, `.gitignore` complet, `assets/SUIVI_GIT.md` initialisé, arborescence créée.
 - **Validation** : `git clone` de test dans `/tmp` → branche locale `develop` et non `main` ; `git push` accepté ; `.gitignore` contient bien `target/`, `node_modules/`, `dist/`, `.env` ; `assets/SUIVI_GIT.md` liste chaque commit existant.
 - **Estimation** : 30 min.

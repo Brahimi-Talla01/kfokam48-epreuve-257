@@ -31,7 +31,19 @@
 | 2026-09-25 | `develop` | `76798d1` | docs: décisions techniques — Next.js 15, docker compose, seed Flyway, branche develop, suivi Git | — | 0 |
 | 2026-09-25 | `develop` | `b30509c` | docs: création du suivi Git (assets/SUIVI_GIT.md) | — | 0 |
 | 2026-09-25 | `develop` | `69576fa` | docs: convention auto-référente du suivi Git explicite (§4.6) | — | 0 |
-| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — hash du commit de création complété | — | 0 |
+| 2026-09-25 | `develop` | `eda97be` | docs: suivi Git — hash du commit de création complété | — | 0 |
+| 2026-09-25 | `develop` | *(ce commit)* | docs: configuration du dépôt tracée — develop branche par défaut, étape 0 avancée | — | 0 |
+
+---
+
+## Configuration du dépôt
+
+| Élément | Valeur | Quand |
+|---|---|---|
+| Branche par défaut GitHub | **`develop`** (`gh repo edit --default-branch develop`) | 2026-09-25 |
+| Branche `main` | branche « release » : reçoit uniquement les merges fast-forward de `develop` aux 3 jalons | 2026-09-25 |
+| Visibilité | **public** (obligatoire — un dépôt privé = partie non corrigée) | 2026-09-25 |
+| Auteur unique des commits | `Ibrahim Talla <ibrahimtalla01@gmail.com>` — **aucun co-author** | permanent |
 
 ---
 
