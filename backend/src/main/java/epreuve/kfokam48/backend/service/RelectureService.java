@@ -85,4 +85,42 @@ public class RelectureService {
                 .orElseThrow(() -> ApiException.badRequest("RELECTURE_INCONNUE",
                         "La relecture demandée n'existe pas."));
     }
+
+    /**
+     * Rendu d'une note — POST /api/relectures/{id} (opération imposée).
+     * Ordre des contrôles : 400 NOTE_INVALIDE → 403 AUTO_RELECTURE / relecteur étranger →
+     * 409 RELECTURE_DEJA_RENDUE → 200.
+     * RG8 : note entière entre 0 et 20. RG9 / Q15 : définitive une fois rendue.
+     */
+    @Transactional
+    public Relecture rendre(Long id, Integer note, String commentaire, Long relecteurId) {
+        Relecture relecture = trouver(id);
+
+        if (note == null || note < 0 || note > 20) {
+            throw ApiException.badRequest("NOTE_INVALIDE", "La note doit être un entier entre 0 et 20.");
+        }
+
+        Long auteurExercice = relecture.getExercice().getEtudiant().getId();
+        if (relecteurId != null && relecteurId.equals(auteurExercice)) {
+            throw ApiException.forbidden("AUTO_RELECTURE",
+                    "Vous ne pouvez pas relire votre propre exercice.");
+        }
+
+        Long relecteurAffecte = relecture.getRelecteur() == null ? null : relecture.getRelecteur().getId();
+        if (relecteurId != null && relecteurAffecte != null && !relecteurAffecte.equals(relecteurId)) {
+            throw ApiException.forbidden("RELECTURE_ETRANGERE",
+                    "Cette relecture est affectée à un autre relecteur.");
+        }
+
+        if (relecture.estRendue()) {
+            throw ApiException.conflict("RELECTURE_DEJA_RENDUE",
+                    "Cette note est déjà enregistrée : elle est définitive.");
+        }
+
+        relecture.rendre(note, commentaire);
+        Exercice exercice = relecture.getExercice();
+        exercice.marquerRendu();
+        exercices.save(exercice);
+        return relectures.save(relecture);
+    }
 }
