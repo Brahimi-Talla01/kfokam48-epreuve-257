@@ -62,6 +62,11 @@ public class Exercice {
         this.miseAJourLe = deposeLe;
     }
 
+    /** RG12 / Q13, tranché au §7.2 : « pas encore relu » = statut EN_ATTENTE. */
+    public boolean estModifiable() {
+        return statut == StatutExercice.EN_ATTENTE;
+    }
+
     /** RG12 / Q13 : le lien reste remplaçable tant que la relecture n'est pas rendue. */
     public void remplacerLien(String nouveauLien) {
         this.lien = nouveauLien;

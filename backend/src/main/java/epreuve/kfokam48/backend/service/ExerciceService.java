@@ -3,7 +3,6 @@ package epreuve.kfokam48.backend.service;
 import epreuve.kfokam48.backend.domain.Etudiant;
 import epreuve.kfokam48.backend.domain.Exercice;
 import epreuve.kfokam48.backend.domain.Session;
-import epreuve.kfokam48.backend.domain.StatutExercice;
 import epreuve.kfokam48.backend.repository.EtudiantRepository;
 import epreuve.kfokam48.backend.repository.ExerciceRepository;
 import epreuve.kfokam48.backend.repository.SessionRepository;
@@ -72,7 +71,7 @@ public class ExerciceService {
                     "La session est clôturée : le lien n'est plus modifiable.");
         }
 
-        if (exercice.getStatut() == StatutExercice.RENDU) {
+        if (!exercice.estModifiable()) {
             throw ApiException.conflict("RELECTURE_COMMENCEE",
                     "L'exercice a déjà été relu : le lien n'est plus modifiable.");
         }
