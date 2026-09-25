@@ -76,7 +76,7 @@ public class SessionService {
     }
 
     protected void verifierPromotionExistante(Long promotionId) {
-        if (!promotions.existsById(promotionId)) {
+        if (promotionId == null || !promotions.existsById(promotionId)) {
             throw ApiException.notFound("PROMOTION_INCONNUE", "La promotion demandée n'existe pas.");
         }
     }
