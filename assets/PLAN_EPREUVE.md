@@ -329,13 +329,13 @@ flowchart LR
 
 - **Objectif** : un état livrable, traçable et vérifiable par un tiers.
 - **Tâches détaillées** :
-  1. **`git commit --allow-empty -m "[JALON] v1.0"`** + push.
-  2. `CHANGELOG.md` **cohérent avec l'historique réel** (aucun élément absent de l'historique).
-  3. `README` d'installation **testé depuis un clone vierge dans un dossier vide** : installation, démarrage (3 commandes max), choix du front justifié en 1 ligne (F1), données de démo.
-  4. Backlog restant trié (issues fermées/ouvertes avec priorité à jour).
-  5. Mise à jour finale du `JOURNAL.md`.
+  1. ✅ **Fait** — `CHANGELOG.md` créé, **cohérent avec l'historique réel** (une entrée par étape/jalon, renvoyant aux issues et PR de `assets/SUIVI_GIT.md`).
+  2. ✅ **Fait** — `README` **testé depuis un clone vierge dans un dossier séparé** : `git clone` + `docker compose up --build` (une commande) → API `:8080`, frontend `:3000`, données de démo, vérifié par requêtes réelles puis conteneurs/volume nettoyés.
+  3. ✅ **Fait** — Backlog restant trié : `#15` documentée comme sacrifiée (étape 3), `#16` en cours de fermeture.
+  4. ✅ **Fait** — Mise à jour du `JOURNAL.md` (entrée étape 4).
+  5. ✅ **Fait** (`9382fa7`) — `git commit --allow-empty -m "[JALON] v1.0"` poussé, `main` avancée en fast-forward.
 - **Livrable** : release v1.0, changelog, README validé.
-- **Validation** : dans un dossier vide : `git clone … && <commande 1> && <commande 2> && <commande 3>` → application opérationnelle **avec données de démonstration**.
+- **Validation** : dans un dossier vide : `git clone … && docker compose up --build` → application opérationnelle **avec données de démonstration**.
 - **Estimation** : 45 min.
 
 ### Étape 5 — Soumettre — **sans elle, rien n'est rendu** *(5 étapes au total — précision n° 3)*
@@ -528,8 +528,8 @@ git grep -nE "target/|node_modules/|dist/" --name-only
 **Jalons (3 × malus −5)**
 - [x] `[JALON] analyse` **avant** le premier commit de code, poussé (`f730f76`)
 - [x] `[JALON] v0.1` poussé (condition d'obtention de l'enveloppe) (`974ff81`)
-- [ ] `[JALON] v1.0` poussé
-- [ ] Les trois, **dans cet ordre** *(2/3 pour l'instant, ordre respecté)*
+- [x] `[JALON] v1.0` poussé (`9382fa7`)
+- [x] Les trois, **dans cet ordre**
 - [x] **Aucun autre commit** ne porte le préfixe `[JALON]` — le test de connexion s'intitule `chore: verification du depot` (précision n° 2, malus −5)
 
 **Étape 3 (10 pts)**
@@ -551,10 +551,10 @@ git grep -nE "target/|node_modules/|dist/" --name-only
 - [x] **Démarre chez un tiers depuis le seul `README`**, avec données de démonstration (clone vierge, une commande) — smoke-testé en conteneurs
 
 **Journal et livraison**
-- [ ] `docs/JOURNAL.md` : **une entrée par étape** (Fait / Bloqué / IA + vérification), écrite en temps réel *(étapes 1 et 2 faites, 3/4/5 à venir)*
-- [ ] `CHANGELOG.md` cohérent avec l'historique
-- [ ] README testé depuis un **clone vierge**
-- [ ] Backlog restant trié
+- [ ] `docs/JOURNAL.md` : **une entrée par étape** (Fait / Bloqué / IA + vérification), écrite en temps réel *(étapes 1 à 4 faites, étape 5 à venir)*
+- [x] `CHANGELOG.md` cohérent avec l'historique
+- [x] README testé depuis un **clone vierge**
+- [x] Backlog restant trié
 - [ ] `SOUMISSION.md` rempli, hash **40 caractères**, liens testés **en navigation privée**
 - [ ] Téléversement sur la plateforme **avant 18h00** (viser 17h00)
 - [ ] Le dépôt reste **public** jusqu'à la publication des résultats

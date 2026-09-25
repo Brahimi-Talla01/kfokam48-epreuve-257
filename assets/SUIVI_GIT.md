@@ -98,7 +98,10 @@
 | 2026-09-25 | `evolution/deux-relecteurs` | `6dca0be` | Frontend etudiant : note retenue et badge provisoire (RG19) | **#33** | 3 |
 | 2026-09-25 | `evolution/deux-relecteurs` | `48a65ff` | docs: journal de bord — entree de l'etape 3 (bug + evolution), sacrifice ecrit | **#33** | 3 |
 | 2026-09-25 | `develop` | `d60b181` | Deux relecteurs par exercice, note = moyenne, note provisoire (squash PR #34) | **#33** · PR #34 | 3 |
-| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — PR #32 et #34, issues #31 et #33 tracées, étape 3 cochée | — | 3 |
+| 2026-09-25 | `develop` | `232e45c` | docs: plan et suivi — étape 3 cochée (PR #32, #34), issues #31/#33 tracées | — | 3 |
+| 2026-09-25 | `develop` | `21f41cb` | Changelog et journal de bord — étape 4, README revalidé depuis un clone vierge | — | 4 |
+| 2026-09-25 | `develop` → `main` | `9382fa7` | `[JALON] v1.0` (commit vide) — `main` avancée en fast-forward de `develop` | — | 4 |
+| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — jalon v1.0 tracé, étape 4 cochée | — | 4 |
 
 ---
 
