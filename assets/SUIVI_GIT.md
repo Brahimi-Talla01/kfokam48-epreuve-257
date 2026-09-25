@@ -29,7 +29,9 @@
 | 2026-09-25 | `main` *(avant convention)* | `07a7d22` | docs: plan d'implémentation enrichi à partir des documents officiels KFOKAM48 | — | 0 |
 | 2026-09-25 | `main` *(avant convention)* | `90849d2` | docs: plan aligné sur les 4 précisions du prof (issues, chore de test, 5 étapes, enveloppe au surveillant) | — | 0 |
 | 2026-09-25 | `develop` | `76798d1` | docs: décisions techniques — Next.js 15, docker compose, seed Flyway, branche develop, suivi Git | — | 0 |
-| 2026-09-25 | `develop` | *(ce commit)* | docs: création du suivi Git (assets/SUIVI_GIT.md) | — | 0 |
+| 2026-09-25 | `develop` | `b30509c` | docs: création du suivi Git (assets/SUIVI_GIT.md) | — | 0 |
+| 2026-09-25 | `develop` | `69576fa` | docs: convention auto-référente du suivi Git explicite (§4.6) | — | 0 |
+| 2026-09-25 | `develop` | *(ce commit)* | docs: suivi Git — hash du commit de création complété | — | 0 |
 
 ---
 
